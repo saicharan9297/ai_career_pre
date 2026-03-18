@@ -1,0 +1,19 @@
+{
+    "venvPath": "c:/Users/lenovo/OneDrive/Desktop/ai_career_pre",
+    "venv": ".venv",
+    "include": [
+        "app.py",
+        "models.py",
+        "extensions.py",
+        "core"
+    ],
+    "executionEnvironments": [
+        {
+            "root": "c:/Users/lenovo/OneDrive/Desktop/ai_career_pre",
+            "pythonVersion": "3.10",
+            "extraPaths": [
+                "c:/Users/lenovo/OneDrive/Desktop/ai_career_pre"
+            ]
+        }
+    ]
+}

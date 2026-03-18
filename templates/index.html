@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}AI-Powered Career Prep Platform{% endblock %}
+
+{% block content %}
+<div class="hero-section text-center">
+    <h1 class="display-3 fw-bold mb-4">Elevate Your Career with <br><span class="gradient-text">AI Guidance</span></h1>
+    <p class="lead text-muted mb-5 mx-auto" style="max-width: 700px;">
+        Prepare for your dream role with personalized roadmaps, adaptive mock interviews, 
+        and real-time tracking. Whether you're a student or a job seeker, we've got you covered.
+    </p>
+    <div class="d-flex justify-content-center gap-3">
+        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg px-5 py-3 shadow-lg">Start Free Trial</a>
+        <a href="#features" class="btn btn-outline-secondary btn-lg px-5 py-3">Learn More</a>
+    </div>
+</div>
+
+<div id="features" class="row mt-5 py-5">
+    <div class="col-md-4 mb-4">
+        <div class="card card-glass h-100 p-4 border-0 shadow-sm">
+            <div class="mb-3 text-info">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-map" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M15.817.113A.5.5 0 0 1 16 .5v14a.5.5 0 0 1-.402.49l-5 1a.5.5 0 0 1-.196 0L5.5 15.01l-4.902.98A.5.5 0 0 1 0 15.5v-14a.5.5 0 0 1 .402-.49l5-1a.5.5 0 0 1 .196 0L10.5.99l4.902-.98a.5.5 0 0 1 .415.103zM10 1.91l-4-.8v12.98l4 .8V1.91zm1 12.98 4-.8V1.11l-4 .8v12.98zm-6-.8V.11l-4 .8v12.98l4-.8z"/>
+                </svg>
+            </div>
+            <h4 class="fw-bold">Smart Roadmaps</h4>
+            <p class="text-muted small">Personalized learning paths tailored to your education level and target role.</p>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card card-glass h-100 p-4 border-0 shadow-sm">
+            <div class="mb-3 text-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-cpu" viewBox="0 0 16 16">
+                    <path d="M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2A2.5 2.5 0 0 1 14 4.5h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14a2.5 2.5 0 0 1-2.5 2.5v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14A2.5 2.5 0 0 1 2 11.5H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2A2.5 2.5 0 0 1 4.5 2V.5A.5.5 0 0 1 5 0zm-.5 3A1.5 1.5 0 0 0 3 4.5V11.5A1.5 1.5 0 0 0 4.5 13h7a1.5 1.5 0 0 0 1.5-1.5V4.5A1.5 1.5 0 0 0 11.5 3h-7zM5 5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1-.5-.5V5z"/>
+                </svg>
+            </div>
+            <h4 class="fw-bold">Adaptive Interviews</h4>
+            <p class="text-muted small">Real-time interview simulator that adjusts difficulty based on your performance.</p>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card card-glass h-100 p-4 border-0 shadow-sm">
+            <div class="mb-3 text-warning">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-graph-up-arrow" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.109 2.617L12.987 4H10.5a.5.5 0 0 1-.5-.5Z"/>
+                </svg>
+            </div>
+            <h4 class="fw-bold">Progress Tracking</h4>
+            <p class="text-muted small">Detailed analytics on weak areas and readiness scores to keep you on track.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+        <div class="card card-glass p-5 shadow-lg border-0">
+            <h2 class="fw-bold mb-4">Quiz Completed!</h2>
+            
+            <div class="display-1 fw-bold mb-3 {% if attempt.score >= 3 %}text-success{% else %}text-warning{% endif %}">
+                {{ attempt.score }}/{{ attempt.total_questions }}
+            </div>
+            
+            <p class="lead mb-4">
+                {% if attempt.score == attempt.total_questions %}
+                    Perfect! You have a strong grasp of {{ attempt.category }} fundamentals.
+                {% elif attempt.score >= 3 %}
+                    Good job! You're on the right track for your {{ attempt.category }} preparation.
+                {% else %}
+                    Keep practicing! Consistency is key to mastering {{ attempt.category }} subjects.
+                {% endif %}
+            </p>
+            
+            <div class="d-grid gap-3">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg rounded-pill fw-bold shadow">Back to Dashboard</a>
+                <a href="{{ url_for('quiz') }}" class="btn btn-outline-primary btn-lg rounded-pill fw-bold">Try Another Quiz</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - AI Career Prep{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Welcome Header -->
+    <div class="col-12 mb-5 d-flex justify-content-between align-items-center">
+        <div>
+            <h2 class="fw-bold">Welcome, <span class="gradient-text">{{ user.username }}</span>!</h2>
+            <p class="text-muted">Target Role: <span class="fw-semibold text-primary">{{ user.desired_role }}</span> | Prep Style: <span class="fw-semibold text-primary">{{ user.available_time }} hrs/day</span> | Duration: <span class="fw-semibold text-primary">{{ user.prep_weeks }} Weeks</span></p>
+        </div>
+        <a href="{{ url_for('onboarding') }}" class="btn btn-outline-primary btn-sm">Update Profile</a>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="col-md-4 mb-4">
+        <div class="card card-glass p-4 text-center h-100">
+            <h6 class="text-muted text-uppercase small fw-bold">Daily Quiz</h6>
+            <div class="my-3"><i class="bi bi-journal-check display-4 text-primary"></i></div>
+            <a href="{{ url_for('quiz') }}" class="btn btn-primary w-100 rounded-pill fw-bold">Take Quiz</a>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card card-glass p-4 text-center h-100">
+            <h6 class="text-muted text-uppercase small fw-bold">Preparation Progress</h6>
+            <div class="display-4 fw-bold gradient-text my-2">{{ user.readiness_score }}%</div>
+            <div class="progress bg-dark" style="height: 8px;">
+                <div class="progress-bar bg-info" role="progressbar" style="width:{{ user.readiness_score or 0 }}%;"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card card-glass p-4 text-center h-100">
+            <h6 class="text-muted text-uppercase small fw-bold">Interviews Taken</h6>
+            <div class="display-4 fw-bold text-primary my-2">{{ user.sessions|length }}</div>
+            <p class="text-muted small">Keep practicing to improve!</p>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card card-glass p-4 text-center h-100">
+            <h6 class="text-muted text-uppercase small fw-bold">Weak Areas</h6>
+            <div class="text-white mt-3">
+                {% if user.sessions and user.sessions[-1].weak_areas %}
+                    {% for area in user.sessions[-1].weak_areas.split(',') %}
+                        <span class="badge bg-danger mb-1">{{ area.strip() }}</span>
+                    {% endfor %}
+                {% else %}
+                    <span class="text-muted italic small">No data yet. Take an interview!</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="col-md-8">
+        <div class="card card-glass p-4 shadow-sm mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="fw-bold mb-0">Preparation Roadmap</h4>
+                <a href="{{ url_for('onboarding') }}" class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                    <i class="bi bi-pencil-square me-1"></i> Modify Plan
+                </a>
+            </div>
+            <div class="roadmap-summary p-3 rounded border-start border-primary border-4 mb-4" style="background: rgba(14, 165, 233, 0.05);">
+                <p class="mb-0 fw-semibold text-primary">{{ roadmap.strategy }}</p>
+                <small class="text-muted">Personalized based on your profile as a {{ user.education_level }}</small>
+            </div>
+            
+            <div class="list-group list-group-flush bg-transparent">
+                {% for module in roadmap.modules %}
+                {% set module_idx = loop.index0 %}
+                {% set is_completed = (module_idx|string) in user.completed_modules.split(',') %}
+                <div class="list-group-item bg-transparent text-white border-secondary py-4 {% if is_completed %}opacity-50{% endif %}" style="position: relative;">
+                    <div class="d-flex align-items-start">
+                        <div class="me-3 {% if is_completed %}bg-success{% else %}bg-primary{% endif %} rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px;">
+                            {% if is_completed %}<i class="bi bi-check-lg"></i>{% else %}{{ loop.index }}{% endif %}
+                        </div>
+                        <div class="w-100">
+                            <h5 class="mb-3 fw-bold {% if is_completed %}text-success text-decoration-line-through{% else %}text-primary{% endif %}">{{ module.title }}</h5>
+                            <div class="row">
+                                {% for subject in module.subjects %}
+                                <div class="col-12 mb-3">
+                                    <div class="p-3 rounded border-start border-primary border-3" style="background: rgba(14, 165, 233, 0.03);">
+                                        <h6 class="fw-bold mb-2">{{ subject.name }}</h6>
+                                        <p class="text-muted small mb-0">{{ subject.content }}</p>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="text-end mt-2">
+                                <a href="{{ url_for('toggle_module', module_idx=module_idx) }}" class="btn {% if is_completed %}btn-success{% else %}btn-outline-primary{% endif %} btn-sm rounded-pill px-4">
+                                    {% if is_completed %}
+                                        <i class="bi bi-check-circle-fill me-1"></i> Completed
+                                    {% else %}
+                                        Mark as Complete
+                                    {% endif %}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card card-glass p-4 shadow-sm text-center mb-4">
+            <h5 class="fw-bold mb-3">Ready to Practice?</h5>
+            <p class="text-muted small mb-4">Take a role-specific mock interview with adaptive difficulty.</p>
+            <a href="{{ url_for('interview') }}" class="btn btn-primary w-100 py-3 fw-bold">Start Mock Interview</a>
+        </div>
+        
+        <div class="card card-glass p-4 shadow-sm mb-4">
+            <h5 class="fw-bold mb-3">Preparation Tips</h5>
+            <ul class="list-group list-group-flush bg-transparent small">
+                {% for tip in roadmap.tips %}
+                <li class="list-group-item bg-transparent text-white border-dark px-0 py-2">
+                    <i class="bi bi-lightbulb text-warning me-2"></i> {{ tip }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <div class="card card-glass p-4 shadow-sm">
+            <h5 class="fw-bold mb-3">Recent Activity</h5>
+            <div class="activity-feed small text-muted">
+                {% if user.sessions %}
+                    {% for session in user.sessions[:3] %}
+                        <div class="mb-2 border-bottom border-dark pb-2">
+                            <div class="d-flex justify-content-between">
+                                <span class="text-white">Interview ({{ session.role }})</span>
+                                <span>{{ session.date.strftime('%b %d') }}</span>
+                            </div>
+                            <span>Score: {{ session.score }}%</span>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No recent activity found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

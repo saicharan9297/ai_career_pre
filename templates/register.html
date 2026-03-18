@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Register - AI Career Prep{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card card-glass p-5 shadow">
+            <h2 class="text-center mb-4 fw-bold">Create <span class="gradient-text">Account</span></h2>
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label text-muted small">Full Name</label>
+                    <input type="text" name="username" class="form-control" placeholder="John Doe" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted small">Email Address</label>
+                    <input type="email" name="email" class="form-control" placeholder="name@example.com" required>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label text-muted small">Password</label>
+                    <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">Sign Up</button>
+            </form>
+            <div class="text-center mt-4">
+                <span class="text-muted small">Already have an account? <a href="{{ url_for('login') }}" class="text-decoration-none text-info fw-semibold">Login here</a></span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

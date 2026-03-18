@@ -1,0 +1,85 @@
+:root {
+    --sky-blue: #0ea5e9;
+    --sky-blue-hover: #0284c7;
+    --cream-bg: #fdfcf0;
+    --deep-slate: #0f172a;
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(14, 165, 233, 0.15);
+    --primary-gradient: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 100%);
+}
+
+body {
+    background-color: var(--cream-bg);
+    background-image: radial-gradient(circle at top right, rgba(14, 165, 233, 0.05), transparent);
+    color: var(--deep-slate);
+    min-height: 100vh;
+}
+
+.card-glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(14, 165, 233, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-glass:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(14, 165, 233, 0.12);
+}
+
+.gradient-text {
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-section {
+    padding: 100px 0;
+}
+
+.form-control {
+    background: white;
+    border: 1px solid rgba(14, 165, 233, 0.2);
+    color: var(--deep-slate);
+    border-radius: 10px;
+}
+
+.form-control:focus {
+    background: white;
+    color: var(--deep-slate);
+    border-color: var(--sky-blue);
+    box-shadow: 0 0 0 0.25rem rgba(14, 165, 233, 0.15);
+}
+
+.list-group-item {
+    border-color: rgba(14, 165, 233, 0.1) !important;
+}
+
+.text-white {
+    color: var(--deep-slate) !important;
+}
+
+.text-muted {
+    color: #4b5563 !important;
+}
+
+.bg-dark {
+    background-color: #f8fafc !important;
+}
+
+.border-secondary, .border-dark {
+    border-color: rgba(14, 165, 233, 0.1) !important;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease forwards;
+}
+
