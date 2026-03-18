@@ -1,9 +1,9 @@
 from models import QuizQuestion
 import random
 
-def get_quiz_questions(user, count=5):
+def get_quiz_questions(user, week_number=1, count=5):
     """
-    Selects balanced MCQs based on user role.
+    Selects balanced MCQs based on user role and week number.
     """
     role = (user.desired_role or "").lower()
     
@@ -19,15 +19,33 @@ def get_quiz_questions(user, count=5):
     else:
         category = "Professional"
         
-    # Fetch questions for the category
-    questions = QuizQuestion.query.filter_by(category=category).all()
+    # Fetch questions for the specific week
+    week_questions = QuizQuestion.query.filter_by(category=category, week_number=week_number).all()
     
-    # If not enough specific questions, add some from Professional/HR
-    if len(questions) < count:
+    # Always fetch some additional questions from the same category to ensure variety
+    # even if the specific week has limited content.
+    other_questions = QuizQuestion.query.filter_by(category=category).filter(QuizQuestion.week_number != week_number).all()
+    
+    # Final pool prioritization:
+    # 1. Start with week-specific questions
+    # 2. Add other questions from the same category
+    # 3. Fallback to Professional/HR if still extremely low
+    
+    pool = list(week_questions)
+    
+    # If we have very few questions for this week, add more from the same category
+    if len(pool) < count + 2:
+        pool.extend([q for q in other_questions if q not in pool])
+        
+    # Final fallback for variety if pool is still small
+    if len(pool) < count:
         fallback = QuizQuestion.query.filter(QuizQuestion.category.in_(["Professional", "HR"])).all()
-        questions.extend([q for q in fallback if q not in questions])
+        pool.extend([q for q in fallback if q not in pool])
     
-    # Select random questions
-    if len(questions) >= count:
-        return random.sample(questions, count)
-    return questions
+    # Select random questions from the pool
+    if len(pool) >= count:
+        return random.sample(pool, count)
+    
+    # Shuffle if we return fewer than count
+    random.shuffle(pool)
+    return pool

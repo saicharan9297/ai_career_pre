@@ -151,22 +151,80 @@ def seed_questions():
             "correct_answer": "A style of leadership where a leader works with teams to identify needed change and creates a vision to guide the change through inspiration.",
             "hint": "It focuses on motivation and positive development of followers."
         },
-        # HR - Easy
+        # HR Questions
         {
-            "category": "HR",
-            "sub_category": "Behavioral",
-            "difficulty": "Easy",
-            "question_text": "Tell me about yourself in 2 minutes.",
-            "correct_answer": "Professional summary focusing on skills and goals.",
-            "hint": "Focus on your background, achievements, and why you are here."
+            "category": "HR", "sub_category": "Introduction", "difficulty": "Easy",
+            "question_text": "Tell me about yourself and your background.",
+            "correct_answer": "Experience, Skills, Passion, Professional summary",
+            "hint": "Focus on the 'Past, Present, Future' model."
         },
         {
-            "category": "HR",
-            "sub_category": "Conflict Resolution",
-            "difficulty": "Medium",
-            "question_text": "How do you handle a disagreement with a direct supervisor?",
-            "correct_answer": "Communicate professionally, provide evidence, and seek a collaborative solution.",
-            "hint": "Focus on professionalism and the best outcome for the organization."
+            "category": "HR", "sub_category": "Behavioral", "difficulty": "Medium",
+            "question_text": "What is your greatest professional achievement so far?",
+            "correct_answer": "Context, Action, Result, Achievement, Impact",
+            "hint": "Use the STAR method to structure your answer."
+        },
+        {
+            "category": "HR", "sub_category": "Situational", "difficulty": "Hard",
+            "question_text": "Describe a time you failed. How did you handle it?",
+            "correct_answer": "Responsibility, Learning, Growth, Resilience, Solution",
+            "hint": "Be honest and focus on the learning outcome."
+        },
+        {
+            "category": "HR", "sub_category": "Behavioral", "difficulty": "Medium",
+            "question_text": "Why do you want to work for this company?",
+            "correct_answer": "Culture, Mission, Value alignment, Product interest",
+            "hint": "Connect your personal values with the company's mission."
+        },
+        {
+            "category": "HR", "sub_category": "Behavioral", "difficulty": "Easy",
+            "question_text": "What are your greatest strengths and weaknesses?",
+            "correct_answer": "Self-awareness, Improvement, Honesty, Professionalism",
+            "hint": "Mention a weakness and how you are actively working to improve it."
+        },
+        {
+            "category": "HR", "sub_category": "Situational", "difficulty": "Medium",
+            "question_text": "How do you handle conflict in a team setting?",
+            "correct_answer": "Communication, Empathy, Resolution, Professionalism, Collaboration",
+            "hint": "Focus on open communication and finding a win-win solution."
+        },
+        # Additional Tech Questions
+        {
+            "category": "Coding", "sub_category": "Databases", "difficulty": "Medium",
+            "question_text": "What is the difference between a JOIN and a UNION in SQL?",
+            "correct_answer": "JOIN combines columns from multiple tables; UNION combines rows from multiple queries.",
+            "hint": "Think about horizontal vs vertical combination of data."
+        },
+        {
+            "category": "Coding", "sub_category": "Security", "difficulty": "Hard",
+            "question_text": "Explain the concept of Cross-Site Scripting (XSS) and how to prevent it.",
+            "correct_answer": "XSS is a vulnerability where malicious scripts are injected into web pages. Prevention includes input sanitization and Content Security Policy.",
+            "hint": "It involves trust in the browser and improper handling of user input."
+        },
+        {
+            "category": "Coding", "sub_category": "System Design", "difficulty": "Hard",
+            "question_text": "What is Load Balancing and why is it important for high-traffic applications?",
+            "correct_answer": "Distributing incoming network traffic across multiple servers. It ensures high availability and reliability. Distribution of traffic, scaling, availability.",
+            "hint": "Think about avoiding a single point of failure."
+        },
+        # Additional Professional/IAS Questions
+        {
+            "category": "Professional", "sub_category": "Management", "difficulty": "Medium",
+            "question_text": "What is the difference between a Manager and a Leader?",
+            "correct_answer": "Managers focus on tasks and systems; Leaders focus on people and vision.",
+            "hint": "Think about inspiration vs regulation."
+        },
+        {
+            "category": "IAS", "sub_category": "Economy", "difficulty": "Medium",
+            "question_text": "What is 'Fiscal Deficit' and why is it a concern for the economy?",
+            "correct_answer": "The difference between total revenue and total expenditure of the government. High deficit can lead to inflation and debt.",
+            "hint": "It's about the government's borrowing needs."
+        },
+        {
+            "category": "IAS", "sub_category": "Ethics", "difficulty": "Hard",
+            "question_text": "What do you understand by 'Crisis of Conscience'?",
+            "correct_answer": "A situation where an individual is forced to act against their moral beliefs or values.",
+            "hint": "It's a conflict between duty and morality."
         }
     ]
 
@@ -182,90 +240,309 @@ def seed_questions():
 def seed_quizzes():
     from models import QuizQuestion
     mcqs = [
-        # Tech - Data Structures
+        # --- TECH CATEGORY (Coding) ---
+        # Week 1: Foundations & Algorithms
         {
-            "category": "Coding",
-            "sub_category": "Data Structures",
-            "difficulty": "Easy",
+            "category": "Coding", "sub_category": "Data Structures", "week_number": 1, "difficulty": "Easy",
             "question_text": "Which data structure follows the Last-In-First-Out (LIFO) principle?",
             "option_a": "Queue", "option_b": "Stack", "option_c": "Linked List", "option_d": "Hash Table",
             "correct_option": "B"
         },
         {
-            "category": "Coding",
-            "sub_category": "Algorithms",
-            "difficulty": "Medium",
+            "category": "Coding", "sub_category": "Algorithms", "week_number": 1, "difficulty": "Medium",
             "question_text": "What is the time complexity of a Binary Search on a sorted array?",
             "option_a": "O(n)", "option_b": "O(n log n)", "option_c": "O(log n)", "option_d": "O(1)",
             "correct_option": "C"
         },
-        # Tech - Web
         {
-            "category": "Coding",
-            "sub_category": "Web Dev",
-            "difficulty": "Easy",
+            "category": "Coding", "sub_category": "Data Structures", "week_number": 1, "difficulty": "Easy",
+            "question_text": "What is the primary advantage of a Hash Table?",
+            "option_a": "Memory efficiency", "option_b": "Constant time access (O(1))", "option_c": "Sorted data", "option_d": "Recursive structure",
+            "correct_option": "B"
+        },
+        {
+            "category": "Coding", "sub_category": "Algorithms", "week_number": 1, "difficulty": "Medium",
+            "question_text": "Which sorting algorithm is generally considered the fastest in practice for large datasets?",
+            "option_a": "Bubble Sort", "option_b": "Insertion Sort", "option_c": "Quick Sort", "option_d": "Selection Sort",
+            "correct_option": "C"
+        },
+        {
+            "category": "Coding", "sub_category": "Data Structures", "week_number": 1, "difficulty": "Medium",
+            "question_text": "What type of data structure is a Binary Search Tree (BST)?",
+            "option_a": "Linear", "option_b": "Hierarchical", "option_c": "Matrix", "option_d": "Circular",
+            "correct_option": "B"
+        },
+
+        # Week 2: Core Tech & Language Proficiency
+        {
+            "category": "Coding", "sub_category": "Web Dev", "week_number": 2, "difficulty": "Easy",
             "question_text": "Which HTML tag is used to define an internal style sheet?",
             "option_a": "<css>", "option_b": "<script>", "option_c": "<style>", "option_d": "<link>",
             "correct_option": "C"
         },
         {
-            "category": "Coding",
-            "sub_category": "Javascript",
-            "difficulty": "Medium",
+            "category": "Coding", "sub_category": "Javascript", "week_number": 2, "difficulty": "Medium",
             "question_text": "Inside which HTML element do we put the JavaScript?",
             "option_a": "<js>", "option_b": "<javascript>", "option_c": "<scripting>", "option_d": "<script>",
             "correct_option": "D"
         },
-        # IAS - Polity
         {
-            "category": "IAS",
-            "sub_category": "Polity",
-            "difficulty": "Easy",
-            "question_text": "Who is the ex-officio Chairman of the Rajya Sabha?",
-            "option_a": "President of India", "option_b": "Prime Minister", "option_c": "Vice President of India", "option_d": "Speaker of Lok Sabha",
+            "category": "Coding", "sub_category": "Git", "week_number": 2, "difficulty": "Easy",
+            "question_text": "Which command is used to stage changes in Git?",
+            "option_a": "git commit", "option_b": "git push", "option_c": "git add", "option_d": "git save",
             "correct_option": "C"
         },
         {
-            "category": "IAS",
-            "sub_category": "Polity",
-            "difficulty": "Medium",
-            "question_text": "Which Article of the Indian Constitution provides for the Election Commission?",
-            "option_a": "Article 324", "option_b": "Article 315", "option_c": "Article 356", "option_d": "Article 280",
-            "correct_option": "A"
+            "category": "Coding", "sub_category": "API", "week_number": 2, "difficulty": "Medium",
+            "question_text": "What does REST stand for in API development?",
+            "option_a": "Rapid Enterprise Solution Tool", "option_b": "Representational State Transfer", "option_c": "Remote Scripting Technology", "option_d": "Real-time Stack Transfer",
+            "correct_option": "B"
         },
-        # IAS - History
         {
-            "category": "IAS",
-            "sub_category": "History",
-            "difficulty": "Easy",
+            "category": "Coding", "sub_category": "CSS", "week_number": 2, "difficulty": "Easy",
+            "question_text": "In CSS, what does 'Cascading' refer to?",
+            "option_a": "Animation effects", "option_b": "The priority order of style rules", "option_c": "Liquid layouts", "option_d": "Inheritance from parents only",
+            "correct_option": "B"
+        },
+
+        # Week 3: Frameworks & Applied Development
+        {
+            "category": "Coding", "sub_category": "React", "week_number": 3, "difficulty": "Medium",
+            "question_text": "In React, what are 'Hooks' used for?",
+            "option_a": "Styling components", "option_b": "Connecting to external APIs only", "option_c": "Using state and other React features in functional components", "option_d": "Routing",
+            "correct_option": "C"
+        },
+        {
+            "category": "Coding", "sub_category": "Databases", "week_number": 3, "difficulty": "Medium",
+            "question_text": "What is the purpose of an 'Index' in a SQL database?",
+            "option_a": "To encrypt data", "option_b": "To improve query performance", "option_c": "To define relationships", "option_d": "To back up data",
+            "correct_option": "B"
+        },
+        {
+            "category": "Coding", "sub_category": "Testing", "week_number": 3, "difficulty": "Medium",
+            "question_text": "What does TDD stand for in software development?",
+            "option_a": "Total Data Design", "option_b": "Test Document Driven", "option_c": "Test Driven Development", "option_d": "Technical Design Document",
+            "correct_option": "C"
+        },
+        {
+            "category": "Coding", "sub_category": "React", "week_number": 3, "difficulty": "Hard",
+            "question_text": "What is the use of the 'useEffect' dependency array?",
+            "option_a": "To define global variables", "option_b": "To control when the effect function executes", "option_c": "To import local scripts", "option_d": "To manage child components",
+            "correct_option": "B"
+        },
+        {
+            "category": "Coding", "sub_category": "Databases", "week_number": 3, "difficulty": "Hard",
+            "question_text": "What is the difference between SQL and NoSQL?",
+            "option_a": "SQL is only for small data", "option_b": "NoSQL is always faster", "option_c": "SQL uses structured tables; NoSQL uses flexible schemas", "option_d": "SQL is web-only",
+            "correct_option": "C"
+        },
+
+        # Week 4: System Design & Production
+        {
+            "category": "Coding", "sub_category": "Docker", "week_number": 4, "difficulty": "Medium",
+            "question_text": "What is a major benefit of using Docker containers?",
+            "option_a": "Increased hardware speed", "option_b": "Environment consistency across machines", "option_c": "Automatic code writing", "option_d": "Graphical UI design",
+            "correct_option": "B"
+        },
+        {
+            "category": "Coding", "sub_category": "Scalability", "week_number": 4, "difficulty": "Hard",
+            "question_text": "What is 'Horizontal Scaling'?",
+            "option_a": "Adding more RAM to a server", "option_b": "Adding more machines to the pool", "option_c": "Optimizing code loops", "option_d": "Changing the programming language",
+            "correct_option": "B"
+        },
+        {
+            "category": "Coding", "sub_category": "Cloud", "week_number": 4, "difficulty": "Easy",
+            "question_text": "Which of these is a popular Cloud Computing provider?",
+            "option_a": "HTTP", "option_b": "AWS", "option_c": "JSON", "option_d": "SQL",
+            "correct_option": "B"
+        },
+        {
+            "category": "Coding", "sub_category": "Deployment", "week_number": 4, "difficulty": "Medium",
+            "question_text": "What does CI/CD stand for?",
+            "option_a": "Calculated Input/Controlled Output", "option_b": "Continuous Integration/Continuous Deployment", "option_c": "Code Inspection/Code Design", "option_d": "Cloud Integration/Cloud Database",
+            "correct_option": "B"
+        },
+        {
+            "category": "Coding", "sub_category": "Architecture", "week_number": 4, "difficulty": "Hard",
+            "question_text": "What is a 'Microservices' architecture?",
+            "option_a": "One large application managing everything", "option_b": "A small collection of libraries", "option_c": "A system of small, independent services communicating over a network", "option_d": "Code written for microchips",
+            "correct_option": "C"
+        },
+
+        # --- IAS CATEGORY ---
+        # Week 1: History
+        {
+            "category": "IAS", "sub_category": "History", "week_number": 1, "difficulty": "Easy",
             "question_text": "The Indus Valley Civilization was primarily located in which modern-day region?",
             "option_a": "South India", "option_b": "Northwest India & Pakistan", "option_c": "Northeast India", "option_d": "Central India",
             "correct_option": "B"
         },
         {
-            "category": "IAS",
-            "sub_category": "History",
-            "difficulty": "Medium",
+            "category": "IAS", "sub_category": "History", "week_number": 1, "difficulty": "Medium",
             "question_text": "The 'Dandi March' was a part of which movement?",
             "option_a": "Non-Cooperation Movement", "option_b": "Quit India Movement", "option_c": "Civil Disobedience Movement", "option_d": "Swadeshi Movement",
             "correct_option": "C"
         },
-        # Professional
         {
-            "category": "Professional",
-            "sub_category": "Soft Skills",
-            "difficulty": "Easy",
+            "category": "IAS", "sub_category": "History", "week_number": 1, "difficulty": "Easy",
+            "question_text": "Who was the founder of the Maurya Empire?",
+            "option_a": "Ashoka", "option_b": "Bindusara", "option_c": "Chandragupta Maurya", "option_d": "Bimbisara",
+            "correct_option": "C"
+        },
+        {
+            "category": "IAS", "sub_category": "Geography", "week_number": 1, "difficulty": "Medium",
+            "question_text": "In which state is the highest peak of South India, Anamudi, located?",
+            "option_a": "Tamil Nadu", "option_b": "Karnataka", "option_c": "Kerala", "option_d": "Andhra Pradesh",
+            "correct_option": "C"
+        },
+        {
+            "category": "IAS", "sub_category": "History", "week_number": 1, "difficulty": "Medium",
+            "question_text": "The First Battle of Panipat (1526) was fought between?",
+            "option_a": "Babur and Ibrahim Lodi", "option_b": "Akbar and Hemu", "option_c": "Marathas and Ahmad Shah Abdali", "option_d": "Humayun and Sher Shah Suri",
+            "correct_option": "A"
+        },
+
+        # Week 2: Polity
+        {
+            "category": "IAS", "sub_category": "Polity", "week_number": 2, "difficulty": "Easy",
+            "question_text": "Who is the ex-officio Chairman of the Rajya Sabha?",
+            "option_a": "President of India", "option_b": "Prime Minister", "option_c": "Vice President of India", "option_d": "Speaker of Lok Sabha",
+            "correct_option": "C"
+        },
+        {
+            "category": "IAS", "sub_category": "Polity", "week_number": 2, "difficulty": "Medium",
+            "question_text": "Which Article of the Indian Constitution provides for the Election Commission?",
+            "option_a": "Article 324", "option_b": "Article 315", "option_c": "Article 356", "option_d": "Article 280",
+            "correct_option": "A"
+        },
+        {
+            "category": "IAS", "sub_category": "Economy", "week_number": 2, "difficulty": "Medium",
+            "question_text": "What is 'Inflation' in an economy?",
+            "option_a": "Decrease in price of goods", "option_b": "Increase in purchasing power of money", "option_c": "General increase in prices and fall in purchasing value of money", "option_d": "A stock market crash",
+            "correct_option": "C"
+        },
+        {
+            "category": "IAS", "sub_category": "Polity", "week_number": 2, "difficulty": "Easy",
+            "question_text": "Which part of the Indian Constitution deals with Fundamental Rights?",
+            "option_a": "Part II", "option_b": "Part III", "option_c": "Part IV", "option_d": "Part V",
+            "correct_option": "B"
+        },
+        {
+            "category": "IAS", "sub_category": "Economy", "week_number": 2, "difficulty": "Medium",
+            "question_text": "Who represents the 'Lender of Last Resort' in India?",
+            "option_a": "SBI", "option_b": "Finance Ministry", "option_c": "RBI", "option_d": "NABARD",
+            "correct_option": "C"
+        },
+
+        # Week 3: Ethics & Tech
+        {
+            "category": "IAS", "sub_category": "Ethics", "week_number": 3, "difficulty": "Medium",
+            "question_text": "What is 'Emotional Intelligence' in administration?",
+            "option_a": "Being extremely emotional", "option_b": "Ability to control others using emotions", "option_c": "Understanding and managing one's own and others' emotions effectively", "option_d": "Reading files quickly",
+            "correct_option": "C"
+        },
+        {
+            "category": "IAS", "sub_category": "Environment", "week_number": 3, "difficulty": "Easy",
+            "question_text": "Where is the headquarters of the International Solar Alliance (ISA) located?",
+            "option_a": "Paris", "option_b": "Delhi", "option_c": "Gurugram", "option_d": "Nairobi",
+            "correct_option": "C"
+        },
+        {
+            "category": "IAS", "sub_category": "Science", "week_number": 3, "difficulty": "Medium",
+            "question_text": "What does a 'Light Year' measure?",
+            "option_a": "Time", "option_b": "Speed", "option_c": "Distance", "option_d": "Intensity",
+            "correct_option": "C"
+        },
+        {
+            "category": "IAS", "sub_category": "Ethics", "week_number": 3, "difficulty": "Hard",
+            "question_text": "What is the core principle of 'Utilitarianism'?",
+            "option_a": "Duty for duty's sake", "option_b": "Greatest good for the greatest number", "option_c": "Individual self-interest", "option_d": "Religious law",
+            "correct_option": "B"
+        },
+        {
+            "category": "IAS", "sub_category": "Tech", "week_number": 3, "difficulty": "Medium",
+            "question_text": "What is a 'Geostationary Orbit'?",
+            "option_a": "Orbiting the moon", "option_b": "Staying fixed relative to a point on the rotating Earth", "option_c": "Passing over both poles", "option_d": "Entering the atmosphere",
+            "correct_option": "B"
+        },
+
+        # Week 4: Current Affairs
+        {
+            "category": "IAS", "sub_category": "CSAT", "week_number": 4, "difficulty": "Medium",
+            "question_text": "If a train 100m long passes a post in 10 seconds, what is its speed?",
+            "option_a": "36 km/h", "option_b": "10 km/h", "option_c": "50 km/h", "option_d": "72 km/h",
+            "correct_option": "A"
+        },
+        {
+            "category": "IAS", "sub_category": "Current Affairs", "week_number": 4, "difficulty": "Easy",
+            "question_text": "What is the primary role of the PIB (Press Information Bureau)?",
+            "option_a": "Publishing newspapers", "option_b": "Providing news to international agencies only", "option_c": "Nodal agency of Govt. to disseminate information to media", "option_d": "Regulating social media",
+            "correct_option": "C"
+        },
+        {
+            "category": "IAS", "sub_category": "Polity", "week_number": 4, "difficulty": "Medium",
+            "question_text": "Which constitutional amendment is known as the 'Mini Constitution'?",
+            "option_a": "44th", "option_b": "24th", "option_c": "42nd", "option_d": "73rd",
+            "correct_option": "C"
+        },
+        {
+            "category": "IAS", "sub_category": "Revision", "week_number": 4, "difficulty": "Medium",
+            "question_text": "What was the main purpose of the Non-Cooperation Movement?",
+            "option_a": "To get violent revenge", "option_b": "To achieve Swaraj through non-violent means", "option_c": "To support the British war effort", "option_d": "To establish a monarchy",
+            "correct_option": "B"
+        },
+        {
+            "category": "IAS", "sub_category": "Geography", "week_number": 4, "difficulty": "Easy",
+            "question_text": "Which latitude passes through the middle of India?",
+            "option_a": "Equator", "option_b": "Tropic of Capricorn", "option_c": "Tropic of Cancer", "option_d": "Arctic Circle",
+            "correct_option": "C"
+        },
+
+        # --- PROFESSIONAL CATEGORY ---
+        # Week 1: Soft Skills
+        {
+            "category": "Professional", "sub_category": "Soft Skills", "week_number": 1, "difficulty": "Easy",
             "question_text": "What does the 'S' stand for in the SMART goals framework?",
             "option_a": "Sustainable", "option_b": "Strategic", "option_c": "Specific", "option_d": "Scalable",
             "correct_option": "C"
         },
         {
-            "category": "Professional",
-            "sub_category": "Leadership",
-            "difficulty": "Medium",
+            "category": "Professional", "sub_category": "Communication", "week_number": 1, "difficulty": "Medium",
+            "question_text": "What is 'Active Listening'?",
+            "option_a": "Talking while others speak", "option_b": "Paying full attention and showing you've understood", "option_c": "Hearing background noise", "option_d": "Writing down every single word",
+            "correct_option": "B"
+        },
+        {
+            "category": "Professional", "sub_category": "Domain", "week_number": 1, "difficulty": "Easy",
+            "question_text": "What is the primary goal of professional networking?",
+            "option_a": "Getting free meals", "option_b": "Building mutually beneficial relationships", "option_c": "Collecting business cards only", "option_d": "Avoiding work",
+            "correct_option": "B"
+        },
+        # Week 2: Leadership
+        {
+            "category": "Professional", "sub_category": "Leadership", "week_number": 2, "difficulty": "Medium",
             "question_text": "Which leadership style involves including team members in the decision-making process?",
             "option_a": "Autocratic", "option_b": "Laissez-faire", "option_c": "Democratic", "option_d": "Bureaucratic",
             "correct_option": "C"
+        },
+        {
+            "category": "Professional", "sub_category": "Management", "week_number": 2, "difficulty": "Medium",
+            "question_text": "What is a 'SWOT Analysis'?",
+            "option_a": "Software Work Or Training", "option_b": "Strengths, Weaknesses, Opportunities, Threats", "option_c": "Strategic Work On Time", "option_d": "Systematic Weekly Online Test",
+            "correct_option": "B"
+        },
+        # Week 3 & 4 (Expanding)
+        {
+            "category": "Professional", "sub_category": "Strategy", "week_number": 3, "difficulty": "Hard",
+            "question_text": "What is 'Strategic Alignment' in an organization?",
+            "option_a": "Putting chairs in a row", "option_b": "Ensuring all departments work towards common organizational goals", "option_c": "Following the competitor's strategy", "option_d": "Hiring only one type of person",
+            "correct_option": "B"
+        },
+        {
+            "category": "Professional", "sub_category": "Interviews", "week_number": 4, "difficulty": "Medium",
+            "question_text": "What is the 'STAR' method used for in interviews?",
+            "option_a": "Rating the interviewer", "option_b": "Situation, Task, Action, Result", "option_c": "Standard Technical Aptitude Review", "option_d": "Strategic Talk And Response",
+            "correct_option": "B"
         }
     ]
 
@@ -273,10 +550,10 @@ def seed_quizzes():
         # Clear existing
         db.session.query(QuizQuestion).delete()
         for q_data in mcqs:
-            q = QuizQuestion(**q_data)
-            db.session.add(q)
+            new_q = QuizQuestion(**q_data)
+            db.session.add(new_q)
         db.session.commit()
-        print("Quiz questions seeded.")
+        print(f"Seeded {len(mcqs)} quiz questions with multi-week mapping.")
 
 if __name__ == "__main__":
     seed_questions()

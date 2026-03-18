@@ -5,11 +5,12 @@
     <div class="col-md-8">
         <div class="card card-glass p-5 shadow-lg border-0">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="fw-bold mb-0">Daily Quiz</h2>
+                <h2 class="fw-bold mb-0">Week {{ week }} Quiz</h2>
                 <span class="badge bg-primary rounded-pill px-3">{{ questions|length }} Questions</span>
             </div>
             
             <form action="{{ url_for('quiz') }}" method="POST" id="quizForm">
+                <input type="hidden" name="week_number" value="{{ week }}">
                 {% for q in questions %}
                 <div class="quiz-question mb-5 p-4 rounded bg-white shadow-sm border-start border-primary border-4">
                     <h5 class="fw-bold mb-3">Question {{ loop.index }}: {{ q.question_text }}</h5>

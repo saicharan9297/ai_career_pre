@@ -9,35 +9,110 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <span class="badge bg-primary px-3 py-2 text-uppercase">{{ question.category }}</span>
-                    <span class="ms-2 text-muted small">Target: <span class="fw-semibold text-primary">{{ user.desired_role }}</span></span>
+                    <span class="ms-2 text-muted small">Question {{ current_num }} of {{ total_num }}</span>
                 </div>
-                <span class="text-muted">Difficulty: <span class="badge {% if question.difficulty == 'Easy' %}bg-success{% elif question.difficulty == 'Medium' %}bg-warning{% else %}bg-danger{% endif %}">{{ question.difficulty }}</span></span>
+                <div class="d-flex align-items-center">
+                    <span class="text-muted me-3">Difficulty: <span class="badge {% if question.difficulty == 'Easy' %}bg-success{% elif question.difficulty == 'Medium' %}bg-warning{% else %}bg-danger{% endif %}">{{ question.difficulty }}</span></span>
+                    <button class="btn btn-sm btn-info rounded-pill" onclick="speakQuestion()">
+                        <i class="bi bi-volume-up-fill me-1"></i> Listen
+                    </button>
+                </div>
             </div>
 
             <div class="question-container mb-5">
-                <h3 class="fw-bold mb-4 gradient-text">{{ question.question_text }}</h3>
+                <h3 class="fw-bold mb-4 gradient-text" id="question-text">{{ question.question_text }}</h3>
                 <div id="hint-section" class="p-3 rounded border-start border-info border-4" style="display: none; background: rgba(13, 202, 240, 0.05);">
                     <small class="text-info fw-bold">HINT:</small>
                     <p class="mb-0 text-muted italic">{{ question.hint }}</p>
                 </div>
             </div>
 
-            <form method="POST" id="interview-form">
+            <form action="{{ url_for('submit_answer') }}" method="POST" id="interview-form">
                 <input type="hidden" name="question_id" value="{{ question.id }}">
-                <input type="hidden" name="current_difficulty" value="{{ question.difficulty }}">
                 
                 <div class="mb-4">
-                    <label class="form-label text-muted small">Your Answer</label>
-                    <textarea name="user_answer" class="form-control" rows="4" placeholder="Type your answer here..." required></textarea>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <label class="form-label text-muted small mb-0">Your Answer</label>
+                        <button type="button" class="btn btn-sm btn-outline-danger rounded-pill" id="start-record-btn" onclick="startRecording()">
+                            <i class="bi bi-mic-fill me-1"></i> Start Speaking
+                        </button>
+                    </div>
+                    <textarea name="user_answer" id="user_answer" class="form-control" rows="6" placeholder="Your answer will appear here as you speak, or you can type..." required></textarea>
+                    <div id="recording-status" class="small text-danger mt-1 fw-bold" style="display: none;">
+                        <span class="spinner-grow spinner-grow-sm me-1"></span> Recording...
+                    </div>
                 </div>
 
                 <div class="d-flex gap-3">
-                    <button type="submit" class="btn btn-primary px-5 py-2 fw-bold">Submit Answer</button>
-                    <button type="button" class="btn btn-outline-info" onclick="document.getElementById('hint-section').style.display='block'">Show Hint</button>
-                    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary ms-auto">Exit Session</a>
+                    <button type="submit" class="btn btn-primary px-5 py-2 fw-bold rounded-pill">Next Question</button>
+                    <button type="button" class="btn btn-outline-info rounded-pill" onclick="document.getElementById('hint-section').style.display='block'">Show Hint</button>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary ms-auto rounded-pill" onclick="return confirm('Are you sure you want to exit? Your progress for this session will be lost.')">Exit Session</a>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+    // Text-to-Speech
+    function speakQuestion() {
+        const text = document.getElementById('question-text').innerText;
+        const msg = new SpeechSynthesisUtterance(text);
+        window.speechSynthesis.speak(msg);
+    }
+
+    // Speech-to-Text
+    let recognition;
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
+
+        recognition.onresult = (event) => {
+            let transcript = '';
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                transcript += event.results[i][0].transcript;
+            }
+            document.getElementById('user_answer').value = transcript;
+        };
+
+        recognition.onend = () => {
+            document.getElementById('recording-status').style.display = 'none';
+            document.getElementById('start-record-btn').innerHTML = '<i class="bi bi-mic-fill me-1"></i> Resume Speaking';
+            document.getElementById('start-record-btn').className = 'btn btn-sm btn-outline-danger rounded-pill';
+        };
+
+        recognition.onerror = (event) => {
+            console.error('Speech recognition error:', event.error);
+            stopRecording();
+        };
+    } else {
+        document.getElementById('start-record-btn').style.display = 'none';
+    }
+
+    let isRecording = false;
+    function startRecording() {
+        if (!recognition) return;
+        
+        if (isRecording) {
+            stopRecording();
+        } else {
+            recognition.start();
+            isRecording = true;
+            document.getElementById('recording-status').style.display = 'block';
+            document.getElementById('start-record-btn').innerHTML = '<i class="bi bi-stop-circle-fill me-1"></i> Stop Recording';
+            document.getElementById('start-record-btn').className = 'btn btn-sm btn-danger rounded-pill';
+        }
+    }
+
+    function stopRecording() {
+        if (recognition) recognition.stop();
+        isRecording = false;
+    }
+
+    // Auto-speak on load (optional, modern browsers might block without user interaction)
+    // window.onload = speakQuestion;
+</script>
 {% endblock %}

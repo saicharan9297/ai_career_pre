@@ -87,14 +87,28 @@
                                 </div>
                                 {% endfor %}
                             </div>
-                            <div class="text-end mt-2">
-                                <a href="{{ url_for('toggle_module', module_idx=module_idx) }}" class="btn {% if is_completed %}btn-success{% else %}btn-outline-primary{% endif %} btn-sm rounded-pill px-4">
-                                    {% if is_completed %}
-                                        <i class="bi bi-check-circle-fill me-1"></i> Completed
+                            
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div>
+                                    {% set week_num = module_idx + 1 %}
+                                    {% if week_num in passed_weeks %}
+                                        <span class="badge bg-success"><i class="bi bi-patch-check-fill me-1"></i> Quiz Passed</span>
                                     {% else %}
-                                        Mark as Complete
+                                        <a href="{{ url_for('quiz', week=week_num) }}" class="btn btn-warning btn-sm rounded-pill px-3">
+                                            <i class="bi bi-pencil-square me-1"></i> Take Week {{ week_num }} Quiz
+                                        </a>
                                     {% endif %}
-                                </a>
+                                </div>
+                                <div>
+                                    <a href="{{ url_for('toggle_module', module_idx=module_idx) }}" 
+                                       class="btn {% if is_completed %}btn-success{% elif week_num in passed_weeks %}btn-outline-primary{% else %}btn-outline-secondary disabled{% endif %} btn-sm rounded-pill px-4">
+                                        {% if is_completed %}
+                                            <i class="bi bi-arrow-repeat me-1"></i> Study Again
+                                        {% else %}
+                                            Mark as Complete
+                                        {% endif %}
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -108,7 +122,7 @@
         <div class="card card-glass p-4 shadow-sm text-center mb-4">
             <h5 class="fw-bold mb-3">Ready to Practice?</h5>
             <p class="text-muted small mb-4">Take a role-specific mock interview with adaptive difficulty.</p>
-            <a href="{{ url_for('interview') }}" class="btn btn-primary w-100 py-3 fw-bold">Start Mock Interview</a>
+            <a href="{{ url_for('start_interview') }}" class="btn btn-primary w-100 py-3 fw-bold">Start Mock Interview</a>
         </div>
         
         <div class="card card-glass p-4 shadow-sm mb-4">
