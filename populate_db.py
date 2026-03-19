@@ -241,7 +241,19 @@ def seed_quizzes():
     from models import QuizQuestion
     mcqs = [
         # --- TECH CATEGORY (Coding) ---
-        # Week 1: Foundations & Algorithms
+        # Week 1: Core CSE Foundations (OS, DBMS, Data Structures)
+        {
+            "category": "Coding", "sub_category": "OS", "week_number": 1, "difficulty": "Medium",
+            "question_text": "What is the main purpose of an Operating System's kernel?",
+            "option_a": "To provide a user interface", "option_b": "To manage system resources and communication between hardware and software", "option_c": "To compile source code", "option_d": "To browse the internet",
+            "correct_option": "B"
+        },
+        {
+            "category": "Coding", "sub_category": "Databases", "week_number": 1, "difficulty": "Medium",
+            "question_text": "In a relational database, what does ACID stand for?",
+            "option_a": "Atomicity, Consistency, Isolation, Durability", "option_b": "Access, Control, Identification, Data", "option_c": "Array, Code, Index, Database", "option_d": "Automatic, Centralized, Integrated, Distributed",
+            "correct_option": "A"
+        },
         {
             "category": "Coding", "sub_category": "Data Structures", "week_number": 1, "difficulty": "Easy",
             "question_text": "Which data structure follows the Last-In-First-Out (LIFO) principle?",
@@ -255,36 +267,24 @@ def seed_quizzes():
             "correct_option": "C"
         },
         {
-            "category": "Coding", "sub_category": "Data Structures", "week_number": 1, "difficulty": "Easy",
-            "question_text": "What is the primary advantage of a Hash Table?",
-            "option_a": "Memory efficiency", "option_b": "Constant time access (O(1))", "option_c": "Sorted data", "option_d": "Recursive structure",
+            "category": "Coding", "sub_category": "Databases", "week_number": 1, "difficulty": "Medium",
+            "question_text": "What is the purpose of an 'Index' in a SQL database?",
+            "option_a": "To encrypt data", "option_b": "To improve query performance", "option_c": "To define relationships", "option_d": "To back up data",
             "correct_option": "B"
         },
+
+        # Week 2: Advanced Data Structures & Languages
         {
-            "category": "Coding", "sub_category": "Algorithms", "week_number": 1, "difficulty": "Medium",
-            "question_text": "Which sorting algorithm is generally considered the fastest in practice for large datasets?",
-            "option_a": "Bubble Sort", "option_b": "Insertion Sort", "option_c": "Quick Sort", "option_d": "Selection Sort",
-            "correct_option": "C"
-        },
-        {
-            "category": "Coding", "sub_category": "Data Structures", "week_number": 1, "difficulty": "Medium",
+            "category": "Coding", "sub_category": "Data Structures", "week_number": 2, "difficulty": "Medium",
             "question_text": "What type of data structure is a Binary Search Tree (BST)?",
             "option_a": "Linear", "option_b": "Hierarchical", "option_c": "Matrix", "option_d": "Circular",
             "correct_option": "B"
         },
-
-        # Week 2: Core Tech & Language Proficiency
-        {
-            "category": "Coding", "sub_category": "Web Dev", "week_number": 2, "difficulty": "Easy",
-            "question_text": "Which HTML tag is used to define an internal style sheet?",
-            "option_a": "<css>", "option_b": "<script>", "option_c": "<style>", "option_d": "<link>",
-            "correct_option": "C"
-        },
         {
             "category": "Coding", "sub_category": "Javascript", "week_number": 2, "difficulty": "Medium",
-            "question_text": "Inside which HTML element do we put the JavaScript?",
-            "option_a": "<js>", "option_b": "<javascript>", "option_c": "<scripting>", "option_d": "<script>",
-            "correct_option": "D"
+            "question_text": "What is 'Hoisting' in JavaScript?",
+            "option_a": "Moving declarations to the top of their scope", "option_b": "Deleting unused variables", "option_c": "Compiling code to machine language", "option_d": "Loading scripts asynchronously",
+            "correct_option": "A"
         },
         {
             "category": "Coding", "sub_category": "Git", "week_number": 2, "difficulty": "Easy",
@@ -293,16 +293,16 @@ def seed_quizzes():
             "correct_option": "C"
         },
         {
-            "category": "Coding", "sub_category": "API", "week_number": 2, "difficulty": "Medium",
-            "question_text": "What does REST stand for in API development?",
-            "option_a": "Rapid Enterprise Solution Tool", "option_b": "Representational State Transfer", "option_c": "Remote Scripting Technology", "option_d": "Real-time Stack Transfer",
-            "correct_option": "B"
+            "category": "Coding", "sub_category": "Networking", "week_number": 2, "difficulty": "Medium",
+            "question_text": "What does HTTP stand for?",
+            "option_a": "HyperText Transfer Protocol", "option_b": "High Tech Transfer Program", "option_c": "Home Tool Transfer Process", "option_d": "HyperLink Terminal Type",
+            "correct_option": "A"
         },
         {
-            "category": "Coding", "sub_category": "CSS", "week_number": 2, "difficulty": "Easy",
-            "question_text": "In CSS, what does 'Cascading' refer to?",
-            "option_a": "Animation effects", "option_b": "The priority order of style rules", "option_c": "Liquid layouts", "option_d": "Inheritance from parents only",
-            "correct_option": "B"
+            "category": "Coding", "sub_category": "Algorithms", "week_number": 2, "difficulty": "High",
+            "question_text": "Which sorting algorithm is generally considered the fastest in practice for large datasets?",
+            "option_a": "Bubble Sort", "option_b": "Insertion Sort", "option_c": "Quick Sort", "option_d": "Selection Sort",
+            "correct_option": "C"
         },
 
         # Week 3: Frameworks & Applied Development
@@ -370,65 +370,65 @@ def seed_quizzes():
         },
 
         # --- IAS CATEGORY ---
-        # Week 1: History
+        # Week 2: History
         {
-            "category": "IAS", "sub_category": "History", "week_number": 1, "difficulty": "Easy",
+            "category": "IAS", "sub_category": "History", "week_number": 2, "difficulty": "Easy",
             "question_text": "The Indus Valley Civilization was primarily located in which modern-day region?",
             "option_a": "South India", "option_b": "Northwest India & Pakistan", "option_c": "Northeast India", "option_d": "Central India",
             "correct_option": "B"
         },
         {
-            "category": "IAS", "sub_category": "History", "week_number": 1, "difficulty": "Medium",
+            "category": "IAS", "sub_category": "History", "week_number": 2, "difficulty": "Medium",
             "question_text": "The 'Dandi March' was a part of which movement?",
             "option_a": "Non-Cooperation Movement", "option_b": "Quit India Movement", "option_c": "Civil Disobedience Movement", "option_d": "Swadeshi Movement",
             "correct_option": "C"
         },
         {
-            "category": "IAS", "sub_category": "History", "week_number": 1, "difficulty": "Easy",
+            "category": "IAS", "sub_category": "History", "week_number": 2, "difficulty": "Easy",
             "question_text": "Who was the founder of the Maurya Empire?",
             "option_a": "Ashoka", "option_b": "Bindusara", "option_c": "Chandragupta Maurya", "option_d": "Bimbisara",
             "correct_option": "C"
         },
         {
-            "category": "IAS", "sub_category": "Geography", "week_number": 1, "difficulty": "Medium",
+            "category": "IAS", "sub_category": "Geography", "week_number": 2, "difficulty": "Medium",
             "question_text": "In which state is the highest peak of South India, Anamudi, located?",
             "option_a": "Tamil Nadu", "option_b": "Karnataka", "option_c": "Kerala", "option_d": "Andhra Pradesh",
             "correct_option": "C"
         },
         {
-            "category": "IAS", "sub_category": "History", "week_number": 1, "difficulty": "Medium",
+            "category": "IAS", "sub_category": "History", "week_number": 2, "difficulty": "Medium",
             "question_text": "The First Battle of Panipat (1526) was fought between?",
             "option_a": "Babur and Ibrahim Lodi", "option_b": "Akbar and Hemu", "option_c": "Marathas and Ahmad Shah Abdali", "option_d": "Humayun and Sher Shah Suri",
             "correct_option": "A"
         },
 
-        # Week 2: Polity
+        # Week 1: Polity
         {
-            "category": "IAS", "sub_category": "Polity", "week_number": 2, "difficulty": "Easy",
+            "category": "IAS", "sub_category": "Polity", "week_number": 1, "difficulty": "Easy",
             "question_text": "Who is the ex-officio Chairman of the Rajya Sabha?",
             "option_a": "President of India", "option_b": "Prime Minister", "option_c": "Vice President of India", "option_d": "Speaker of Lok Sabha",
             "correct_option": "C"
         },
         {
-            "category": "IAS", "sub_category": "Polity", "week_number": 2, "difficulty": "Medium",
+            "category": "IAS", "sub_category": "Polity", "week_number": 1, "difficulty": "Medium",
             "question_text": "Which Article of the Indian Constitution provides for the Election Commission?",
             "option_a": "Article 324", "option_b": "Article 315", "option_c": "Article 356", "option_d": "Article 280",
             "correct_option": "A"
         },
         {
-            "category": "IAS", "sub_category": "Economy", "week_number": 2, "difficulty": "Medium",
+            "category": "IAS", "sub_category": "Economy", "week_number": 1, "difficulty": "Medium",
             "question_text": "What is 'Inflation' in an economy?",
             "option_a": "Decrease in price of goods", "option_b": "Increase in purchasing power of money", "option_c": "General increase in prices and fall in purchasing value of money", "option_d": "A stock market crash",
             "correct_option": "C"
         },
         {
-            "category": "IAS", "sub_category": "Polity", "week_number": 2, "difficulty": "Easy",
+            "category": "IAS", "sub_category": "Polity", "week_number": 1, "difficulty": "Easy",
             "question_text": "Which part of the Indian Constitution deals with Fundamental Rights?",
             "option_a": "Part II", "option_b": "Part III", "option_c": "Part IV", "option_d": "Part V",
             "correct_option": "B"
         },
         {
-            "category": "IAS", "sub_category": "Economy", "week_number": 2, "difficulty": "Medium",
+            "category": "IAS", "sub_category": "Economy", "week_number": 1, "difficulty": "Medium",
             "question_text": "Who represents the 'Lender of Last Resort' in India?",
             "option_a": "SBI", "option_b": "Finance Ministry", "option_c": "RBI", "option_d": "NABARD",
             "correct_option": "C"
@@ -543,6 +543,59 @@ def seed_quizzes():
             "question_text": "What is the 'STAR' method used for in interviews?",
             "option_a": "Rating the interviewer", "option_b": "Situation, Task, Action, Result", "option_c": "Standard Technical Aptitude Review", "option_d": "Strategic Talk And Response",
             "correct_option": "B"
+        },
+        # --- FINANCE & GOVT COMPETITIVE (Categorized as IAS for GS/Aptitude overlap) ---
+        # Week 1: Quantitative Aptitude
+        {
+            "category": "IAS", "sub_category": "Quants", "week_number": 1, "difficulty": "Medium",
+            "question_text": "If a man sells an article at a profit of 25%, what is the ratio of cost price to selling price?",
+            "option_a": "4:5", "option_b": "5:4", "option_c": "1:4", "option_d": "4:1",
+            "correct_option": "A"
+        },
+        {
+            "category": "IAS", "sub_category": "Quants", "week_number": 1, "difficulty": "Easy",
+            "question_text": "What is 15% of 200?",
+            "option_a": "20", "option_b": "30", "option_c": "40", "option_d": "25",
+            "correct_option": "B"
+        },
+        # Week 2: Finance & Tax
+        {
+            "category": "IAS", "sub_category": "Taxation", "week_number": 2, "difficulty": "Medium",
+            "question_text": "Which of the following is a direct tax in India?",
+            "option_a": "GST", "option_b": "Customs Duty", "option_c": "Income Tax", "option_d": "Excise Duty",
+            "correct_option": "C"
+        },
+        {
+            "category": "IAS", "sub_category": "Banking", "week_number": 2, "difficulty": "Medium",
+            "question_text": "What is the primary function of the Reserve Bank of India (RBI)?",
+            "option_a": "Lending to individuals", "option_b": "Regulating the monetary policy and currency", "option_c": "Managing commercial banks' equity", "option_d": "Setting corporate tax rates",
+            "correct_option": "B"
+        },
+        # Week 3: Advanced Domain & Economics
+        {
+            "category": "IAS", "sub_category": "Economy", "week_number": 3, "difficulty": "High",
+            "question_text": "What does 'Fiscal Deficit' represent in the Union Budget?",
+            "option_a": "Total expenditure minus total receipts", "option_b": "Total borrowings required by the government", "option_c": "Total tax revenue minus total subsidies", "option_d": "Difference between imports and exports",
+            "correct_option": "B"
+        },
+        {
+            "category": "IAS", "sub_category": "Financial Awareness", "week_number": 3, "difficulty": "Medium",
+            "question_text": "Which institution regulates the stock market in India?",
+            "option_a": "RBI", "option_b": "SEBI", "option_c": "IRDAI", "option_d": "SIDBI",
+            "correct_option": "B"
+        },
+        # Week 4: Final Practice
+        {
+            "category": "IAS", "sub_category": "Current Affairs", "week_number": 4, "difficulty": "Medium",
+            "question_text": "Who is the current Finance Minister of India (as of 2024)?",
+            "option_a": "Amit Shah", "option_b": "Nirmala Sitharaman", "option_c": "Piyush Goyal", "option_d": "S. Jaishankar",
+            "correct_option": "B"
+        },
+        {
+            "category": "IAS", "sub_category": "Taxation", "week_number": 4, "difficulty": "High",
+            "question_text": "What is the standard GST rate for most essential services in India?",
+            "option_a": "5%", "option_b": "12%", "option_c": "18%", "option_d": "28%",
+            "correct_option": "C"
         }
     ]
 

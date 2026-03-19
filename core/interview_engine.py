@@ -7,18 +7,36 @@ def get_interview_session_questions(user):
     """
     role = (user.desired_role or "").lower()
     tech_keywords = ['engineer', 'developer', 'coding', 'ai', 'data', 'software', 'tech', 'programmer', 'web', 'frontend', 'backend', 'fullstack', 'devops', 'stack', 'cloud', 'security', 'machine learning', 'data science']
+    # Robust Category Detection
+    civil_keywords = ['ias', 'civil service', 'upsc', 'mro', 'revenue', 'ssc', 'govt', 'government']
+    medical_keywords = ['medical', 'doctor', 'nurse', 'pharmacy', 'healthcare']
+    science_keywords = ['science', 'research', 'physics', 'chemistry', 'biology', 'scientist']
+    
     is_tech = any(kw in role for kw in tech_keywords)
+    is_civil = any(kw in role for kw in civil_keywords)
+    is_medical = any(kw in role for kw in medical_keywords)
+    is_science = any(kw in role for kw in science_keywords)
     
     # 1. Fetch Technical/Role-Specific Pool
     if is_tech:
         role_pool = Question.query.filter(Question.category.in_(["Coding", "Core CS"])).all()
+    elif is_civil:
+        role_pool = Question.query.filter_by(category="Civil Service").all()
+    elif is_medical:
+        role_pool = Question.query.filter_by(category="Medical").all()
+    elif is_science:
+        role_pool = Question.query.filter_by(category="Science").all()
     else:
         role_pool = Question.query.filter(Question.category.notin_(["Coding", "Core CS", "HR"])).all()
     
-    # Filter by role keywords if possible
+    # Filter by role keywords if possible for additional refinement
     refined_role_pool = [q for q in role_pool if role in (q.sub_category or "").lower() or role in q.question_text.lower()]
     if len(refined_role_pool) < 3:
-        refined_role_pool = role_pool # Fallback to general tech/non-tech pool
+        refined_role_pool = role_pool # Fallback to the category pool
+    
+    if not refined_role_pool:
+        # Extreme fallback to any non-HR if still empty
+        refined_role_pool = Question.query.filter(Question.category != "HR").all()
     
     # 2. Fetch HR Pool
     hr_pool = Question.query.filter_by(category="HR").all()

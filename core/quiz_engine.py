@@ -5,47 +5,85 @@ def get_quiz_questions(user, week_number=1, count=5):
     """
     Selects balanced MCQs based on user role and week number.
     """
-    role = (user.desired_role or "").lower()
+    role_raw = (user.desired_role or "").lower()
     
-    # Detect role type
+    # Robust Role Detection (Synchronized with roadmap.py)
     tech_keywords = ['engineer', 'developer', 'coding', 'ai', 'data', 'software', 'tech', 'programmer', 'web', 'frontend', 'backend', 'fullstack', 'devops', 'stack', 'cloud', 'security', 'machine learning', 'data science']
-    is_tech = any(kw in role for kw in tech_keywords)
-    is_ias = any(kw in role for kw in ['ias', 'civil service', 'upsc'])
-    
+    civil_service_keywords = ['ias', 'civil service', 'upsc', 'mro', 'revenue officer', 'tpsc', 'appsc', 'group 1', 'group 2', 'constable', 'sub-inspector', 'panchayat', 'administrative', 'ips', 'ifs', 'collector']
+    finance_govt_keywords = ['income tax', 'tax', 'ssc', 'cgl', 'banking', 'bank', 'po', 'clerk', 'finance', 'audit', 'lic', 'rbi', 'ibps', 'accountant', 'budget', 'revenue']
+    medical_keywords = ['medical', 'doctor', 'nurse', 'pharmacy', 'healthcare', 'dentist', 'physician', 'surgeon', 'clinic']
+    science_keywords = ['science', 'research', 'physics', 'chemistry', 'biology', 'scientist', 'laboratory', 'biotech']
+
+    is_tech = any(kw in role_raw for kw in tech_keywords)
+    is_civil = any(kw in role_raw for kw in civil_service_keywords)
+    is_finance_govt = any(kw in role_raw for kw in finance_govt_keywords)
+    is_medical = any(kw in role_raw for kw in medical_keywords)
+    is_science = any(kw in role_raw for kw in science_keywords)
+
     if is_tech:
         category = "Coding"
-    elif is_ias:
-        category = "IAS"
+    elif is_medical:
+        category = "Medical"
+    elif is_science:
+        category = "Science"
+    elif is_civil or is_finance_govt:
+        category = "IAS" # Shared GS/Aptitude pool but different weekly priorities
     else:
         category = "Professional"
         
-    # Fetch questions for the specific week
-    week_questions = QuizQuestion.query.filter_by(category=category, week_number=week_number).all()
+    # Map roadmap week to DB week (assuming 4 weeks of content)
+    try:
+        mapped_week = (int(week_number) - 1) % 4 + 1
+    except (ValueError, TypeError):
+        mapped_week = 1
     
-    # Always fetch some additional questions from the same category to ensure variety
-    # even if the specific week has limited content.
-    other_questions = QuizQuestion.query.filter_by(category=category).filter(QuizQuestion.week_number != week_number).all()
+    # Sub-category filtering based on ROLE and WEEK (Alignment with roadmap.py themes)
+    preferred_subcats = []
     
-    # Final pool prioritization:
-    # 1. Start with week-specific questions
-    # 2. Add other questions from the same category
-    # 3. Fallback to Professional/HR if still extremely low
+    if is_tech:
+        if mapped_week == 1: preferred_subcats = ['OS', 'Databases', 'Data Structures']
+        elif mapped_week == 2: preferred_subcats = ['Data Structures', 'Javascript', 'Networking', 'Git']
+        elif mapped_week == 3: preferred_subcats = ['React', 'Web', 'Testing']
+        elif mapped_week == 4: preferred_subcats = ['System Design', 'Docker', 'Scalability', 'Cloud', 'Architecture']
     
-    pool = list(week_questions)
-    
-    # If we have very few questions for this week, add more from the same category
-    if len(pool) < count + 2:
-        pool.extend([q for q in other_questions if q not in pool])
+    elif is_civil:
+        if mapped_week == 1: preferred_subcats = ['Polity', 'Governance']
+        elif mapped_week == 2: preferred_subcats = ['History', 'Geography']
+        elif mapped_week == 3: preferred_subcats = ['Economy', 'Social Justice']
+        elif mapped_week == 4: preferred_subcats = ['Ethics', 'Current Affairs', 'Environment', 'Science']
         
-    # Final fallback for variety if pool is still small
-    if len(pool) < count:
-        fallback = QuizQuestion.query.filter(QuizQuestion.category.in_(["Professional", "HR"])).all()
-        pool.extend([q for q in fallback if q not in pool])
+    elif is_finance_govt:
+        if mapped_week == 1: preferred_subcats = ['Quants', 'Reasoning', 'Numerical Ability']
+        elif mapped_week == 2: preferred_subcats = ['Polity', 'History', 'Geography', 'Economy']
+        elif mapped_week == 3: preferred_subcats = ['Taxation', 'Banking', 'Financial Awareness']
+        elif mapped_week == 4: preferred_subcats = ['Current Affairs', 'Revision', 'Mixed']
+        
+    elif is_medical:
+        preferred_subcats = ['Anatomy', 'Physiology', 'Pharmacology', 'Clinical', 'Medical Ethics']
+    elif is_science:
+        preferred_subcats = ['Physics', 'Chemistry', 'Biology', 'Research', 'Genetics']
+
+    # Base query for the correct category and week
+    from sqlalchemy import func
+    query = QuizQuestion.query.filter_by(category=category, week_number=mapped_week)
     
-    # Select random questions from the pool
-    if len(pool) >= count:
-        return random.sample(pool, count)
-    
-    # Shuffle if we return fewer than count
-    random.shuffle(pool)
-    return pool
+    questions = []
+    if preferred_subcats:
+        # Try to get questions from preferred sub-categories first
+        questions = query.filter(QuizQuestion.sub_category.in_(preferred_subcats)).order_by(func.random()).limit(count).all()
+        
+    # If not enough specific questions, fill the rest from the same category/week
+    if len(questions) < count:
+        remaining = count - len(questions)
+        excluded_ids = [q.id for q in questions]
+        more_questions = query.filter(~QuizQuestion.id.in_(excluded_ids)).order_by(func.random()).limit(remaining).all()
+        questions.extend(more_questions)
+        
+    # Final fallback: if still not enough, take any from the category regardless of week
+    if len(questions) < count:
+        remaining = count - len(questions)
+        excluded_ids = [q.id for q in questions]
+        fallback = QuizQuestion.query.filter_by(category=category).filter(~QuizQuestion.id.in_(excluded_ids)).order_by(func.random()).limit(remaining).all()
+        questions.extend(fallback)
+        
+    return questions

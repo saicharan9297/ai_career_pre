@@ -126,8 +126,23 @@ def create_app():
             a.week_number for a in passed_attempts 
             if a.score >= (a.total_questions * 0.7)
         ]
+
+        # Calculate current prep week (first incomplete week)
+        completed_indices = [int(i) for i in current_user.completed_modules.split(',') if i]
+        current_prep_week = 1
+        for i in range(current_user.prep_weeks or 1):
+            if i not in completed_indices:
+                current_prep_week = i + 1
+                break
+            else:
+                # If all weeks up to this point are complete, the next week is the current one
+                current_prep_week = i + 1
         
-        return render_template('dashboard.html', user=current_user, roadmap=roadmap_data, passed_weeks=passed_weeks)
+        return render_template('dashboard.html', 
+                               user=current_user, 
+                               roadmap=roadmap_data, 
+                               passed_weeks=passed_weeks,
+                               current_week=current_prep_week)
 
     @app.route('/interview')
     @login_required
