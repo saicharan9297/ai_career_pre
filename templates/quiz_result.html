@@ -6,12 +6,12 @@
         <div class="card card-glass p-5 shadow-lg border-0">
             <h2 class="fw-bold mb-4">Quiz Completed!</h2>
             
-            <div class="display-1 fw-bold mb-3 {% if (attempt.score / attempt.total_questions) >= 0.7 %}text-success{% else %}text-warning{% endif %}">
+            <div class="display-1 fw-bold mb-3 {% if attempt.total_questions > 0 and (attempt.score / attempt.total_questions) >= 0.7 %}text-success{% else %}text-warning{% endif %}">
                 {{ attempt.score }}/{{ attempt.total_questions }}
             </div>
             
             <h4 class="fw-bold mb-4">
-                {% if (attempt.score / attempt.total_questions) >= 0.7 %}
+                {% if attempt.total_questions > 0 and (attempt.score / attempt.total_questions) >= 0.7 %}
                     <span class="text-success"><i class="bi bi-patch-check-fill"></i> Quiz Passed!</span>
                 {% else %}
                     <span class="text-warning"><i class="bi bi-exclam-triangle-fill"></i> Try Again</span>
@@ -19,12 +19,16 @@
             </h4>
 
             <p class="lead mb-4">
-                {% if (attempt.score / attempt.total_questions) >= 0.7 %}
+                {% if attempt.total_questions > 0 and (attempt.score / attempt.total_questions) >= 0.7 %}
                     Fantastic work! You've successfully mastered the topics for <strong>Week {{ attempt.week_number }}</strong>. 
                     Your roadmap has been updated and this module is marked as <strong>Complete</strong>.
                 {% else %}
-                    You're close! You need at least 70% to pass and mark <strong>Week {{ attempt.week_number }}</strong> as complete. 
-                    Review the subjects and try again to unlock your progress!
+                    {% if attempt.total_questions == 0 %}
+                        No questions were available for this category yet. Please check back later!
+                    {% else %}
+                        You're close! You need at least 70% to pass and mark <strong>Week {{ attempt.week_number }}</strong> as complete. 
+                        Review the subjects and try again to unlock your progress!
+                    {% endif %}
                 {% endif %}
             </p>
             

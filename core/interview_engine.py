@@ -5,32 +5,51 @@ def get_interview_session_questions(user):
     """
     Returns a list of 5 questions: 3 role-specific and 2 HR questions.
     """
-    role = (user.desired_role or "").lower()
-    tech_keywords = ['engineer', 'developer', 'coding', 'ai', 'data', 'software', 'tech', 'programmer', 'web', 'frontend', 'backend', 'fullstack', 'devops', 'stack', 'cloud', 'security', 'machine learning', 'data science']
-    # Robust Category Detection
-    civil_keywords = ['ias', 'civil service', 'upsc', 'mro', 'revenue', 'ssc', 'govt', 'government']
-    medical_keywords = ['medical', 'doctor', 'nurse', 'pharmacy', 'healthcare']
-    science_keywords = ['science', 'research', 'physics', 'chemistry', 'biology', 'scientist']
+    role_raw = (user.desired_role or "").lower()
     
-    is_tech = any(kw in role for kw in tech_keywords)
-    is_civil = any(kw in role for kw in civil_keywords)
-    is_medical = any(kw in role for kw in medical_keywords)
-    is_science = any(kw in role for kw in science_keywords)
+    # Robust Role Detection (Synchronized with roadmap.py)
+    tech_keywords = ['engineer', 'developer', 'coding', 'ai', 'data', 'software', 'tech', 'programmer', 'web', 'frontend', 'backend', 'fullstack', 'devops', 'stack', 'cloud', 'security', 'machine learning', 'data science']
+    civil_keywords = ['ias', 'civil service', 'upsc', 'mro', 'revenue officer', 'tpsc', 'appsc', 'group 1', 'group 2', 'constable', 'sub-inspector', 'panchayat', 'administrative', 'ips', 'ifs', 'collector']
+    finance_keywords = ['income tax', 'tax', 'ssc', 'cgl', 'banking', 'bank', 'po', 'clerk', 'finance', 'audit', 'lic', 'rbi', 'ibps', 'accountant', 'budget', 'revenue']
+    medical_keywords = ['medical', 'doctor', 'nurse', 'pharmacy', 'healthcare', 'dentist', 'physician', 'surgeon', 'clinic']
+    science_keywords = ['science', 'research', 'physics', 'chemistry', 'biology', 'scientist', 'laboratory', 'biotech']
+    
+    is_role_tech = any(kw in role_raw for kw in tech_keywords)
+    is_civil = any(kw in role_raw for kw in civil_keywords)
+    is_finance = any(kw in role_raw for kw in finance_keywords)
+    is_medical = any(kw in role_raw for kw in medical_keywords)
+    is_science = any(kw in role_raw for kw in science_keywords)
+
+    edu = user.education_level or ""
+    is_tech_edu = edu in ['B.Tech', 'M.Tech', 'Diploma', 'ITI']
+    
+    # Priority: Role keywords override education
+    is_tech = is_role_tech or is_tech_edu
+    if is_civil or is_finance or is_medical or is_science:
+        is_tech = is_role_tech
     
     # 1. Fetch Technical/Role-Specific Pool
     if is_tech:
         role_pool = Question.query.filter(Question.category.in_(["Coding", "Core CS"])).all()
     elif is_civil:
         role_pool = Question.query.filter_by(category="Civil Service").all()
+    elif is_finance:
+        role_pool = Question.query.filter_by(category="Finance/Govt").all()
     elif is_medical:
         role_pool = Question.query.filter_by(category="Medical").all()
     elif is_science:
         role_pool = Question.query.filter_by(category="Science").all()
     else:
-        role_pool = Question.query.filter(Question.category.notin_(["Coding", "Core CS", "HR"])).all()
+        # Check educational category if no role match
+        edu = user.education_level or ""
+        if 'School' in edu: category = "School"
+        elif 'Intermediate' in edu: category = "Intermediate"
+        elif edu in ['ITI', 'Diploma']: category = "Vocational"
+        else: category = "Professional"
+        role_pool = Question.query.filter_by(category=category).all()
     
     # Filter by role keywords if possible for additional refinement
-    refined_role_pool = [q for q in role_pool if role in (q.sub_category or "").lower() or role in q.question_text.lower()]
+    refined_role_pool = [q for q in role_pool if any(word in (q.sub_category or "").lower() or word in q.question_text.lower() for word in role_raw.split())]
     if len(refined_role_pool) < 3:
         refined_role_pool = role_pool # Fallback to the category pool
     

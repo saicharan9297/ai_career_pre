@@ -6,7 +6,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
-    password = db.Column(db.String(150), nullable=False)
+    password = db.Column(db.String(500), nullable=False)
     
     # Onboarding Data
     age = db.Column(db.Integer)
@@ -57,3 +57,12 @@ class QuizAttempt(db.Model):
     week_number = db.Column(db.Integer, default=1)
     score = db.Column(db.Integer)
     total_questions = db.Column(db.Integer)
+
+class UserProgress(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    role = db.Column(db.String(100), nullable=False)
+    prep_weeks = db.Column(db.Integer, default=1)
+    completed_modules = db.Column(db.String(500), default="")
+    readiness_score = db.Column(db.Integer, default=0)
+    last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

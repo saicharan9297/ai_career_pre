@@ -19,9 +19,19 @@
                         <label class="form-label text-muted small">Education Level</label>
                         <select name="education_level" class="form-select form-control" required>
                             <option value="" disabled selected>Select Level</option>
-                            <option value="School Student" {% if current_user.education_level == 'School Student' %}selected{% endif %}>School Student</option>
-                            <option value="College (Early Years)" {% if current_user.education_level == 'College (Early Years)' %}selected{% endif %}>College (Early Years)</option>
-                            <option value="Final Year Student" {% if current_user.education_level == 'Final Year Student' %}selected{% endif %}>Final Year Student</option>
+                            <option value="School (6-10)" {% if current_user.education_level == 'School (6-10)' %}selected{% endif %}>School Student (6-10)</option>
+                            <option value="Intermediate (1st Year)" {% if current_user.education_level == 'Intermediate (1st Year)' %}selected{% endif %}>Intermediate (1st Year)</option>
+                            <option value="Intermediate (2nd Year)" {% if current_user.education_level == 'Intermediate (2nd Year)' %}selected{% endif %}>Intermediate (2nd Year)</option>
+                            <option value="Diploma (1st Year)" {% if current_user.education_level == 'Diploma (1st Year)' %}selected{% endif %}>Diploma (1st Year)</option>
+                            <option value="Diploma (2nd Year)" {% if current_user.education_level == 'Diploma (2nd Year)' %}selected{% endif %}>Diploma (2nd Year)</option>
+                            <option value="Diploma (3rd Year)" {% if current_user.education_level == 'Diploma (3rd Year)' %}selected{% endif %}>Diploma (3rd Year)</option>
+                            <option value="ITI" {% if current_user.education_level == 'ITI' %}selected{% endif %}>ITI</option>
+                            <option value="B.Tech (1st Year)" {% if current_user.education_level == 'B.Tech (1st Year)' %}selected{% endif %}>B.Tech (1st Year)</option>
+                            <option value="B.Tech (2nd Year)" {% if current_user.education_level == 'B.Tech (2nd Year)' %}selected{% endif %}>B.Tech (2nd Year)</option>
+                            <option value="B.Tech (3rd Year)" {% if current_user.education_level == 'B.Tech (3rd Year)' %}selected{% endif %}>B.Tech (3rd Year)</option>
+                            <option value="B.Tech (4th Year)" {% if current_user.education_level == 'B.Tech (4th Year)' %}selected{% endif %}>B.Tech (4th Year)</option>
+                            <option value="M.Tech (1st Year)" {% if current_user.education_level == 'M.Tech (1st Year)' %}selected{% endif %}>M.Tech (1st Year)</option>
+                            <option value="M.Tech (2nd Year)" {% if current_user.education_level == 'M.Tech (2nd Year)' %}selected{% endif %}>M.Tech (2nd Year)</option>
                             <option value="Job Seeker" {% if current_user.education_level == 'Job Seeker' %}selected{% endif %}>Job Seeker</option>
                             <option value="Professional" {% if current_user.education_level == 'Professional' %}selected{% endif %}>Working Professional</option>
                         </select>

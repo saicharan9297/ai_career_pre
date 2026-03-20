@@ -92,20 +92,46 @@ def create_app():
     @app.route('/onboarding', methods=['GET', 'POST'])
     @login_required
     def onboarding():
+        from models import UserProgress
         if request.method == 'POST':
             try:
                 new_role = request.form.get('desired_role')
                 new_weeks = int(request.form.get('prep_weeks') or 1)
                 
-                if current_user.desired_role != new_role or current_user.prep_weeks != new_weeks:
+                # --- SAVE CURRENT PROGRESS BEFORE SWITCHING ---
+                if current_user.desired_role:
+                    old_progress = UserProgress.query.filter_by(
+                        user_id=current_user.id, 
+                        role=current_user.desired_role
+                    ).first()
+                    if not old_progress:
+                        old_progress = UserProgress(user_id=current_user.id, role=current_user.desired_role)
+                        db.session.add(old_progress)
+                    
+                    old_progress.completed_modules = current_user.completed_modules
+                    old_progress.readiness_score = current_user.readiness_score
+                    old_progress.prep_weeks = current_user.prep_weeks
+                
+                # --- RESTORE NEW ROLE PROGRESS ---
+                new_progress = UserProgress.query.filter_by(
+                    user_id=current_user.id, 
+                    role=new_role
+                ).first()
+                
+                if new_progress:
+                    current_user.completed_modules = new_progress.completed_modules
+                    current_user.readiness_score = new_progress.readiness_score
+                    current_user.prep_weeks = new_progress.prep_weeks
+                else:
+                    # New role, no previous progress
                     current_user.completed_modules = ""
                     current_user.readiness_score = 0
-                
+                    current_user.prep_weeks = new_weeks
+
                 current_user.age = request.form.get('age')
                 current_user.education_level = request.form.get('education_level')
                 current_user.available_time = request.form.get('available_time')
                 current_user.desired_role = new_role
-                current_user.prep_weeks = new_weeks
                 db.session.commit()
                 flash(f'Your roadmap for {new_role} has been updated!', category='success')
                 return redirect(url_for('dashboard'))
@@ -247,6 +273,20 @@ def create_app():
 
     return app
 
+def sync_user_progress(user):
+    from models import UserProgress
+    from extensions import db
+    if not user.desired_role:
+        return
+    progress = UserProgress.query.filter_by(user_id=user.id, role=user.desired_role).first()
+    if not progress:
+        progress = UserProgress(user_id=user.id, role=user.desired_role)
+        db.session.add(progress)
+    progress.completed_modules = user.completed_modules
+    progress.readiness_score = user.readiness_score
+    progress.prep_weeks = user.prep_weeks
+    db.session.commit()
+
 app = create_app()
 
 @app.route('/toggle_module/<int:module_idx>')
@@ -289,6 +329,7 @@ def toggle_module(module_idx):
     current_user.readiness_score = int(progress_score)
     
     db.session.commit()
+    sync_user_progress(current_user)
     return redirect(url_for('dashboard'))
 
 @app.route('/quiz', methods=['GET', 'POST'])
@@ -339,6 +380,7 @@ def quiz():
                 flash(f"Congratulations! You passed Week {form_week} and it's been marked as complete.", category='success')
         
         db.session.commit()
+        sync_user_progress(current_user)
         return redirect(url_for('quiz_result', attempt_id=attempt.id))
         
     questions = get_quiz_questions(current_user, week_number=week)

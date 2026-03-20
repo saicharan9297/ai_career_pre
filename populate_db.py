@@ -544,70 +544,85 @@ def seed_quizzes():
             "option_a": "Rating the interviewer", "option_b": "Situation, Task, Action, Result", "option_c": "Standard Technical Aptitude Review", "option_d": "Strategic Talk And Response",
             "correct_option": "B"
         },
-        # --- FINANCE & GOVT COMPETITIVE (Categorized as IAS for GS/Aptitude overlap) ---
-        # Week 1: Quantitative Aptitude
-        {
-            "category": "IAS", "sub_category": "Quants", "week_number": 1, "difficulty": "Medium",
-            "question_text": "If a man sells an article at a profit of 25%, what is the ratio of cost price to selling price?",
-            "option_a": "4:5", "option_b": "5:4", "option_c": "1:4", "option_d": "4:1",
-            "correct_option": "A"
-        },
-        {
-            "category": "IAS", "sub_category": "Quants", "week_number": 1, "difficulty": "Easy",
-            "question_text": "What is 15% of 200?",
-            "option_a": "20", "option_b": "30", "option_c": "40", "option_d": "25",
-            "correct_option": "B"
-        },
-        # Week 2: Finance & Tax
-        {
-            "category": "IAS", "sub_category": "Taxation", "week_number": 2, "difficulty": "Medium",
-            "question_text": "Which of the following is a direct tax in India?",
-            "option_a": "GST", "option_b": "Customs Duty", "option_c": "Income Tax", "option_d": "Excise Duty",
-            "correct_option": "C"
-        },
-        {
-            "category": "IAS", "sub_category": "Banking", "week_number": 2, "difficulty": "Medium",
-            "question_text": "What is the primary function of the Reserve Bank of India (RBI)?",
-            "option_a": "Lending to individuals", "option_b": "Regulating the monetary policy and currency", "option_c": "Managing commercial banks' equity", "option_d": "Setting corporate tax rates",
-            "correct_option": "B"
-        },
-        # Week 3: Advanced Domain & Economics
-        {
-            "category": "IAS", "sub_category": "Economy", "week_number": 3, "difficulty": "High",
-            "question_text": "What does 'Fiscal Deficit' represent in the Union Budget?",
-            "option_a": "Total expenditure minus total receipts", "option_b": "Total borrowings required by the government", "option_c": "Total tax revenue minus total subsidies", "option_d": "Difference between imports and exports",
-            "correct_option": "B"
-        },
-        {
-            "category": "IAS", "sub_category": "Financial Awareness", "week_number": 3, "difficulty": "Medium",
-            "question_text": "Which institution regulates the stock market in India?",
-            "option_a": "RBI", "option_b": "SEBI", "option_c": "IRDAI", "option_d": "SIDBI",
-            "correct_option": "B"
-        },
-        # Week 4: Final Practice
-        {
-            "category": "IAS", "sub_category": "Current Affairs", "week_number": 4, "difficulty": "Medium",
-            "question_text": "Who is the current Finance Minister of India (as of 2024)?",
-            "option_a": "Amit Shah", "option_b": "Nirmala Sitharaman", "option_c": "Piyush Goyal", "option_d": "S. Jaishankar",
-            "correct_option": "B"
-        },
-        {
-            "category": "IAS", "sub_category": "Taxation", "week_number": 4, "difficulty": "High",
-            "question_text": "What is the standard GST rate for most essential services in India?",
-            "option_a": "5%", "option_b": "12%", "option_c": "18%", "option_d": "28%",
-            "correct_option": "C"
-        }
+        # --- FINANCE & GOVT ---
+        {"category": "Finance/Govt", "sub_category": "Quantitative Aptitude", "week_number": 1, "difficulty": "Medium", "question_text": "A sum of money doubles itself in 8 years at simple interest. What is the rate of interest?", "option_a": "10%", "option_b": "12.5%", "option_c": "15%", "option_d": "8%", "correct_option": "B"},
+        {"category": "Finance/Govt", "sub_category": "Quantitative Aptitude", "week_number": 1, "difficulty": "Easy", "question_text": "What is the average of first five prime numbers?", "option_a": "5.6", "option_b": "5.4", "option_c": "5.2", "option_d": "5.0", "correct_option": "A"},
+        {"category": "Finance/Govt", "sub_category": "Reasoning", "week_number": 1, "difficulty": "Medium", "question_text": "If 'CLOSET' is coded as 'DMPTFU', how is 'OPEN' coded?", "option_a": "PQFO", "option_b": "PQFO", "option_c": "PQFO", "option_d": "PQFO", "correct_option": "A"},
+        {"category": "Finance/Govt", "sub_category": "Core Concepts", "week_number": 1, "difficulty": "Easy", "question_text": "Identify the odd one out: RBI, SEBI, IRDAI, NASA", "option_a": "RBI", "option_b": "SEBI", "option_c": "IRDAI", "option_d": "NASA", "correct_option": "D"},
+        {"category": "Finance/Govt", "sub_category": "Aptitude", "week_number": 1, "difficulty": "Medium", "question_text": "Find the next term in the series: 1, 4, 9, 16, ?", "option_a": "20", "option_b": "25", "option_c": "30", "option_d": "36", "correct_option": "B"},
+        
+        {"category": "Finance/Govt", "sub_category": "Banking", "week_number": 2, "difficulty": "Medium", "question_text": "What is the primary objective of the Monetary Policy Committee (MPC)?", "option_a": "Employment", "option_b": "Price Stability/Inflation Target", "option_c": "Stock regulation", "option_d": "Foreign aid", "correct_option": "B"},
+        {"category": "Finance/Govt", "sub_category": "Taxation", "week_number": 2, "difficulty": "Medium", "question_text": "Which schedule of the Indian Constitution contains the three lists (Union, State, Concurrent)?", "option_a": "5th", "option_b": "7th", "option_c": "9th", "option_d": "12th", "correct_option": "B"},
+        {"category": "Finance/Govt", "sub_category": "Finance", "week_number": 2, "difficulty": "Easy", "question_text": "What is 'Fiscal Deficit'?", "option_a": "Govt Revenue - Govt Expenditure", "option_b": "Govt Borrowing - Govt Revenue", "option_c": "Govt Expenditure - Govt Revenue (excluding borrowings)", "option_d": "Total Debt", "correct_option": "C"},
+        {"category": "Finance/Govt", "sub_category": "Economics", "week_number": 2, "difficulty": "Medium", "question_text": "Which institution releases the 'Economic Survey' in India?", "option_a": "RBI", "option_b": "NITI Aayog", "option_c": "Ministry of Finance", "option_d": "World Bank", "correct_option": "C"},
+
+        {"category": "Finance/Govt", "sub_category": "Financial Awareness", "week_number": 3, "difficulty": "Medium", "question_text": "What does 'Bull Market' signify in the stock exchange?", "option_a": "Falling prices", "option_b": "Stagnant prices", "option_c": "Rising prices", "option_d": "Market crash", "correct_option": "C"},
+        {"category": "Finance/Govt", "sub_category": "Banking", "week_number": 3, "difficulty": "Medium", "question_text": "What is the full form of NEFT?", "option_a": "National Electronic Funds Transfer", "option_b": "Net Electronic Financial Terminal", "option_c": "Native Easy Fund Task", "option_d": "None of these", "correct_option": "A"},
+
+        # --- CIVIL SERVICE ---
+        {"category": "Civil Service", "sub_category": "Polity", "week_number": 1, "difficulty": "Hard", "question_text": "Which committee recommended the 3-tier Panchayati Raj system?", "option_a": "Ashok Mehta", "option_b": "Balwant Rai Mehta", "option_c": "GVK Rao", "option_d": "LM Singhvi", "correct_option": "B"},
+        {"category": "Civil Service", "sub_category": "Polity", "week_number": 1, "difficulty": "Medium", "question_text": "The Tenth Schedule was added by which Amendment?", "option_a": "42nd", "option_b": "44th", "option_c": "52nd", "option_d": "61st", "correct_option": "C"},
+        {"category": "Civil Service", "sub_category": "Polity", "week_number": 2, "difficulty": "Medium", "question_text": "Who appoints the Chief Election Commissioner of India?", "option_a": "Prime Minister", "option_b": "CJI", "option_c": "President", "option_d": "Speaker", "correct_option": "C"},
+        {"category": "Civil Service", "sub_category": "History", "week_number": 2, "difficulty": "Hard", "question_text": "The battle of Plassey (1757) was fought between Siraj-ud-Daulah and?", "option_a": "Warren Hastings", "option_b": "Robert Clive", "option_c": "Lord Cornwallis", "option_d": "Lord Dalhousie", "correct_option": "B"},
+        {"category": "Civil Service", "sub_category": "History", "week_number": 3, "difficulty": "Medium", "question_text": "Who is known as the 'Iron Man of India'?", "option_a": "Nehru", "option_b": "Sardar Patel", "option_c": "Ambedkar", "option_d": "Bose", "correct_option": "B"},
+        {"category": "Civil Service", "sub_category": "Polity", "week_number": 3, "difficulty": "Hard", "question_text": "Article 360 deals with which type of emergency?", "option_a": "National", "option_b": "State", "option_c": "Financial", "option_d": "None", "correct_option": "C"},
+        {"category": "Civil Service", "sub_category": "History", "week_number": 3, "difficulty": "Medium", "question_text": "Quit India Movement started in which year?", "option_a": "1920", "option_b": "1930", "option_c": "1942", "option_d": "1947", "correct_option": "C"},
+        {"category": "Civil Service", "sub_category": "History", "week_number": 4, "difficulty": "Medium", "question_text": "Who was the Viceroy during the Partition of Bengal?", "option_a": "Curzon", "option_b": "Mountbatten", "option_c": "Ripon", "option_d": "Dalhousie", "correct_option": "A"},
+        {"category": "Civil Service", "sub_category": "Economy", "week_number": 4, "difficulty": "Medium", "question_text": "Gini Coefficient measures:", "option_a": "Inflation", "option_b": "Inequality", "option_c": "GDP", "option_d": "Debt", "correct_option": "B"},
+        {"category": "Civil Service", "sub_category": "Polity", "week_number": 4, "difficulty": "Medium", "question_text": "Fundamental Duties were added by:", "option_a": "42nd Amendment", "option_b": "44th", "option_c": "1st", "option_d": "None", "correct_option": "A"},
+        {"category": "Civil Service", "sub_category": "Geography", "week_number": 4, "difficulty": "Easy", "question_text": "Largest delta in the world?", "option_a": "Nile", "option_b": "Sundarbans", "option_c": "Mississippi", "option_d": "Amazon", "correct_option": "B"},
+        
+        # --- PROFESSIONAL ---
+        {"category": "Professional", "sub_category": "Management", "week_number": 1, "difficulty": "Easy", "question_text": "What is the 'Pareto Principle'?", "option_a": "50/50 rule", "option_b": "80/20 rule", "option_c": "100/0 rule", "option_d": "None", "correct_option": "B"},
+        {"category": "Professional", "sub_category": "Soft Skills", "week_number": 1, "difficulty": "Medium", "question_text": "What is the primary purpose of a 'Stand-up' meeting?", "option_a": "Long deep discussions", "option_b": "Quick status update & blockers", "option_c": "Coffee break", "option_d": "Managerial review", "correct_option": "B"},
+        {"category": "Professional", "sub_category": "Management", "week_number": 2, "difficulty": "Medium", "question_text": "In project management, what does 'CPM' stand for?", "option_a": "Core Path Method", "option_b": "Critical Path Method", "option_c": "Constant Project Mode", "option_d": "None", "correct_option": "B"},
+        {"category": "Professional", "sub_category": "Soft Skills", "week_number": 2, "difficulty": "Easy", "question_text": "The ability to understand and share the feelings of another is:", "option_a": "Sympathy", "option_b": "Apathy", "option_c": "Empathy", "option_d": "Antipathy", "correct_option": "C"},
+        {"category": "Professional", "sub_category": "Management", "week_number": 3, "difficulty": "Medium", "question_text": "What is 'Scope Creep'?", "option_a": "Expanding project beyond goals", "option_b": "Reducing costs", "option_c": "Hiring new staff", "option_d": "None", "correct_option": "A"},
+        {"category": "Professional", "sub_category": "Management", "week_number": 3, "difficulty": "Easy", "question_text": "KPI stands for:", "option_a": "Key Performance Indicator", "option_b": "Knowledge Process Info", "option_c": "Key Plan Item", "option_d": "None", "correct_option": "A"},
+        {"category": "Professional", "sub_category": "Management", "week_number": 4, "difficulty": "Hard", "question_text": "Theory X and Theory Y were developed by:", "option_a": "Maslow", "option_b": "McGregor", "option_c": "Herzberg", "option_d": "Drucker", "correct_option": "B"},
+        {"category": "Professional", "sub_category": "Management", "week_number": 4, "difficulty": "Hard", "question_text": "What is 'Emotional Intelligence' expert Daniel Goleman's key pillar?", "option_a": "IQ", "option_b": "Self-awareness", "option_c": "Coding", "option_d": "Math", "correct_option": "B"},
+        
+        # --- FINANCE & GOVT ---
+        {"category": "Finance/Govt", "sub_category": "Quantitative Aptitude", "week_number": 3, "difficulty": "Medium", "question_text": "Find the interest on $1000 for 2 years at 10% per annum compound interest.", "option_a": "$200", "option_b": "$210", "option_c": "$100", "option_d": "$220", "correct_option": "B"},
+        {"category": "Finance/Govt", "sub_category": "Reasoning", "week_number": 3, "difficulty": "Medium", "question_text": "If A=1, B=2, then CAT=?", "option_a": "24", "option_b": "20", "option_c": "25", "option_d": "30", "correct_option": "A"},
+        {"category": "Finance/Govt", "sub_category": "Aptitude", "week_number": 4, "difficulty": "Medium", "question_text": "A can do a work in 10 days, B in 15 days. Together they do it in?", "option_a": "5 days", "option_b": "6 days", "option_c": "7 days", "option_d": "8 days", "correct_option": "B"},
+        {"category": "Finance/Govt", "sub_category": "Financial Awareness", "week_number": 4, "difficulty": "Medium", "question_text": "FDI stands for:", "option_a": "Foreign Direct Investment", "option_b": "Fixed Deposit Info", "option_c": "Fast Data Integration", "option_d": "None", "correct_option": "A"}
     ]
 
     with app.app_context():
         # Clear existing
         db.session.query(QuizQuestion).delete()
         for q_data in mcqs:
-            new_q = QuizQuestion(**q_data)
-            db.session.add(new_q)
+            try:
+                new_q = QuizQuestion(
+                    category=q_data.get('category'),
+                    sub_category=q_data.get('sub_category'),
+                    week_number=q_data.get('week_number', 1),
+                    difficulty=q_data.get('difficulty', 'Medium'),
+                    question_text=q_data.get('question_text'),
+                    option_a=q_data.get('option_a', 'N/A'),
+                    option_b=q_data.get('option_b', 'N/A'),
+                    option_c=q_data.get('option_c', 'N/A'),
+                    option_d=q_data.get('option_d', 'N/A'),
+                    correct_option=q_data.get('correct_option', 'A')
+                )
+                db.session.add(new_q)
+            except Exception as e:
+                print(f"FAILED TO SEED: {q_data.get('question_text', 'UNKNOWN')}")
+                # Log but continue or handle as needed
         db.session.commit()
         print(f"Seeded {len(mcqs)} quiz questions with multi-week mapping.")
 
 if __name__ == "__main__":
     seed_questions()
     seed_quizzes()
+    # Also seed all specialized categories
+    from seed_medical_comprehensive import seed_medical_comprehensive
+    from seed_educational import seed_educational_data
+    from seed_extra_roles import seed_extra_data
+    from seed_specialized import seed_specialized_data
+    
+    seed_medical_comprehensive()
+    seed_educational_data()
+    seed_extra_data()
+    seed_specialized_data()
