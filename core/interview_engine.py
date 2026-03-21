@@ -9,19 +9,24 @@ def get_interview_session_questions(user):
     
     # Robust Role Detection (Synchronized with roadmap.py)
     tech_keywords = ['engineer', 'developer', 'coding', 'ai', 'data', 'software', 'tech', 'programmer', 'web', 'frontend', 'backend', 'fullstack', 'devops', 'stack', 'cloud', 'security', 'machine learning', 'data science']
-    civil_keywords = ['ias', 'civil service', 'upsc', 'mro', 'revenue officer', 'tpsc', 'appsc', 'group 1', 'group 2', 'constable', 'sub-inspector', 'panchayat', 'administrative', 'ips', 'ifs', 'collector']
+    civil_keywords = ['ias', 'civil service', 'upsc', 'mro', 'revenue officer', 'tpsc', 'appsc', 'group 1', 'group 2', 'constable', 'sub-inspector', 'panchayat', 'administrative', 'ips', 'ifs', 'collector', 'telangana', 'andhra']
     finance_keywords = ['income tax', 'tax', 'ssc', 'cgl', 'banking', 'bank', 'po', 'clerk', 'finance', 'audit', 'lic', 'rbi', 'ibps', 'accountant', 'budget', 'revenue']
-    medical_keywords = ['medical', 'doctor', 'nurse', 'pharmacy', 'healthcare', 'dentist', 'physician', 'surgeon', 'clinic']
+    medical_keywords = ['medical', 'doctor', 'nurse', 'pharmacy', 'healthcare', 'dentist', 'physician', 'surgeon', 'clinic', 'radiology', 'psychiatry', 'dermatology', 'urology', 'nephrology', 'pulmonology', 'ophthalmology', 'ayurveda', 'homeopathy', 'public health']
     science_keywords = ['science', 'research', 'physics', 'chemistry', 'biology', 'scientist', 'laboratory', 'biotech']
     
     is_role_tech = any(kw in role_raw for kw in tech_keywords)
-    is_civil = any(kw in role_raw for kw in civil_keywords)
-    is_finance = any(kw in role_raw for kw in finance_keywords)
+    is_upsc = 'upsc' in role_raw or 'civil service' in role_raw or 'ias' in role_raw
+    is_ssc = 'ssc' in role_raw or 'cgl' in role_raw
+    is_appsc = 'appsc' in role_raw or 'ap' in role_raw and ('psc' in role_raw or 'group' in role_raw)
+    is_tspsc = 'tspsc' in role_raw or 'tpsc' in role_raw or 'telangana' in role_raw and ('psc' in role_raw or 'group' in role_raw)
+    
+    is_civil = is_upsc or is_appsc or is_tspsc or any(kw in role_raw for kw in civil_keywords)
+    is_finance = is_ssc or any(kw in role_raw for kw in finance_keywords)
     is_medical = any(kw in role_raw for kw in medical_keywords)
     is_science = any(kw in role_raw for kw in science_keywords)
 
     edu = user.education_level or ""
-    is_tech_edu = edu in ['B.Tech', 'M.Tech', 'Diploma', 'ITI']
+    is_tech_edu = any(kw in edu for kw in ['B.Tech', 'M.Tech', 'Diploma', 'ITI'])
     
     # Priority: Role keywords override education
     is_tech = is_role_tech or is_tech_edu
@@ -31,6 +36,13 @@ def get_interview_session_questions(user):
     # 1. Fetch Technical/Role-Specific Pool
     if is_tech:
         role_pool = Question.query.filter(Question.category.in_(["Coding", "Core CS"])).all()
+    elif is_upsc:
+        role_pool = Question.query.filter(Question.category.in_(["Civil Service", "IAS", "UPSC"])).all()
+    elif is_appsc or is_tspsc:
+        cat = "APPSC" if is_appsc else "TSPSC"
+        role_pool = Question.query.filter(Question.category.in_(["Civil Service", cat])).all()
+    elif is_ssc:
+        role_pool = Question.query.filter(Question.category.in_(["Finance/Govt", "SSC"])).all()
     elif is_civil:
         role_pool = Question.query.filter(Question.category.in_(["Civil Service", "IAS"])).all()
     elif is_finance:

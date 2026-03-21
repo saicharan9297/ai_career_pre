@@ -36,8 +36,13 @@ def generate_roadmap(user):
     
     # Specific ROLE matching (Prioritize keywords in desired_role)
     is_role_tech = any(kw in role_lower for kw in tech_keywords)
-    is_civil = any(kw in role_lower for kw in civil_service_keywords)
-    is_finance_govt = any(kw in role_lower for kw in finance_govt_keywords)
+    is_upsc = 'upsc' in role_lower or 'civil service' in role_lower or 'ias' in role_lower or 'ips' in role_lower
+    is_ssc = 'ssc' in role_lower or 'cgl' in role_lower or 'chsl' in role_lower
+    is_appsc = 'appsc' in role_lower or 'ap' in role_lower and ('psc' in role_lower or 'group' in role_lower)
+    is_tspsc = 'tspsc' in role_lower or 'tpsc' in role_lower or 'telangana' in role_lower and ('psc' in role_lower or 'group' in role_lower)
+    
+    is_civil = is_upsc or is_appsc or is_tspsc or any(kw in role_lower for kw in civil_service_keywords)
+    is_finance_govt = is_ssc or any(kw in role_lower for kw in finance_govt_keywords)
     
     # Education Level Specific Flags
     is_school = 'School' in edu
@@ -130,6 +135,33 @@ def generate_roadmap(user):
                         {"name": "Cloud Computing & DevOps", "content": "Virtualization, AWS/Azure, and CI/CD pipelines."},
                         {"name": "Cyber Security Foundations", "content": "Cryptography, Network security, and Secure coding practices."}
                     ]
+                },
+                {
+                    "title": "Project Management & Industry Standards",
+                    "subjects": [
+                        {"name": "System Design", "content": "Designing scalable systems, microservices, and load balancing."},
+                        {"name": "Product Management Basics", "content": "Requirements gathering, user stories, and roadmap planning."},
+                        {"name": "Professional Ethics & Communication", "content": "Workplace etiquette, presentation skills, and ethical hacking basics."}
+                    ]
+                }
+            ]
+        elif is_mtech:
+            all_themes = [
+                {
+                    "title": "Research Methodology & Advanced Computing",
+                    "subjects": [
+                        {"name": "Advanced Data Structures & Algorithms", "content": "Advanced tree structures, graph algorithms, and approximation algorithms."},
+                        {"name": "Distributed Systems", "content": "Consensus protocols, distributed databases, and fault tolerance."},
+                        {"name": "Research Methodology", "content": "Literature survey, experimental design, and thesis writing."}
+                    ]
+                },
+                {
+                    "title": "Specialized Electives & Industrial R&D",
+                    "subjects": [
+                        {"name": "Deep Learning & NLP", "content": "Transformer models, computer vision, and advanced neural architectures."},
+                        {"name": "Internet of Things (IoT)", "content": "Embedded systems, sensor networks, and IoT security."},
+                        {"name": "Big Data Analytics", "content": "Hadoop, Spark, and processing large-scale datasets."}
+                    ]
                 }
             ]
         else:
@@ -168,6 +200,97 @@ def generate_roadmap(user):
                     ]
                 }
             ]
+    elif is_upsc:
+        all_themes = [
+            {
+                "title": "UPSC Prelims: GS Paper I",
+                "subjects": [
+                    {"name": "History of India", "content": "Ancient, Medieval, and Modern history with focus on National Movement."},
+                    {"name": "Indian and World Geography", "content": "Physical, Social, and Economic geography of India and the world."},
+                    {"name": "Indian Polity & Governance", "content": "Constitution, Political System, Panchayati Raj, and Public Policy."}
+                ]
+            },
+            {
+                "title": "UPSC Prelims: GS Paper II (CSAT)",
+                "subjects": [
+                    {"name": "Comprehension & Interpersonal Skills", "content": "Communication skills, logical reasoning, and analytical ability."},
+                    {"name": "Decision Making & Problem Solving", "content": "General mental ability and basic numeracy (Class X level)."},
+                    {"name": "Data Interpretation", "content": "Charts, graphs, tables, and data sufficiency."}
+                ]
+            },
+            {
+                "title": "UPSC Mains: GS I & II Focus",
+                "subjects": [
+                    {"name": "Indian Heritage & Culture", "content": "Art forms, Literature, and Architecture from ancient to modern times."},
+                    {"name": "International Relations", "content": "Bilateral, regional, and global groupings involving India."},
+                    {"name": "Social Justice", "content": "Government policies and interventions for development in various sectors."}
+                ]
+            },
+            {
+                "title": "UPSC Mains: GS III & IV Focus",
+                "subjects": [
+                    {"name": "Technology & Economy", "content": "Economic development, Bio-diversity, Environment, and Security."},
+                    {"name": "Ethics, Integrity & Aptitude", "content": "Attitude, Emotional Intelligence, and case studies on ethical dilemmas."},
+                    {"name": "Disaster Management", "content": "Role of administration in dealing with natural and man-made disasters."}
+                ]
+            }
+        ]
+    elif is_appsc or is_tspsc:
+        region = "Andhra Pradesh" if is_appsc else "Telangana"
+        state_code = "AP" if is_appsc else "TS"
+        all_themes = [
+            {
+                "title": f"{state_code}PSC Group I/II: General Studies",
+                "subjects": [
+                    {"name": "General Science", "content": "Contemporary developments in Science and Technology and Information Technology."},
+                    {"name": "Environmental Issues", "content": "Disaster Management, Prevention and Mitigation Strategies."},
+                    {"name": f"Economic & Social Development of India & {region}", "content": "Focus on state-specific policies and socio-economic history."}
+                ]
+            },
+            {
+                "title": f"History & Culture of {region}",
+                "subjects": [
+                    {"name": f"{region} Movement & State Formation", "content": f"Chronological history of {region} and its unique cultural identity." if is_tspsc else "Modern history of AP and bifurcated state challenges."},
+                    {"name": "Social & Cultural History of India", "content": "Focus on the influence of regional movements on national history."},
+                    {"name": "Regional Geography", "content": f"Physical and economic geography of {region}."}
+                ]
+            },
+            {
+                "title": "Indian Constitution & Polity",
+                "subjects": [
+                    {"name": "Indian Political System", "content": "Focus on federalism and center-state relations."},
+                    {"name": "Panchayati Raj & Local Self Govt", "content": "Specific focus on state-level implementation and 73rd/74th amendments."},
+                    {"name": "Public Administration", "content": "Role of District Administration and State Secretariat."}
+                ]
+            }
+        ]
+    elif is_ssc:
+        all_themes = [
+            {
+                "title": "SSC CGL/CHSL: Tier I Preparation",
+                "subjects": [
+                    {"name": "General Intelligence & Reasoning", "content": "Analogies, spatial orientation, and critical thinking puzzles."},
+                    {"name": "General Awareness", "content": "Scientific research, sports, history, culture, and geography."},
+                    {"name": "Quantitative Aptitude", "content": "Computation of whole numbers, decimals, fractions and relationships."}
+                ]
+            },
+            {
+                "title": "SSC CGL: Tier II Advanced Quant & English",
+                "subjects": [
+                    {"name": "Arithmetical Abilities", "content": "Number Systems, Percentage, Ratio & Proportion, Average, and Interest."},
+                    {"name": "Algebra & Geometry", "content": "Basic algebraic identities, elementary surds, and geometric problems."},
+                    {"name": "English Language & Comprehension", "content": "Grammar, error recognition, fill in the blanks, and synonyms/antonyms."}
+                ]
+            },
+            {
+                "title": "SSC CGL: Statistics & Finance (If applicable)",
+                "subjects": [
+                    {"name": "Statistics for AAO/JSO", "content": "Probability, Statistical Errors, and Sampling distributions."},
+                    {"name": "General Studies (Finance & Economics)", "content": "Fundamental principles of Economics and Indian Economy (CAG focus)."},
+                    {"name": "Computer Proficiency", "content": "Basics of MS Office, Internet, and operating system shortcuts."}
+                ]
+            }
+        ]
     elif is_civil:
         all_themes = [
             {

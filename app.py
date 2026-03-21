@@ -3,6 +3,8 @@ from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from extensions import db, login_manager
 import os
+import secrets
+from datetime import datetime, timedelta
 
 def create_app():
     app = Flask(__name__)
@@ -94,6 +96,46 @@ def create_app():
     def logout():
         logout_user()
         return redirect(url_for('index'))
+
+    @app.route('/forgot-password', methods=['GET', 'POST'])
+    def forgot_password():
+        if current_user.is_authenticated:
+            return redirect(url_for('dashboard'))
+        if request.method == 'POST':
+            email = request.form.get('email')
+            user = User.query.filter_by(email=email).first()
+            if user:
+                token = secrets.token_urlsafe(32)
+                user.reset_token = token
+                user.reset_token_expiry = datetime.utcnow() + timedelta(hours=1)
+                db.session.commit()
+                
+                return redirect(url_for('reset_password', token=token))
+            else:
+                flash('Email not found.', category='error')
+        return render_template('forgot_password.html')
+
+    @app.route('/reset-password/<token>', methods=['GET', 'POST'])
+    def reset_password(token):
+        if current_user.is_authenticated:
+            return redirect(url_for('dashboard'))
+        
+        user = User.query.filter_by(reset_token=token).first()
+        
+        if not user or user.reset_token_expiry < datetime.utcnow():
+            flash('Invalid or expired token.', category='error')
+            return redirect(url_for('forgot_password'))
+            
+        if request.method == 'POST':
+            password = request.form.get('password')
+            user.password = generate_password_hash(password, method='scrypt')
+            user.reset_token = None
+            user.reset_token_expiry = None
+            db.session.commit()
+            flash('Password reset successful! Please login.', category='success')
+            return redirect(url_for('login'))
+            
+        return render_template('reset_password.html', token=token)
 
     @app.route('/onboarding', methods=['GET', 'POST'])
     @login_required

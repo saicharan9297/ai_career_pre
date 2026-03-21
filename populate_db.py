@@ -225,6 +225,32 @@ def seed_questions():
             "question_text": "What do you understand by 'Crisis of Conscience'?",
             "correct_answer": "A situation where an individual is forced to act against their moral beliefs or values.",
             "hint": "It's a conflict between duty and morality."
+        },
+        # --- UPSC ---
+        {
+            "category": "UPSC", "sub_category": "Ethics", "difficulty": "Hard",
+            "question_text": "How would you handle a situation where a superior gives you an illegal order?",
+            "correct_answer": "Discuss constitutional morality, civil service conduct rules, and ethical courage.",
+            "hint": "Think about the Hierarchy vs Rule of Law."
+        },
+        {
+            "category": "UPSC", "sub_category": "International Relations", "difficulty": "Medium",
+            "question_text": "Discuss the significance of 'Non-Alignment' in India's current foreign policy.",
+            "correct_answer": "Strategic autonomy, multi-alignment, and national interest.",
+            "hint": "Think about the Cold War origins vs current multi-polar world."
+        },
+        # --- Advanced Tech ---
+        {
+            "category": "Coding", "sub_category": "System Design", "difficulty": "Hard",
+            "question_text": "How would you design a URL shortening service like Bitly?",
+            "correct_answer": "Discuss hashing, database choice, scalability, and redirection logic.",
+            "hint": "Think about how to handle millions of requests."
+        },
+        {
+            "category": "Coding", "sub_category": "AI", "difficulty": "Medium",
+            "question_text": "What is the difference between Overfitting and Underfitting in ML?",
+            "correct_answer": "Bias vs Variance tradeoff, model complexity, and training error vs test error.",
+            "hint": "Think about model generalization."
         }
     ]
 
@@ -582,11 +608,25 @@ def seed_quizzes():
         {"category": "Professional", "sub_category": "Management", "week_number": 4, "difficulty": "Hard", "question_text": "Theory X and Theory Y were developed by:", "option_a": "Maslow", "option_b": "McGregor", "option_c": "Herzberg", "option_d": "Drucker", "correct_option": "B"},
         {"category": "Professional", "sub_category": "Management", "week_number": 4, "difficulty": "Hard", "question_text": "What is 'Emotional Intelligence' expert Daniel Goleman's key pillar?", "option_a": "IQ", "option_b": "Self-awareness", "option_c": "Coding", "option_d": "Math", "correct_option": "B"},
         
-        # --- FINANCE & GOVT ---
-        {"category": "Finance/Govt", "sub_category": "Quantitative Aptitude", "week_number": 3, "difficulty": "Medium", "question_text": "Find the interest on $1000 for 2 years at 10% per annum compound interest.", "option_a": "$200", "option_b": "$210", "option_c": "$100", "option_d": "$220", "correct_option": "B"},
-        {"category": "Finance/Govt", "sub_category": "Reasoning", "week_number": 3, "difficulty": "Medium", "question_text": "If A=1, B=2, then CAT=?", "option_a": "24", "option_b": "20", "option_c": "25", "option_d": "30", "correct_option": "A"},
-        {"category": "Finance/Govt", "sub_category": "Aptitude", "week_number": 4, "difficulty": "Medium", "question_text": "A can do a work in 10 days, B in 15 days. Together they do it in?", "option_a": "5 days", "option_b": "6 days", "option_c": "7 days", "option_d": "8 days", "correct_option": "B"},
-        {"category": "Finance/Govt", "sub_category": "Financial Awareness", "week_number": 4, "difficulty": "Medium", "question_text": "FDI stands for:", "option_a": "Foreign Direct Investment", "option_b": "Fixed Deposit Info", "option_c": "Fast Data Integration", "option_d": "None", "correct_option": "A"}
+        {"category": "Finance/Govt", "sub_category": "Financial Awareness", "week_number": 4, "difficulty": "Medium", "question_text": "FDI stands for:", "option_a": "Foreign Direct Investment", "option_b": "Fixed Deposit Info", "option_c": "Fast Data Integration", "option_d": "None", "correct_option": "A"},
+
+        # --- UPSC ---
+        {"category": "UPSC", "sub_category": "Polity", "week_number": 1, "difficulty": "Hard", "question_text": "Who is the custodian of the Indian Constitution?", "option_a": "President", "option_b": "Supreme Court", "option_c": "Parliament", "option_d": "Prime Minister", "correct_option": "B"},
+        {"category": "UPSC", "sub_category": "History", "week_number": 1, "difficulty": "Hard", "question_text": "The Rowlatt Act was passed in which year?", "option_a": "1917", "option_b": "1918", "option_c": "1919", "option_d": "1920", "correct_option": "C"},
+        {"category": "UPSC", "sub_category": "Geography", "week_number": 2, "difficulty": "Medium", "question_text": "Which Indian state has the longest coastline?", "option_a": "Maharashtra", "option_b": "Tamil Nadu", "option_c": "Gujarat", "option_d": "Andhra Pradesh", "correct_option": "C"},
+        
+        # --- SSC ---
+        {"category": "SSC", "sub_category": "Quant", "week_number": 1, "difficulty": "Medium", "question_text": "Find the average of first 50 natural numbers.", "option_a": "25", "option_b": "25.5", "option_c": "26", "option_d": "24.5", "correct_option": "B"},
+        {"category": "SSC", "sub_category": "English", "week_number": 1, "difficulty": "Easy", "question_text": "Synonym of 'Abundant'?", "option_a": "Scarce", "option_b": "Plentiful", "option_c": "Rare", "option_d": "Small", "correct_option": "B"},
+        
+        # --- APPSC / TSPSC ---
+        {"category": "APPSC", "sub_category": "State History", "week_number": 1, "difficulty": "Medium", "question_text": "Who was the first Chief Minister of Andhra Pradesh?", "option_a": "T. Prakasam", "option_b": "N. Sanjiva Reddy", "option_c": "P.V. Narasimha Rao", "option_d": "None", "correct_option": "A"},
+        {"category": "TSPSC", "sub_category": "State Formation", "week_number": 1, "difficulty": "Hard", "question_text": "In which year was the Telangana state formed?", "option_a": "2012", "option_b": "2013", "option_c": "2014", "option_d": "2015", "correct_option": "C"},
+        
+        # --- Advanced Tech (B.Tech/M.Tech) ---
+        {"category": "Coding", "sub_category": "Cloud", "week_number": 5, "difficulty": "Medium", "question_text": "What is 'SaaS' in Cloud Computing?", "option_a": "Server as a Service", "option_b": "Software as a Service", "option_c": "Storage as a Service", "option_d": "System as a Service", "correct_option": "B"},
+        {"category": "Coding", "sub_category": "DevOps", "week_number": 5, "difficulty": "Medium", "question_text": "What does CI/CD stand for?", "option_a": "Continuous Integration / Continuous Delivery", "option_b": "Core Integration / Core Delivery", "option_c": "Code Integration / Code Deployment", "option_d": "None", "correct_option": "A"},
+        {"category": "Coding", "sub_category": "AI/ML", "week_number": 6, "difficulty": "Hard", "question_text": "What is the primary goal of Unsupervised Learning?", "option_a": "Predicting labels", "option_b": "Finding hidden patterns/clusters", "option_c": "Optimizing weights", "option_d": "None", "correct_option": "B"}
     ]
 
     with app.app_context():
@@ -617,12 +657,26 @@ if __name__ == "__main__":
     seed_questions()
     seed_quizzes()
     # Also seed all specialized categories
-    from seed_medical_comprehensive import seed_medical_comprehensive
-    from seed_educational import seed_educational_data
-    from seed_extra_roles import seed_extra_data
-    from seed_specialized import seed_specialized_data
+    try:
+        from seed_medical_comprehensive import seed_medical_comprehensive
+        seed_medical_comprehensive()
+    except ImportError:
+        print("Skipping seed_medical_comprehensive (not found)")
+
+    try:
+        from seed_educational import seed_educational_data
+        seed_educational_data()
+    except ImportError:
+        print("Skipping seed_educational (not found)")
+
+    try:
+        from seed_extra import seed_extra_fields
+        seed_extra_fields()
+    except ImportError:
+        print("Skipping seed_extra (not found)")
     
-    seed_medical_comprehensive()
-    seed_educational_data()
-    seed_extra_data()
-    seed_specialized_data()
+    try:
+        from seed_advanced_content import seed_advanced_content
+        seed_advanced_content()
+    except ImportError:
+        print("Skipping seed_advanced_content (not found)")

@@ -17,6 +17,10 @@ class User(UserMixin, db.Model):
     readiness_score = db.Column(db.Integer, default=0)
     completed_modules = db.Column(db.String(500), default="") # Comma-separated indices
     
+    # Password Reset
+    reset_token = db.Column(db.String(100), unique=True)
+    reset_token_expiry = db.Column(db.DateTime)
+    
     sessions = db.relationship('InterviewSession', backref='user', lazy=True)
 
 class Question(db.Model):
