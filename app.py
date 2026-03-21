@@ -127,7 +127,8 @@ def create_app():
                 if new_progress:
                     current_user.completed_modules = new_progress.completed_modules
                     current_user.readiness_score = new_progress.readiness_score
-                    current_user.prep_weeks = new_progress.prep_weeks
+                    # Only restore prep_weeks if it's not provided in form, but here it's required
+                    current_user.prep_weeks = new_weeks 
                 else:
                     # New role, no previous progress
                     current_user.completed_modules = ""

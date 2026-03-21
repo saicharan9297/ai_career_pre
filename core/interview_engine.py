@@ -32,9 +32,9 @@ def get_interview_session_questions(user):
     if is_tech:
         role_pool = Question.query.filter(Question.category.in_(["Coding", "Core CS"])).all()
     elif is_civil:
-        role_pool = Question.query.filter_by(category="Civil Service").all()
+        role_pool = Question.query.filter(Question.category.in_(["Civil Service", "IAS"])).all()
     elif is_finance:
-        role_pool = Question.query.filter_by(category="Finance/Govt").all()
+        role_pool = Question.query.filter(Question.category.in_(["Finance/Govt"])).all()
     elif is_medical:
         role_pool = Question.query.filter_by(category="Medical").all()
     elif is_science:
@@ -48,14 +48,22 @@ def get_interview_session_questions(user):
         else: category = "Professional"
         role_pool = Question.query.filter_by(category=category).all()
     
-    # Filter by role keywords if possible for additional refinement
+    # 2. Refine by role keywords if possible
+    # We want to be more specific if the pool is large
     refined_role_pool = [q for q in role_pool if any(word in (q.sub_category or "").lower() or word in q.question_text.lower() for word in role_raw.split())]
-    if len(refined_role_pool) < 3:
-        refined_role_pool = role_pool # Fallback to the category pool
     
+    # If refinement is too narrow, use the category pool
+    if len(refined_role_pool) < 3:
+        refined_role_pool = role_pool
+    
+    # 3. IF THE POOL IS STILL EMPTY, FALLBACK GRACEFULLY
     if not refined_role_pool:
-        # Extreme fallback to any non-HR if still empty
-        refined_role_pool = Question.query.filter(Question.category != "HR").all()
+        # Fallback to "Professional" (Management/Leadership) which is safer than mixing all domains
+        refined_role_pool = Question.query.filter(Question.category == "Professional").all()
+        
+    # Final catch-all to prevent crash, though Professional should have content
+    if not refined_role_pool:
+        refined_role_pool = Question.query.filter(Question.category != "HR").limit(10).all()
     
     # 2. Fetch HR Pool
     hr_pool = Question.query.filter_by(category="HR").all()
