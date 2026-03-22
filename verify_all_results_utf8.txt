@@ -1,0 +1,10 @@
+Branch/Role          | Edu Level            | First Theme                   
+--------------------------------------------------------------------------------
+ECE                  | B.Tech 3rd Year      | Week 1: Advanced Communication & VLSI
+MECH                 | B.Tech 2nd Year      | Week 1: Thermal & Fluid Engineering
+EEE                  | B.Tech 4th Year      | Week 1: Power Systems & Machines
+CHEMICAL             | B.Tech 3rd Year      | Week 1: Chemical Process Foundations
+AIML                 | B.Tech 4th Year      | Week 1: AI & Advanced Math    
+Data Science         | B.Tech 2nd Year      | Week 1: Data Foundations & Programming
+CSE                  | B.Tech 3rd Year      | Week 1: Advanced Engineering & Professional Readiness
+Data Analyst         | Job Seeker           | Week 1: Core Data Science Foundations

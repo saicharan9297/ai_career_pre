@@ -1,0 +1,33 @@
+Total Users: 4
+USER EMAIL: persist@test.com
+  Desired Role: 'Full Stack Developer'
+  Edu Level: 'B.Tech'
+  First Week Theme: Week 1: Core CSE Foundations (OS, DBMS, Data Structures)
+  First Subject: Operating Systems (OS)
+  Quiz Category Identified: Coding
+  Sample Question: What is the main purpose of an Operating System's 
+========================================
+USER EMAIL: sai1@gmail.com
+  Desired Role: 'ECE'
+  Edu Level: 'Intermediate (1st Year)'
+  First Week Theme: Week 1: Core Electronics Foundations
+  First Subject: Electronic Devices & Digital Circuits
+  Quiz Category Identified: ECE
+  Sample Question: How many select lines are needed for a 8:1 Multipl
+========================================
+USER EMAIL: testuser@test.com
+  Desired Role: 'Full Stack Developer'
+  Edu Level: 'School (6-10)'
+  First Week Theme: Week 1: Core CSE Foundations (OS, DBMS, Data Structures)
+  First Subject: Operating Systems (OS)
+  Quiz Category Identified: Coding
+  Sample Question: Which data structure follows the Last-In-First-Out
+========================================
+USER EMAIL: sai@gmail.com
+  Desired Role: 'ECE'
+  Edu Level: 'B.Tech (1st Year)'
+  First Week Theme: Week 1: Engineering Foundations & Programming
+  First Subject: Engineering Mathematics
+  Quiz Category Identified: ECE
+  Sample Question: How many select lines are needed for a 8:1 Multipl
+========================================

@@ -142,6 +142,7 @@ def create_app():
     def onboarding():
         from models import UserProgress
         if request.method == 'POST':
+            print(f"DEBUG ONBOARDING: form={request.form}")
             try:
                 new_role = request.form.get('desired_role')
                 new_weeks = int(request.form.get('prep_weeks') or 1)

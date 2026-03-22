@@ -11,9 +11,9 @@ def generate_roadmap(user):
         hours = 2
     
     # Robust Role Detection Keywords
-    tech_keywords = ['engineer', 'developer', 'coding', 'ai', 'data', 'software', 'tech', 'programmer', 'web', 'frontend', 'backend', 'fullstack', 'devops', 'stack', 'cloud', 'security', 'machine learning', 'data science']
+    tech_keywords = ['engineer', 'developer', 'coding', 'ai', 'data', 'software', 'tech', 'programmer', 'web', 'frontend', 'backend', 'fullstack', 'devops', 'stack', 'cloud', 'security', 'machine learning', 'data science', 'cse', 'it', 'ece', 'eee', 'iot', 'aiml', 'vlsi', 'embedded', 'robotics', 'mech', 'mechanical', 'civil', 'chemical', 'aerospace']
     civil_service_keywords = ['ias', 'civil service', 'upsc', 'mro', 'revenue officer', 'tpsc', 'appsc', 'group 1', 'group 2', 'constable', 'sub-inspector', 'panchayat', 'administrative', 'ips', 'ifs', 'collector']
-    finance_govt_keywords = ['income tax', 'tax', 'ssc', 'cgl', 'banking', 'bank', 'po', 'clerk', 'finance', 'audit', 'lic', 'rbi', 'ibps', 'accountant', 'budget', 'revenue']
+    finance_govt_keywords = ['income tax', 'tax', 'ssc', 'cgl', 'banking', 'bank', 'po', 'clerk', 'finance', 'audit', 'lic', 'rbi', 'ibps', 'accountant', 'budget', 'revenue', 'economist', 'tally']
     medical_keywords = ['medical', 'doctor', 'nurse', 'pharmacy', 'healthcare', 'dentist', 'physician', 'surgeon', 'clinic', 'cardiology', 'neurology', 'orthopedic', 'physiotherapy', 'veterinary', 'radiology', 'psychiatry', 'dermatology', 'urology', 'nephrology', 'pulmonology', 'ophthalmology', 'ayurveda', 'homeopathy', 'public health']
     science_keywords = ['science', 'research', 'physics', 'chemistry', 'biology', 'scientist', 'laboratory', 'biotech']
 
@@ -41,7 +41,7 @@ def generate_roadmap(user):
     is_appsc = 'appsc' in role_lower or 'ap' in role_lower and ('psc' in role_lower or 'group' in role_lower)
     is_tspsc = 'tspsc' in role_lower or 'tpsc' in role_lower or 'telangana' in role_lower and ('psc' in role_lower or 'group' in role_lower)
     
-    is_civil = is_upsc or is_appsc or is_tspsc or any(kw in role_lower for kw in civil_service_keywords)
+    is_civil_service = is_upsc or is_appsc or is_tspsc or any(kw in role_lower for kw in civil_service_keywords)
     is_finance_govt = is_ssc or any(kw in role_lower for kw in finance_govt_keywords)
     
     # Education Level Specific Flags
@@ -51,6 +51,20 @@ def generate_roadmap(user):
     is_btech = 'B.Tech' in edu
     is_mtech = 'M.Tech' in edu
     is_higher_tech = is_btech or is_mtech
+
+    # Specific B.Tech/M.Tech Branch Detection (Expanded for robust matching)
+    edu_lower = (edu or "").lower()
+    is_cse = any(kw in edu_lower or kw in role_lower for kw in ['cse', 'computer science', 'software', 'it', 'web', 'frontend', 'backend', 'fullstack', 'devops', 'cloud', 'security', 'cyber', 'network', 'system admin', 'data analyst', 'database', 'dba'])
+    is_datascience = any(kw in edu_lower or kw in role_lower for kw in ['datascience', 'data science', 'scientist', 'analyst', 'statistics', 'tableau', 'power bi', 'sql', 'data engineer', 'big data', 'pandas', 'numpy', 'ml engineer'])
+    is_ece = any(kw in edu_lower or kw in role_lower for kw in ['ece', 'electronics', 'communication', 'vlsi', 'embedded', 'microprocessor', 'microcontroller', 'signals', 'antenna', 'circuit', 'hardware', 'telecom', 'semiconductor', 'analog', 'digital systems', 'embedded engineer'])
+    is_eee = any(kw in edu_lower or kw in role_lower for kw in ['eee', 'electrical', 'power system', 'power engineering', 'machines', 'control system', 'smart grid', 'renewable', 'high voltage', 'automation', 'instrumentation', 'electrical engineer'])
+    is_mech = any(kw in edu_lower or kw in role_lower for kw in ['mech', 'mechanical', 'thermal', 'thermodynamics', 'manufacturing', 'solid mechanics', 'fluid mechanics', 'cad', 'cam', 'automobile', 'mechatronics', 'robotics', 'industrial', 'design engineer', 'mechanical engineer'])
+    is_civil_eng = any(kw in edu_lower or kw in role_lower for kw in ['civil', 'construction', 'structural', 'surveying', 'geotech', 'geology', 'transportation', 'environmental eng', 'urban planning', 'hydrology', 'steel structures'])
+    is_aiml = any(kw in edu_lower or kw in role_lower for kw in ['aiml', 'ai', 'machine learning', 'deep learning', 'neural network', 'nlp', 'computer vision', 'data science', 'analytics'])
+    is_iot = any(kw in edu_lower or kw in role_lower for kw in ['iot', 'internet of things', 'mqtt', 'sensors', 'edge computing', 'wsn', 'connectivity'])
+    is_chemical = any(kw in edu_lower or kw in role_lower for kw in ['chemical', 'petroleum', 'process engineering', 'polymer', 'biochemical', 'fertilizer', 'refinery'])
+    is_aerospace = any(kw in edu_lower or kw in role_lower for kw in ['aerospace', 'aero', 'satellite', 'rocket', 'avionics', 'propulsion', 'flight', 'orbital'])
+    is_cyber = any(kw in edu_lower or kw in role_lower for kw in ['cyber', 'security', 'penetration', 'ethical hacking', 'infosec', 'forensics', 'cryptography'])
     
     # Career Guidance Information
     guidance = None
@@ -60,19 +74,18 @@ def generate_roadmap(user):
         stage = "Intermediate" if is_intermediate else "Diploma"
         guidance = f"Educational Path: Complete your {stage} successfully. After this, you should pursue B.Tech or a Bachelor's degree in your field of interest for better job opportunities."
     
-    print(f"DEBUG ROADMAP: edu={edu}, is_school={is_school}, is_int={is_intermediate}, guidance={guidance}")
-    
     # Combine tech role with tech education background
     is_tech = is_role_tech or is_higher_tech
     
     # ITI/Diploma should only be considered "Generic Tech" if no specific role matches and no other category matches
-    if not (is_civil or is_finance_govt or is_medical or is_science) and is_iti_diploma:
+    if not (is_civil_service or is_finance_govt or is_medical or is_science) and is_iti_diploma:
         if is_role_tech or role_lower in ["", "career search", "job", "fresher"]:
             is_tech = True
     
     # If a specific NON-TECH role is specified, it should override the tech education background
-    if is_civil or is_finance_govt or is_medical or is_science:
+    if is_civil_service or is_finance_govt or is_medical or is_science:
         is_tech = is_role_tech # Only consider it tech if they explicitly asked for a tech role
+
     
     # Final Priority: Technical Role > Civil Service > Finance > Medical > Science > School/Inter/Voc/HigherTech
 
@@ -81,125 +94,773 @@ def generate_roadmap(user):
     # Define potential themes based on ROLE first, then EDUCATION LEVEL
     if is_tech:
         if is_btech and "1st Year" in edu:
+            # Common subjects but with branch-specific intro
+            branch_intro = "Engineering"
+            branch_special = {"name": "Workshop Practice", "content": "Basic hand tools, fitting, and simple engineering assembly."}
+            
+            if is_ece:
+                branch_intro = "Electronics"
+                branch_special = {"name": "Introduction to Electronics", "content": "Basic components (Resistors, Caps, Diodes) and breadboard prototyping."}
+            elif is_mech:
+                branch_intro = "Mechanical"
+                branch_special = {"name": "Basic Mechanical Engineering", "content": "Mechanism basics, engine cycles, and material properties."}
+            elif is_cse:
+                branch_intro = "Computing"
+                branch_special = {"name": "Basics of IT & AI", "content": "Introduction to computer systems, AI ethics, and cloud basics."}
+            elif is_datascience:
+                branch_intro = "Data Science"
+                branch_special = {"name": "Introduction to Data Science", "content": "Understanding data types, lifecycle, and visualization basics."}
+            elif is_eee:
+                branch_intro = "Electrical"
+                branch_special = {"name": "Basic Electrical Engineering", "content": "DC/AC circuits, energy sources, and safety protocols."}
+
             all_themes = [
                 {
-                    "title": "Engineering Foundations & Programming",
+                    "title": f"1st Year: {branch_intro} Foundations",
                     "subjects": [
-                        {"name": "Engineering Mathematics", "content": "Calculus, Linear Algebra, and Differential Equations for engineering analysis."},
-                        {"name": "Programming for Problem Solving", "content": "Basics of C/Python, control structures, and functional thinking."},
-                        {"name": "Engineering Physics", "content": "Optics, Electromagnetism, and Quantum basics for technical depth."}
+                        {"name": "Engineering Mathematics - I", "content": "Calculus, Matrix theory, and equations for technical analysis."},
+                        {"name": "Programming for Problem Solving", "content": "Foundations of C/Python, logic building, and algorithms."},
+                        branch_special
                     ]
                 },
                 {
-                    "title": "Digital Logic & Computer Basics",
+                    "title": "Science & Professional Design",
                     "subjects": [
-                        {"name": "Digital Electronics", "content": "Number systems, Logic gates, and Combinational circuit design."},
-                        {"name": "Basic Electrical Engineering", "content": "DC/AC circuits, Transformers, and Power systems foundations."},
-                        {"name": "Technical Communication", "content": "Report writing and professional presentation skills."}
+                        {"name": "Engineering Physics/Chemistry", "content": "Core science principles applied to modern technical challenges."},
+                        {"name": "Engineering Drawing/Graphics", "content": "Visualizing and sketching 2D/3D engineering components."},
+                        {"name": "English & Communication Skills", "content": "Professional report writing and soft skills development."}
                     ]
                 }
             ]
         elif is_btech and "2nd Year" in edu:
-            all_themes = [
-                {
-                    "title": "Core Computer Science Foundations",
-                    "subjects": [
-                        {"name": "Data Structures & Algorithms", "content": "Arrays, Lists, Stacks, Queues, and basic algorithmic complexity."},
-                        {"name": "Discrete Mathematics", "content": "Set theory, Graph theory, and Combinatorics for CS logic."},
-                        {"name": "Object Oriented Programming (Java/C++)", "content": "Classes, Inheritance, and Polymorphism in real-world design."}
-                    ]
-                },
-                {
-                    "title": "Computer Organization & Database Basics",
-                    "subjects": [
-                        {"name": "Computer Organization & Architecture", "content": "CPU design, Memory hierarchy, and Instruction set architectures."},
-                        {"name": "Database Management Systems (Relational)", "content": "SQL, Normalization, and Entity-Relationship modeling."},
-                        {"name": "Python for Data Science Basics", "content": "Introduction to NumPy, Pandas, and basic data visualization."}
-                    ]
-                }
-            ]
+            if is_ece:
+                all_themes = [
+                    {
+                        "title": "Electronic Circuits & Digital Logic",
+                        "subjects": [
+                            {"name": "Electronic Devices & Circuits", "content": "Semiconductors, Diodes, and Transistor biasing/analysis."},
+                            {"name": "Digital System Design", "content": "Logic gates, K-maps, Flip-flops, and Sequential circuit design."},
+                            {"name": "Signals & Systems", "content": "Continuous/Discrete time signals, Fourier series, and Z-transforms."}
+                        ]
+                    },
+                    {
+                        "title": "Electrical Networks & Fields",
+                        "subjects": [
+                            {"name": "Network Analysis", "content": "KVL/KCL, Mesh/Nodal analysis, and Network theorems (Thevenin/Norton)."},
+                            {"name": "Electromagnetic Fields", "content": "Electrostatics, Magnetostatics, and Maxwell's equations."},
+                            {"name": "Analog Communications Basics", "content": "Amplitude/Frequency modulation and basic receiver designs."}
+                        ]
+                    }
+                ]
+            elif is_eee:
+                all_themes = [
+                    {
+                        "title": "Electrical Machines & Networks",
+                        "subjects": [
+                            {"name": "Electrical Machines - I", "content": "DC Generators, Motors, and single-phase transformers."},
+                            {"name": "Network Theory", "content": "Steady state analysis, transient response, and two-port networks."},
+                            {"name": "Electromagnetic Fields", "content": "Static electric and magnetic fields, and time-varying fields."}
+                        ]
+                    },
+                    {
+                        "title": "Analog Electronics & Measurements",
+                        "subjects": [
+                            {"name": "Analog Electronics", "content": "Op-amps, oscillators, and power amplifiers for EEE."},
+                            {"name": "Electrical Measurements", "content": "Galvanometers, bridges, and energy meters."},
+                            {"name": "Digital Electronics Basics", "content": "Logic families and combinational logic design."}
+                        ]
+                    }
+                ]
+            elif is_mech:
+                all_themes = [
+                    {
+                        "title": "Thermal & Fluid Engineering",
+                        "subjects": [
+                            {"name": "Engineering Thermodynamics", "content": "Laws of thermodynamics, entropy, and pure substances."},
+                            {"name": "Fluid Mechanics", "content": "Fluid statics, dynamics, and Bernoulli's equation."},
+                            {"name": "Mechanics of Solids", "content": "Stress, strain, shear force, and bending moment diagrams."}
+                        ]
+                    },
+                    {
+                        "title": "Manufacturing & Materials",
+                        "subjects": [
+                            {"name": "Material Science", "content": "Crystal structures, phase diagrams, and heat treatment of steel."},
+                            {"name": "Manufacturing Processes", "content": "Casting, forming, and welding processes."},
+                            {"name": "Machine Drawing", "content": "Orthographic projections and assembly drawings."}
+                        ]
+                    }
+                ]
+            elif is_civil_eng:
+                all_themes = [
+                    {
+                        "title": "Structural Mechanics & Materials",
+                        "subjects": [
+                            {"name": "Strength of Materials", "content": "Stresses, strains, and deflection of beams."},
+                            {"name": "Building Materials", "content": "Properties of cement, concrete, bricks, and timber."},
+                            {"name": "Surveying - I", "content": "Linear measurements, leveling, and compass surveying."}
+                        ]
+                    },
+                    {
+                        "title": "Fluid & Geo-Engineering Basics",
+                        "subjects": [
+                            {"name": "Fluid Mechanics", "content": "Properties of fluids and pipe flow basics."},
+                            {"name": "Engineering Geology", "content": "Weathering, rock types, and geological structures."},
+                            {"name": "Computer Aided Design (CAD)", "content": "Basics of AutoCAD for civil engineering drawings."}
+                        ]
+                    }
+                ]
+            elif is_datascience:
+                all_themes = [
+                    {
+                        "title": "Data Foundations & Programming",
+                        "subjects": [
+                            {"name": "Probability & Statistics", "content": "Descriptive/Inferential statistics, distributions, and hypothesis testing."},
+                            {"name": "Python for Data Science", "content": "NumPy, Pandas, and Matplotlib for data manipulation."},
+                            {"name": "Database Management Systems", "content": "SQL, Normalization, and Relational database design."}
+                        ]
+                    },
+                    {
+                        "title": "Data Warehousing & Math",
+                        "subjects": [
+                            {"name": "Data Warehousing & Mining", "content": "ETL processes, associations, and clustering basics."},
+                            {"name": "Discrete Mathematics", "content": "CS logic, set theory, and probability theory foundations."},
+                            {"name": "Object Oriented Programming (Python/Java)", "content": "Classes and structures for data application design."}
+                        ]
+                    }
+                ]
+            elif is_cyber:
+                all_themes = [
+                    {
+                        "title": "Cyber Security Foundations & Networking",
+                        "subjects": [
+                            {"name": "Network Security & Protocols", "content": "TCP/IP vulnerabilities, Firewalls, VPNs, and IDS/IPS systems."},
+                            {"name": "Cryptography Foundations", "content": "Symmetric/Asymmetric encryption, Hashing, and Digital signatures."},
+                            {"name": "Ethical Hacking Basics", "content": "Vulnerability assessment, port scanning, and security auditing."}
+                        ]
+                    },
+                    {
+                        "title": "Advanced Security & Defense",
+                        "subjects": [
+                            {"name": "Web Application Security", "content": "OWASP Top 10, SQL injection, XSS, and secure coding practices."},
+                            {"name": "Incident Response & Forensics", "content": "Malware analysis, log investigation, and digital evidence recovery."},
+                            {"name": "Identity & Access Management", "content": "OAuth, SAML, Multi-factor authentication, and Zero Trust models."}
+                        ]
+                    }
+                ]
+            else: # Default/Professional Readiness (Fallback for CSE/IT)
+                all_themes = [
+                    {
+                        "title": "Core Computer Science Foundations",
+                        "subjects": [
+                            {"name": "Data Structures & Algorithms", "content": "Arrays, Lists, Stacks, Queues, and basic algorithmic complexity."},
+                            {"name": "Discrete Mathematics", "content": "Set theory, Graph theory, and Combinatorics for CS logic."},
+                            {"name": "Object Oriented Programming (Java/C++)", "content": "Classes, Inheritance, and Polymorphism in real-world design."}
+                        ]
+                    },
+                    {
+                        "title": "Computer Organization & Database Basics",
+                        "subjects": [
+                            {"name": "Computer Organization & Architecture", "content": "CPU design, Memory hierarchy, and Instruction set architectures."},
+                            {"name": "Database Management Systems (Relational)", "content": "SQL, Normalization, and Entity-Relationship modeling."},
+                            {"name": "Python for Data Science Basics", "content": "Introduction to NumPy, Pandas, and basic data visualization."}
+                        ]
+                    }
+                ]
         elif is_btech and ("3rd Year" in edu or "4th Year" in edu):
-             all_themes = [
-                {
-                    "title": "Advanced Engineering & Professional Readiness",
-                    "subjects": [
-                        {"name": "Operating Systems & Networking", "content": "Process scheduling, TCP/IP, and Distributed system foundations."},
-                        {"name": "Design & Analysis of Algorithms", "content": "Dynamic programming, Greedy algorithms, and NP-completeness."},
-                        {"name": "Software Engineering Principles", "content": "SDLC, Design patterns, and Agile methodologies."}
-                    ]
-                },
-                {
-                    "title": "Specialization & Emerging Tech",
-                    "subjects": [
-                        {"name": "AI & Machine Learning", "content": "Neural networks, Supervised/Unsupervised learning, and Model evaluation."},
-                        {"name": "Cloud Computing & DevOps", "content": "Virtualization, AWS/Azure, and CI/CD pipelines."},
-                        {"name": "Cyber Security Foundations", "content": "Cryptography, Network security, and Secure coding practices."}
-                    ]
-                },
-                {
-                    "title": "Project Management & Industry Standards",
-                    "subjects": [
-                        {"name": "System Design", "content": "Designing scalable systems, microservices, and load balancing."},
-                        {"name": "Product Management Basics", "content": "Requirements gathering, user stories, and roadmap planning."},
-                        {"name": "Professional Ethics & Communication", "content": "Workplace etiquette, presentation skills, and ethical hacking basics."}
-                    ]
-                }
-            ]
+            if is_ece:
+                all_themes = [
+                    {
+                        "title": "Advanced Communication & VLSI",
+                        "subjects": [
+                            {"name": "Digital Communication", "content": "Source coding, PCM, digital modulation schemes (ASK/FSK/PSK)."},
+                            {"name": "VLSI Design", "content": "CMOS technology, layout design, and HDL programming (Verilog/VHDL)."},
+                            {"name": "Antennas & Wave Propagation", "content": "Radiation patterns, dipole antennas, and wave propagation modes."}
+                        ]
+                    },
+                    {
+                        "title": "Embedded Systems & Control",
+                        "subjects": [
+                            {"name": "Microprocessors & Microcontrollers", "content": "8086 architectures, 8051 programming, and interfacing techniques."},
+                            {"name": "Control Systems Engineering", "content": "Time/Frequency response, stability analysis, and feedback control."},
+                            {"name": "Digital Signal Processing", "content": "DFT, FFT, FIR/IIR filters, and realized architectures."}
+                        ]
+                    },
+                    {
+                        "title": "Emerging ECE Technologies",
+                        "subjects": [
+                            {"name": "Microwave Engineering", "content": "Waveguides, S-parameters, and microwave components."},
+                            {"name": "Optical Communications", "content": "Fiber optics, light sources, and detectors."},
+                            {"name": "Wireless & Mobile Networks", "content": "Cellular concepts, 4G/5G technology, and IoT connectivity."}
+                        ]
+                    }
+                ]
+            elif is_eee:
+                 all_themes = [
+                    {
+                        "title": "Power Systems & Machines",
+                        "subjects": [
+                            {"name": "Power Systems Analysis", "content": "Load flow studies, fault analysis, and power system stability."},
+                            {"name": "Electrical Machines - II", "content": "Three-phase induction motors, synchronous machines."},
+                            {"name": "Power Electronics", "content": "SCRs, Converters, Inverters, and Choppers."}
+                        ]
+                    },
+                    {
+                        "title": "Control & Automation",
+                        "subjects": [
+                            {"name": "Control Systems", "content": "State variable analysis, stability, and compensation techniques."},
+                            {"name": "Microprocessors & Interfacing", "content": "Architecture and programming for electrical automation."},
+                            {"name": "Renewable Energy Sources", "content": "Solar, wind, and hybrid power systems."}
+                        ]
+                    },
+                    {
+                        "title": "Industrial Power & Protection",
+                        "subjects": [
+                            {"name": "Power System Protection", "content": "Relays, circuit breakers, and protection schemes."},
+                            {"name": "Utilization of Electrical Energy", "content": "Illumination, traction, and industrial drives."},
+                            {"name": "HVDC & FACTs", "content": "High voltage DC transmission and flexible AC transmission systems."}
+                        ]
+                    }
+                ]
+            elif is_mech:
+                all_themes = [
+                    {
+                        "title": "Design & Dynamics",
+                        "subjects": [
+                            {"name": "Design of Machine Elements", "content": "Design of shafts, gears, bearings, and fasteners."},
+                            {"name": "Dynamics of Machinery", "content": "Balancing, gyroscopes, and vibration analysis."},
+                            {"name": "Kinematics of Machinery", "content": "Links, mechanisms, and cams."}
+                        ]
+                    },
+                    {
+                        "title": "Thermal Applications & Fluids",
+                        "subjects": [
+                            {"name": "Internal Combustion Engines", "content": "SI/CI engines, fuel systems, and emissions."},
+                            {"name": "Heat & Mass Transfer", "content": "Conduction, convection, and radiation heat transfer."},
+                            {"name": "Fluid Machines & Turbo Machinery", "content": "Pumps, turbines, and compressible flow."}
+                        ]
+                    },
+                    {
+                        "title": "Production & Modern Manufacturing",
+                        "subjects": [
+                            {"name": "Production Planning & Control", "content": "Inventory management, scheduling, and forecasting."},
+                            {"name": "CAD/CAM", "content": "Geometric modeling and computer-aided manufacturing."},
+                            {"name": "Metrology & Instrumentation", "content": "Measurement techniques and quality control."}
+                        ]
+                    }
+                ]
+            elif is_civil_eng:
+                 all_themes = [
+                    {
+                        "title": "Structural Engineering & Analysis",
+                        "subjects": [
+                            {"name": "Structural Analysis - II", "content": "Matrix methods and indeterminate structures."},
+                            {"name": "Design of Concrete Structures", "content": "Limit state design of beams, slabs, and columns."},
+                            {"name": "Design of Steel Structures", "content": "Connections, tension/compression members, and plate girders."}
+                        ]
+                    },
+                    {
+                        "title": "Water Resources & Geo-Tech",
+                        "subjects": [
+                            {"name": "Geotechnical Engineering", "content": "Index properties, soil classification, and bearing capacity."},
+                            {"name": "Water Resources Engineering", "content": "Hydrology, irrigation systems, and dam design."},
+                            {"name": "Environmental Engineering", "content": "Water supply, sewage treatment, and solid waste management."}
+                        ]
+                    },
+                    {
+                        "title": "Transportation & Management",
+                        "subjects": [
+                            {"name": "Transportation Engineering", "content": "Highway design, traffic engineering, and railway basics."},
+                            {"name": "Construction Management", "content": "Project planning, PERT/CPM, and resource allocation."},
+                            {"name": "Remote Sensing & GIS", "content": "Applications of GIS in civil engineering projects."}
+                        ]
+                    }
+                ]
+            elif is_datascience:
+                all_themes = [
+                    {
+                        "title": "Machine Learning & Advanced Analytics",
+                        "subjects": [
+                            {"name": "Machine Learning", "content": "Supervised learning (Regression, Classification) and Model evaluation."},
+                            {"name": "Advanced Statistical Inference", "content": "Bayesian stats, ANOVA, and time-series forecasting."},
+                            {"name": "Data Visualization", "content": "Storytelling with data using Tableau or Power BI."}
+                        ]
+                    },
+                    {
+                        "title": "Big Data & Deep Learning",
+                        "subjects": [
+                            {"name": "Big Data Analytics", "content": "Spark, Hadoop, and processing distributed datasets."},
+                            {"name": "Introduction to Neural Networks", "content": "Perceptrons, backpropagation, and basic deep learning."},
+                            {"name": "NLP & Text Mining", "content": "Sentiment analysis, tokenization, and vector embeddings."}
+                        ]
+                    },
+                    {
+                        "title": "Data Engineering & Ethics",
+                        "subjects": [
+                            {"name": "Data Engineering Pipelines", "content": "Airflow, Kafka, and cloud data architecture."},
+                            {"name": "MLOps & Deployment", "content": "Model containerization (Docker) and monitoring."},
+                            {"name": "Data Ethics & Privacy", "content": "Privacy-preserving AI, bias, and data regulations (GDPR)."}
+                        ]
+                    }
+                ]
+            elif is_aiml:
+                all_themes = [
+                    {
+                        "title": "AI & Advanced Math",
+                        "subjects": [
+                            {"name": "Artificial Intelligence Fundamentals", "content": "Search algorithms, knowledge representation, and logic."},
+                            {"name": "Mathematical Foundations for AI", "content": "Linear algebra, probability, and optimization techniques."},
+                            {"name": "Machine Learning", "content": "Supervised, unsupervised, and reinforcement learning."}
+                        ]
+                    },
+                    {
+                        "title": "Deep Learning & Neural Networks",
+                        "subjects": [
+                            {"name": "Neural Networks & Deep Learning", "content": "CNNs, RNNs, and backpropagation mechanics."},
+                            {"name": "Computer Vision", "content": "Image processing, object detection, and facial recognition."},
+                            {"name": "Natural Language Processing", "content": "Text analysis, sentiment detection, and transformers (GPT)."}
+                        ]
+                    },
+                    {
+                        "title": "Scalable AI & Ethics",
+                        "subjects": [
+                            {"name": "Big Data Analytics", "content": "Processing large datasets using Spark/Hadoop."},
+                            {"name": "AI Ethics & Fairness", "content": "Bias detection, transparency, and ethical AI deployment."},
+                            {"name": "Cloud Computing for AI", "content": "Deploying models on AWS/Google Cloud."}
+                        ]
+                    }
+                ]
+            elif is_iot:
+                all_themes = [
+                    {
+                        "title": "IoT Architecture & Embedded",
+                        "subjects": [
+                            {"name": "Introduction to IoT", "content": "IoT architecture, protocols (MQTT/CoAP), and ecosystem."},
+                            {"name": "Embedded Systems", "content": "Real-time systems, RTOS, and hardware-software co-design."},
+                            {"name": "Microcontrollers for IoT", "content": "Arduino, Raspberry Pi, and ESP32 programming."}
+                        ]
+                    },
+                    {
+                        "title": "Sensors & Networking",
+                        "subjects": [
+                            {"name": "Sensor & Actuator Technology", "content": "Types of sensors, signal conditioning, and interfacing."},
+                            {"name": "Wireless Sensor Networks", "content": "Zigbee, LoRaWAN, and network topology."},
+                            {"name": "IoT Communication Protocols", "content": "HTTP, WebSocket, and low-power networking."}
+                        ]
+                    },
+                    {
+                        "title": "Security & Data Analytics",
+                        "subjects": [
+                            {"name": "IoT Security", "content": "Cryptography, device authentication, and secure boot."},
+                            {"name": "IoT Data Analytics", "content": "Edge computing and stream data processing."},
+                            {"name": "Cloud for IoT", "content": "Integrating devices with Azure IoT / AWS IoT Core."}
+                        ]
+                    }
+                ]
+            elif is_chemical:
+                all_themes = [
+                    {
+                        "title": "Chemical Process Foundations",
+                        "subjects": [
+                            {"name": "Chemical Reaction Engineering", "content": "Kinetics, reactor design (batch, CSTR, PFR), and catalysis."},
+                            {"name": "Chemical Engineering Thermodynamics", "content": "Phase equilibria, solution thermodynamics, and reaction equilibria."},
+                            {"name": "Fluid Mechanics for Chemical", "content": "Fluid flow through porous media and non-Newtonian fluids."}
+                        ]
+                    },
+                    {
+                        "title": "Heat & Mass Transfer",
+                        "subjects": [
+                            {"name": "Heat Transfer Operations", "content": "Heat exchangers, evaporators, and radiation."},
+                            {"name": "Mass Transfer Operations", "content": "Distillation, absorption, extraction, and drying."},
+                            {"name": "Process Dynamics & Control", "content": "Feedback loops, PID controllers, and system stability."}
+                        ]
+                    },
+                    {
+                        "title": "Industrial Chemistry & Safety",
+                        "subjects": [
+                            {"name": "Chemical Process Technology", "content": "Manufacturing of fertilizers, polymers, and petrochemicals."},
+                            {"name": "Plant Design & Economics", "content": "Equipment sizing, cost estimation, and profitability."},
+                            {"name": "Chemical Process Safety", "content": "Hazards, risk assessment, and environmental regulations."}
+                        ]
+                    }
+                ]
+            elif is_aerospace:
+                all_themes = [
+                    {
+                        "title": "Aerodynamics & Structures",
+                        "subjects": [
+                            {"name": "Aerodynamics - I", "content": "Incompressible flow, airfoils, and wings."},
+                            {"name": "Aerospace Structures", "content": "Stress/strain in thin-walled structures and composite materials."},
+                            {"name": "Aircraft Performance", "content": "Take-off, landing, and cruising flight analysis."}
+                        ]
+                    },
+                    {
+                        "title": "Propulsion & Control",
+                        "subjects": [
+                            {"name": "Aircraft Propulsion", "content": "Gas turbines, jet engines, and propellers."},
+                            {"name": "Flight Mechanics", "content": "Static and dynamic stability of aircraft."},
+                            {"name": "Avionics & Navigation", "content": "Radar systems, flight instruments, and GPS."}
+                        ]
+                    },
+                    {
+                        "title": "Space & Advanced Propulsion",
+                        "subjects": [
+                            {"name": "Rocket Propulsion", "content": "Solid/Liquid propellants and nozzle design."},
+                            {"name": "Orbital Mechanics", "content": "Satellite orbits, interplanetary trajectories, and Kepler's laws."},
+                            {"name": "Computational Fluid Dynamics", "content": "Numerical methods for aerodynamic simulation."}
+                        ]
+                    }
+                ]
+            else: # Fallback to Advanced Tech/Professional Readiness
+                all_themes = [
+                    {
+                        "title": "Advanced Engineering & Professional Readiness",
+                        "subjects": [
+                            {"name": "Operating Systems & Networking", "content": "Process scheduling, TCP/IP, and Distributed system foundations."},
+                            {"name": "Design & Analysis of Algorithms", "content": "Dynamic programming, Greedy algorithms, and NP-completeness."},
+                            {"name": "Software Engineering Principles", "content": "SDLC, Design patterns, and Agile methodologies."}
+                        ]
+                    },
+                    {
+                        "title": "Specialization & Emerging Tech",
+                        "subjects": [
+                            {"name": "AI & Machine Learning", "content": "Neural networks, Supervised/Unsupervised learning, and Model evaluation."},
+                            {"name": "Cloud Computing & DevOps", "content": "Virtualization, AWS/Azure, and CI/CD pipelines."},
+                            {"name": "Cyber Security Foundations", "content": "Cryptography, Network security, and Secure coding practices."}
+                        ]
+                    },
+                    {
+                        "title": "Project Management & Industry Standards",
+                        "subjects": [
+                            {"name": "System Design", "content": "Designing scalable systems, microservices, and load balancing."},
+                            {"name": "Product Management Basics", "content": "Requirements gathering, user stories, and roadmap planning."},
+                            {"name": "Professional Ethics & Communication", "content": "Workplace etiquette, presentation skills, and ethical hacking basics."}
+                        ]
+                    }
+                ]
         elif is_mtech:
-            all_themes = [
-                {
-                    "title": "Research Methodology & Advanced Computing",
-                    "subjects": [
-                        {"name": "Advanced Data Structures & Algorithms", "content": "Advanced tree structures, graph algorithms, and approximation algorithms."},
-                        {"name": "Distributed Systems", "content": "Consensus protocols, distributed databases, and fault tolerance."},
-                        {"name": "Research Methodology", "content": "Literature survey, experimental design, and thesis writing."}
-                    ]
-                },
-                {
-                    "title": "Specialized Electives & Industrial R&D",
-                    "subjects": [
-                        {"name": "Deep Learning & NLP", "content": "Transformer models, computer vision, and advanced neural architectures."},
-                        {"name": "Internet of Things (IoT)", "content": "Embedded systems, sensor networks, and IoT security."},
-                        {"name": "Big Data Analytics", "content": "Hadoop, Spark, and processing large-scale datasets."}
-                    ]
-                }
-            ]
+            if is_ece:
+                all_themes = [
+                    {
+                        "title": "Advanced VLSI & Embedded R&D",
+                        "subjects": [
+                            {"name": "Advanced CMOS Design", "content": "Nanoscale device modeling, leakage power, and variability-aware design."},
+                            {"name": "RTOS & Embedded Software", "content": "Real-time scheduling, kernel optimization, and device drivers."},
+                            {"name": "Mixed Signal Design", "content": "ADC/DAC architectures and high-speed analog-digital layout."}
+                        ]
+                    },
+                    {
+                        "title": "5G Communications & Optical Networks",
+                        "subjects": [
+                            {"name": "MIMO & 5G Systems", "content": "Beamforming, massive MIMO, and OFDM concepts for M.Tech."},
+                            {"name": "Photonic Integrated Circuits", "content": "WDM, optical switches, and silicon photonics foundations."},
+                            {"name": "Information Theory & Coding", "content": "Entropy, Channel capacity, and modern error correction codes (LDPC)."}
+                        ]
+                    }
+                ]
+            elif is_eee:
+                all_themes = [
+                    {
+                        "title": "Advanced Power Systems & Smart Grids",
+                        "subjects": [
+                            {"name": "Power System Dynamics", "content": "Large scale stability, transient studies, and swing equations."},
+                            {"name": "HVDC & FACTs Control", "content": "Controlling power flow using high-power semiconductor converters."},
+                            {"name": "Smart Grid Technologies", "content": "PMU integration, microgrids, and demand-side management."}
+                        ]
+                    },
+                    {
+                        "title": "Industrial Automation & Electric Vehicles",
+                        "subjects": [
+                            {"name": "Advanced Control Theory", "content": "Non-linear control and state-space estimation techniques."},
+                            {"name": "EV Powertrain & Battery", "content": "Motor drives, BMS design, and charging infrastructure."},
+                            {"name": "Digtial Signal Processors for Power", "content": "FPGA/DSP control for industrial machinery."}
+                        ]
+                    }
+                ]
+            elif is_mech:
+                all_themes = [
+                    {
+                        "title": "Precision Manufacturing & Robotics",
+                        "subjects": [
+                            {"name": "Advanced Robotics", "content": "Kinematics, trajectory planning, and robot vision systems."},
+                            {"name": "Additive Manufacturing (3D Printing)", "content": "Metal/Polymer printing, slicing algorithms, and material properties."},
+                            {"name": "Finite Element Analysis (FEA)", "content": "Formulation of stiffness matrices and structural simulation."}
+                        ]
+                    },
+                    {
+                        "title": "Sustainable Energy & Design",
+                        "subjects": [
+                            {"name": "Computational Fluid Dynamics", "content": "Navier-Stokes solutions, meshing, and turbulence modeling."},
+                            {"name": "Renewable Energy Research", "content": "Hydrogen fuels, advanced solar-thermal, and wind farm design."},
+                            {"name": "CIM & Industry 4.0", "content": "Integrating IoT with manufacturing systems (Digital Twins)."}
+                        ]
+                    }
+                ]
+            elif is_civil_eng:
+                all_themes = [
+                    {
+                        "title": "Structural Health & Dynamic Analysis",
+                        "subjects": [
+                            {"name": "Earthquake Engineering", "content": "Seismic forces, response spectrum, and base isolation."},
+                            {"name": "Finite Element Methods in Civil", "content": "Modeling complex foundations and bridge architectures."},
+                            {"name": "Advanced Concrete Technology", "content": "High-performance concrete and specialized additives."}
+                        ]
+                    },
+                    {
+                        "title": "Smart Cities & Environmental R&D",
+                        "subjects": [
+                            {"name": "Smart Infrastructure Management", "content": "Using sensors and GIS for urban planning and maintenance."},
+                            {"name": "Waste-to-Energy Systems", "content": "Technical and chemical aspects of urban waste management."},
+                            {"name": "Water Resources Modeling", "content": "Groundwater simulation and hydrological forecasting."}
+                        ]
+                    }
+                ]
+            else: # Fallback for M.Tech CSE/IT
+                all_themes = [
+                    {
+                        "title": "Research Methodology & Advanced Computing",
+                        "subjects": [
+                            {"name": "Advanced Data Structures & Algorithms", "content": "Advanced tree structures, graph algorithms, and approximation algorithms."},
+                            {"name": "Distributed Systems", "content": "Consensus protocols, distributed databases, and fault tolerance."},
+                            {"name": "Research Methodology", "content": "Literature survey, experimental design, and thesis writing."}
+                        ]
+                    },
+                    {
+                        "title": "Specialized Electives & Industrial R&D",
+                        "subjects": [
+                            {"name": "Deep Learning & NLP", "content": "Transformer models, computer vision, and advanced neural architectures."},
+                            {"name": "Internet of Things (IoT)", "content": "Embedded systems, sensor networks, and IoT security."},
+                            {"name": "Big Data Analytics", "content": "Hadoop, Spark, and processing large-scale datasets."}
+                        ]
+                    }
+                ]
         else:
-            # Standard Tech roles / Generic Tech
-            all_themes = [
-                {
-                    "title": "Core CSE Foundations (OS, DBMS, Data Structures)",
-                    "subjects": [
-                        {"name": "Operating Systems (OS)", "content": "Memory management, process synchronization, threading, and file systems."},
-                        {"name": "Database Management Systems (DBMS)", "content": "SQL vs NoSQL, Indexing, Transaction ACID properties, and Normalization."},
-                        {"name": "Data Structures & Big-O", "content": "Arrays, Linked Lists, Stacks, Queues, and time/space complexity analysis."}
-                    ]
-                },
-                {
-                    "title": f"Advanced Data Structures & {role_raw} Core",
-                    "subjects": [
-                        {"name": "Advanced Data Structures", "content": "Trees (BST, AVL), Graphs (DFS, BFS), and Hashing strategies."},
-                        {"name": f"{role_raw} Core Languages", "content": "Deep dive into language syntax, control structures, and specific best practices for your role."},
-                        {"name": "Computer Networks", "content": "TCP/IP, HTTP/HTTPS, DNS, and basic security in modern networking."}
-                    ]
-                },
-                {
-                    "title": "Frameworks & Applied Development",
-                    "subjects": [
-                        {"name": "Modern Frameworks", "content": "Component lifecycle, state management (Redux/Context), and routing in modern web/mobile apps."},
-                        {"name": "System APIs & Integration", "content": "RESTful services, GraphQL, and integrating third-party APIs."},
-                        {"name": "Testing & Debugging", "content": "Unit testing, TDD, and debugging complex distributed systems."}
-                    ]
-                },
-                {
-                    "title": "System Design & Production Readiness",
-                    "subjects": [
-                        {"name": "Scalability & Performance", "content": "Horizontal vs Vertical scaling, load balancing, and caching strategies (Redis)."},
-                        {"name": "CI/CD & Deployment", "content": "Docker, Kubernetes, and automated deployment pipelines with GitHub Actions/Jenkins."},
-                        {"name": "Architecture Patterns", "content": "Microservices vs Monoliths, event-driven design, and API Gateways."}
-                    ]
-                }
-            ]
+            # Standard Tech roles / Generic Tech (Non-year specific)
+            if is_ece:
+                all_themes = [
+                    {
+                        "title": "Core Electronics Foundations",
+                        "subjects": [
+                            {"name": "Electronic Devices & Digital Circuits", "content": "Semiconductors, Logic gates, and circuit analysis fundamentals."},
+                            {"name": "Signals & Communication Basics", "content": "Signals, systems, and modulation principles for ECE."},
+                            {"name": "Network Theory", "content": "KVL/KCL, theorems, and steady-state analysis."}
+                        ]
+                    },
+                    {
+                        "title": "Advanced Communication & Embedded",
+                        "subjects": [
+                            {"name": "Digital Communication", "content": "PCM, modulation schemes, and information theory."},
+                            {"name": "Microprocessors & Control Systems", "content": "8086/8051 architectures and feedback control systems."},
+                            {"name": "VLSI Design & DSP", "content": "CMOS technology and digital signal processing basics."}
+                        ]
+                    }
+                ]
+            elif is_eee:
+                all_themes = [
+                    {
+                        "title": "Electrical Power & Machines",
+                        "subjects": [
+                            {"name": "Electrical Machines", "content": "Generators, motors, and transformers core concepts."},
+                            {"name": "Power Systems Analysis", "content": "Transmission, distribution, and fault analysis."},
+                            {"name": "Network Theory", "content": "Circuit analysis and electromagnetic field theory."}
+                        ]
+                    },
+                    {
+                        "title": "Control Systems & Power Electronics",
+                        "subjects": [
+                            {"name": "Control Engineering", "content": "Stability analysis and industrial control systems."},
+                            {"name": "Power Electronics", "content": "Converters, inverters, and power semiconductor devices."},
+                            {"name": "Renewable Energy Basics", "content": "Solar and Wind power integration."}
+                        ]
+                    }
+                ]
+            elif is_datascience:
+                all_themes = [
+                    {
+                        "title": "Core Data Science Foundations",
+                        "subjects": [
+                            {"name": "Python & SQL Mastery", "content": "Advanced data structures in Python and complex SQL queries."},
+                            {"name": "Statistics & Analytics", "content": "Applying statistical models to real-world business data."},
+                            {"name": "Machine Learning Foundations", "content": "Core algorithms (Linear, Logistic, trees) and evaluation."}
+                        ]
+                    },
+                    {
+                        "title": "Advanced Visualization & Big Data",
+                        "subjects": [
+                            {"name": "Data Visualization", "content": "Building interactive dashboards for stakeholder insights."},
+                            {"name": "Big Data Environment", "content": "Managing data at scale with Hadoop/Spark frameworks."},
+                            {"name": "Applied AI Techniques", "content": "Introduction to NLP and Computer Vision for business."}
+                        ]
+                    }
+                ]
+            elif is_mech:
+                all_themes = [
+                    {
+                        "title": "Thermal & Mechanical Design",
+                        "subjects": [
+                            {"name": "Thermodynamics & Heat Transfer", "content": "Laws of thermodynamics and heat exchange mechanisms."},
+                            {"name": "Design of Machine Elements", "content": "Failure analysis and component design (gears, shafts)."},
+                            {"name": "Mechanics of Solids", "content": "Stress-strain analysis and structural dynamics."}
+                        ]
+                    },
+                    {
+                        "title": "Fluids & Modern Manufacturing",
+                        "subjects": [
+                            {"name": "Fluid Mechanics & Machinery", "content": "Bernoulli's principle, pumps, and turbines."},
+                            {"name": "CAD/CAM & Production", "content": "Computer-aided design and manufacturing processes."},
+                            {"name": "IC Engines & Energy", "content": "Internal combustion engines and sustainable energy."}
+                        ]
+                    }
+                ]
+            elif is_civil_eng:
+                all_themes = [
+                    {
+                        "title": "Structural & Civil Foundations",
+                        "subjects": [
+                            {"name": "Strength of Materials", "content": "Analysis of stresses and strains in civil structures."},
+                            {"name": "Concrete & Steel Design", "content": "Designing durable infrastructure using modern standards."},
+                            {"name": "Geotechnical Engineering", "content": "Soil mechanics and foundation engineering."}
+                        ]
+                    },
+                    {
+                        "title": "Environmental & Water Resources",
+                        "subjects": [
+                            {"name": "Fluid Mechanics (Civil)", "content": "Open channel flow and peak runoff analysis."},
+                            {"name": "Environmental Engineering", "content": "Water treatment and waste management systems."},
+                            {"name": "Transportation & Surveying", "content": "Highway design and advanced surveying techniques."}
+                        ]
+                    }
+                ]
+            elif is_aiml:
+                all_themes = [
+                    {
+                        "title": "Machine Learning & AI Core",
+                        "subjects": [
+                            {"name": "Statistical ML & Algorithms", "content": "Supervised learning, Regression, and Trees."},
+                            {"name": "Neural Networks & Deep Learning", "content": "Backpropagation, CNNs, and optimization techniques."},
+                            {"name": "Math for AI", "content": "Linear Algebra, Probability, and optimization foundations."}
+                        ]
+                    },
+                    {
+                        "title": "Applied AI & Data Science",
+                        "subjects": [
+                            {"name": "Natural Language Processing", "content": "Text mining, sentiment analysis, and LLMs basics."},
+                            {"name": "Computer Vision", "content": "Object detection and image recognition pipelines."},
+                            {"name": "Reinforcement Learning & Ethics", "content": "Agent-based learning and responsible AI deployment."}
+                        ]
+                    }
+                ]
+            elif is_iot:
+                all_themes = [
+                    {
+                        "title": "IoT Systems & Networking",
+                        "subjects": [
+                            {"name": "IoT Architecture & Protocols", "content": "MQTT, CoAP, and layered IoT structures."},
+                            {"name": "Wireless Sensor Networks", "content": "Zigbee, LoRa, and connectivity standards."},
+                            {"name": "IoT Security", "content": "Device authentication and network layer security."}
+                        ]
+                    },
+                    {
+                        "title": "Embedded & Edge Computing",
+                        "subjects": [
+                            {"name": "Microcontrollers (ESP32/Ardu)", "content": "Hardware-software interfacing for IoT nodes."},
+                            {"name": "RTOS & Real-time Systems", "content": "Managing concurrency in embedded devices."},
+                            {"name": "Cloud for IoT Data", "content": "Processing time-series data at scale."}
+                        ]
+                    }
+                ]
+            elif is_chemical:
+                all_themes = [
+                    {
+                        "title": "Chemical Process Engineering",
+                        "subjects": [
+                            {"name": "Reaction Engineering", "content": "Kinetics and reactor design (Batch/Flow)."},
+                            {"name": "Mass & Heat Transfer", "content": "Separation processes and heat exchangers."},
+                            {"name": "Chemical Thermodynamics", "content": "Phase equilibria and chemical potential."}
+                        ]
+                    },
+                    {
+                        "title": "Industrial Operations & Safety",
+                        "subjects": [
+                            {"name": "Process Dynamics & Control", "content": "Instrumentation and feedback loop management."},
+                            {"name": "Chemical Plant Design", "content": "Equipment sizing and safety regulations (HAZOP)."},
+                            {"name": "Petrochemical Technology", "content": "Industrial processing of polymers and fuels."}
+                        ]
+                    }
+                ]
+            elif is_aerospace:
+                all_themes = [
+                    {
+                        "title": "Aerodynamics & Propulsion",
+                        "subjects": [
+                            {"name": "Incompressible Aerodynamics", "content": "Airfoils, wings, and lift generation theories."},
+                            {"name": "Aircraft & Rocket Propulsion", "content": "Jet engines and propellant-based launch systems."},
+                            {"name": "Flight Mechanics", "content": "Static and dynamic stability of aerospace vehicles."}
+                        ]
+                    },
+                    {
+                        "title": "Aerospace Structures & Space",
+                        "subjects": [
+                            {"name": "Structural Analysis (Aero)", "content": "Composite materials and thin-walled structure stress."},
+                            {"name": "Orbital Mechanics", "content": "Satellite trajectories and celestial mechanics."},
+                            {"name": "Avionics & Control", "content": "Auto-pilot systems and sensor fusion for flight."}
+                        ]
+                    }
+                ]
+            elif is_cyber:
+                all_themes = [
+                    {
+                        "title": "Cyber Security Foundations & Networking",
+                        "subjects": [
+                            {"name": "Network Security & Protocols", "content": "TCP/IP vulnerabilities, Firewalls, VPNs, and IDS/IPS systems."},
+                            {"name": "Cryptography Foundations", "content": "Symmetric/Asymmetric encryption, Hashing, and Digital signatures."},
+                            {"name": "Ethical Hacking Basics", "content": "Vulnerability assessment, port scanning, and security auditing."}
+                        ]
+                    },
+                    {
+                        "title": "Advanced Security & Defense",
+                        "subjects": [
+                            {"name": "Web Application Security", "content": "OWASP Top 10, SQL injection, XSS, and secure coding practices."},
+                            {"name": "Incident Response & Forensics", "content": "Malware analysis, log investigation, and digital evidence recovery."},
+                            {"name": "Identity & Access Management", "content": "OAuth, SAML, Multi-factor authentication, and Zero Trust models."}
+                        ]
+                    }
+                ]
+            else:
+                # Standard CSE Fallback
+                all_themes = [
+                    {
+                        "title": "Core CSE Foundations (OS, DBMS, Data Structures)",
+                        "subjects": [
+                            {"name": "Operating Systems (OS)", "content": "Memory management, process synchronization, threading, and file systems."},
+                            {"name": "Database Management Systems (DBMS)", "content": "SQL vs NoSQL, Indexing, Transaction ACID properties, and Normalization."},
+                            {"name": "Data Structures & Big-O", "content": "Arrays, Linked Lists, Stacks, Queues, and time/space complexity analysis."}
+                        ]
+                    },
+                    {
+                        "title": f"Advanced Data Structures & {role_raw} Core",
+                        "subjects": [
+                            {"name": "Advanced Data Structures", "content": "Trees (BST, AVL), Graphs (DFS, BFS), and Hashing strategies."},
+                            {"name": f"{role_raw} Core Languages", "content": "Deep dive into language syntax, control structures, and specific best practices for your role."},
+                            {"name": "Computer Networks", "content": "TCP/IP, HTTP/HTTPS, DNS, and basic security in modern networking."}
+                        ]
+                    },
+                    {
+                        "title": "Frameworks & Applied Development",
+                        "subjects": [
+                            {"name": "Modern Frameworks", "content": "Component lifecycle, state management (Redux/Context), and routing in modern web/mobile apps."},
+                            {"name": "System APIs & Integration", "content": "RESTful services, GraphQL, and integrating third-party APIs."},
+                            {"name": "Testing & Debugging", "content": "Unit testing, TDD, and debugging complex distributed systems."}
+                        ]
+                    },
+                    {
+                        "title": "System Design & Production Readiness",
+                        "subjects": [
+                            {"name": "System Design & Scalability", "content": "Designing high-availability systems, microservices, and load balancing."},
+                            {"name": "Cloud Deployment & DevOps", "content": "CI/CD pipelines, Docker, and AWS/Azure deployment basics."},
+                            {"name": "Security & Best Practices", "content": "OWASP Top 10, authentication patterns, and scalable architecture."}
+                        ]
+                    }
+                ]
     elif is_upsc:
         all_themes = [
             {
@@ -291,7 +952,7 @@ def generate_roadmap(user):
                 ]
             }
         ]
-    elif is_civil:
+    elif is_civil_service:
         all_themes = [
             {
                 "title": "Polity & Governance",
@@ -738,7 +1399,7 @@ def generate_roadmap(user):
     tips = []
     if is_tech:
         tips = ["Maintain GitHub consistency", "Optimize for Big O", "Build production-ready code"]
-    elif is_civil:
+    elif is_civil_service:
         tips = ["Synthesize current events", "Practice answer writing within word limits", "Conceptual clarity over rote learning"]
     else:
         tips = ["Follow industry trends", "STAR method for interviews", "Strategic networking"]

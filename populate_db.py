@@ -680,3 +680,9 @@ if __name__ == "__main__":
         seed_advanced_content()
     except ImportError:
         print("Skipping seed_advanced_content (not found)")
+
+    try:
+        from seed_btech_branches import seed_btech_branches
+        seed_btech_branches()
+    except ImportError:
+        print("Skipping seed_btech_branches (not found)")

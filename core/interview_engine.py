@@ -5,10 +5,13 @@ def get_interview_session_questions(user):
     """
     Returns a list of 5 questions: 3 role-specific and 2 HR questions.
     """
+    # Case-insensitive role and edu check
     role_raw = (user.desired_role or "").lower()
-    
+    edu = user.education_level or ""
+    edu_lower = edu.lower()
+
     # Robust Role Detection (Synchronized with roadmap.py)
-    tech_keywords = ['engineer', 'developer', 'coding', 'ai', 'data', 'software', 'tech', 'programmer', 'web', 'frontend', 'backend', 'fullstack', 'devops', 'stack', 'cloud', 'security', 'machine learning', 'data science']
+    tech_keywords = ['engineer', 'developer', 'coding', 'ai', 'data', 'software', 'tech', 'programmer', 'web', 'frontend', 'backend', 'fullstack', 'devops', 'stack', 'cloud', 'security', 'machine learning', 'data science', 'cse', 'it', 'ece', 'eee', 'iot', 'aiml', 'vlsi', 'embedded', 'robotics', 'mech', 'mechanical', 'civil', 'chemical', 'aerospace']
     civil_keywords = ['ias', 'civil service', 'upsc', 'mro', 'revenue officer', 'tpsc', 'appsc', 'group 1', 'group 2', 'constable', 'sub-inspector', 'panchayat', 'administrative', 'ips', 'ifs', 'collector', 'telangana', 'andhra']
     finance_keywords = ['income tax', 'tax', 'ssc', 'cgl', 'banking', 'bank', 'po', 'clerk', 'finance', 'audit', 'lic', 'rbi', 'ibps', 'accountant', 'budget', 'revenue']
     medical_keywords = ['medical', 'doctor', 'nurse', 'pharmacy', 'healthcare', 'dentist', 'physician', 'surgeon', 'clinic', 'radiology', 'psychiatry', 'dermatology', 'urology', 'nephrology', 'pulmonology', 'ophthalmology', 'ayurveda', 'homeopathy', 'public health']
@@ -28,13 +31,41 @@ def get_interview_session_questions(user):
     edu = user.education_level or ""
     is_tech_edu = any(kw in edu for kw in ['B.Tech', 'M.Tech', 'Diploma', 'ITI'])
     
+    # B.Tech/M.Tech Branch Detection (Synchronized with roadmap.py)
+    is_cse = any(kw in edu_lower or kw in role_raw for kw in ['cse', 'computer science', 'software', 'it', 'web', 'frontend', 'backend', 'fullstack', 'devops', 'cloud', 'security', 'cyber', 'network', 'system admin', 'data analyst', 'database', 'dba'])
+    is_datascience = any(kw in edu_lower or kw in role_raw for kw in ['datascience', 'data science', 'scientist', 'analyst', 'statistics', 'tableau', 'power bi', 'sql', 'data engineer', 'big data', 'pandas', 'numpy', 'ml engineer'])
+    is_ece = any(kw in edu_lower or kw in role_raw for kw in ['ece', 'electronics', 'communication', 'vlsi', 'embedded', 'microprocessor', 'microcontroller', 'signals', 'antenna', 'circuit', 'hardware', 'telecom', 'semiconductor', 'analog', 'digital systems', 'embedded engineer'])
+    is_eee = any(kw in edu_lower or kw in role_raw for kw in ['eee', 'electrical', 'power system', 'power engineering', 'machines', 'control system', 'smart grid', 'renewable', 'high voltage', 'automation', 'instrumentation', 'electrical engineer'])
+    is_mech = any(kw in edu_lower or kw in role_raw for kw in ['mech', 'mechanical', 'thermal', 'thermodynamics', 'manufacturing', 'solid mechanics', 'fluid mechanics', 'cad', 'cam', 'automobile', 'mechatronics', 'robotics', 'industrial', 'design engineer', 'mechanical engineer'])
+    is_civil_eng = any(kw in edu_lower or kw in role_raw for kw in ['civil', 'construction', 'structural', 'surveying', 'geotech', 'geology', 'transportation', 'environmental eng', 'urban planning', 'hydrology', 'steel structures'])
+    is_aiml = any(kw in edu_lower or kw in role_raw for kw in ['aiml', 'ai', 'machine learning', 'deep learning', 'neural network', 'nlp', 'computer vision', 'data science', 'analytics'])
+    is_iot = any(kw in edu_lower or kw in role_raw for kw in ['iot', 'internet of things', 'mqtt', 'sensors', 'edge computing', 'wsn', 'connectivity'])
+    is_chemical = any(kw in edu_lower or kw in role_raw for kw in ['chemical', 'petroleum', 'process engineering', 'polymer', 'biochemical', 'fertilizer', 'refinery'])
+    is_aerospace = any(kw in edu_lower or kw in role_raw for kw in ['aerospace', 'aero', 'satellite', 'rocket', 'avionics', 'propulsion', 'flight', 'orbital'])
+    
     # Priority: Role keywords override education
     is_tech = is_role_tech or is_tech_edu
     if is_civil or is_finance or is_medical or is_science:
         is_tech = is_role_tech
     
     # 1. Fetch Technical/Role-Specific Pool
-    if is_tech:
+    if is_ece:
+        role_pool = Question.query.filter(Question.category == "ECE").all()
+    elif is_eee:
+        role_pool = Question.query.filter(Question.category == "EEE").all()
+    elif is_mech:
+        role_pool = Question.query.filter(Question.category == "MECH").all()
+    elif is_civil_eng:
+        role_pool = Question.query.filter(Question.category == "CIVIL").all()
+    elif is_chemical:
+        role_pool = Question.query.filter(Question.category == "CHEMICAL").all()
+    elif is_aiml:
+        role_pool = Question.query.filter(Question.category == "AIML").all()
+    elif is_iot:
+        role_pool = Question.query.filter(Question.category == "IOT").all()
+    elif is_aerospace:
+        role_pool = Question.query.filter(Question.category == "AEROSPACE").all()
+    elif is_tech:
         role_pool = Question.query.filter(Question.category.in_(["Coding", "Core CS"])).all()
     elif is_upsc:
         role_pool = Question.query.filter(Question.category.in_(["Civil Service", "IAS", "UPSC"])).all()

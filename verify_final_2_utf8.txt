@@ -1,0 +1,21 @@
+TESTING: Role='Cyber Security', Edu='B.Tech (1st Year)'
+  Week 1 Title: Week 1: 1st Year: Computing Foundations
+    - Engineering Mathematics - I: Calculus, Matrix theory, and equations for technical analysi...
+----------------------------------------
+TESTING: Role='Mechanical Engineer', Edu='B.Tech (1st Year)'
+  Week 1 Title: Week 1: 1st Year: Mechanical Foundations
+    - Engineering Mathematics - I: Calculus, Matrix theory, and equations for technical analysi...
+----------------------------------------
+TESTING: Role='Electronics Engineer', Edu='B.Tech (1st Year)'
+  Week 1 Title: Week 1: 1st Year: Electronics Foundations
+    - Engineering Mathematics - I: Calculus, Matrix theory, and equations for technical analysi...
+----------------------------------------
+TESTING: Role='Cyber Security Specialist', Edu='Job Seeker'
+  Week 1 Title: Week 1: Cyber Security Foundations & Networking
+    - Network Security & Protocols: TCP/IP vulnerabilities, Firewalls, VPNs, and IDS/IPS systems...
+----------------------------------------
+TESTING: Role='bank manager', Edu='Degree'
+  Week 1 Title: Week 1: Quantitative Aptitude & Basics
+    - Numerical Ability: Percentages, Profit & Loss, Ratios, and basic arithmetic for...
+    - Data Interpretation: Deciphering charts, graphs, and tables to extract meaningful...
+----------------------------------------

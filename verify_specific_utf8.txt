@@ -1,0 +1,22 @@
+TESTING: Role='bank manager', Edu='Degree'
+  Strategy: Steady Progress (2h/day for 8 weeks) - Balanced
+  Week 1: Core Principles of bank manager
+    - bank manager Foundations
+----------------------------------------
+TESTING: Role='Electronics Engineer', Edu='B.Tech 3rd Year'
+  Strategy: Steady Progress (2h/day for 8 weeks) - Balanced
+  Week 1: Advanced Communication & VLSI
+    - Digital Communication
+    - VLSI Design
+----------------------------------------
+TESTING: Role='Mechanical Designer', Edu='B.Tech 2nd Year'
+  Strategy: Steady Progress (2h/day for 8 weeks) - Balanced
+  Week 1: Thermal & Fluid Engineering
+    - Engineering Thermodynamics
+----------------------------------------
+TESTING: Role='Data Scientist', Edu='Job Seeker'
+  Strategy: Steady Progress (2h/day for 8 weeks) - Balanced
+  Week 1: Core CSE Foundations (OS, DBMS, Data Structures)
+    - Operating Systems (OS)
+    - Database Management Systems (DBMS)
+----------------------------------------

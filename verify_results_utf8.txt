@@ -1,0 +1,27 @@
+TESTING: Role='ECE', Edu='B.Tech 1st Year'
+  First Subject: Engineering Mathematics
+--------------------
+TESTING: Role='Electronics Engineer', Edu='B.Tech'
+  First Subject: Electronic Devices & Digital Circuits
+--------------------
+TESTING: Role='Embedded Systems', Edu='M.Tech'
+  First Subject: Advanced CMOS Design
+--------------------
+TESTING: Role='VLSI Engineer', Edu='Job Seeker'
+  First Subject: Electronic Devices & Digital Circuits
+--------------------
+TESTING: Role='Power Systems', Edu='M.Tech'
+  First Subject: Numerical Ability
+--------------------
+TESTING: Role='Thermal Engineer', Edu='M.Tech'
+  First Subject: Advanced Data Structures & Algorithms
+--------------------
+TESTING: Role='Structural Engineer', Edu='M.Tech'
+  First Subject: Earthquake Engineering
+--------------------
+TESTING: Role='Embedded Systems', Edu='Job Seeker'
+  First Subject: Electronic Devices & Digital Circuits
+--------------------
+TESTING: Role='Software Engineer', Edu='M.Tech'
+  First Subject: Advanced Data Structures & Algorithms
+--------------------
