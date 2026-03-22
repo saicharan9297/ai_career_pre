@@ -14,7 +14,7 @@ def get_interview_session_questions(user):
     tech_keywords = ['engineer', 'developer', 'coding', 'ai', 'data', 'software', 'tech', 'programmer', 'web', 'frontend', 'backend', 'fullstack', 'devops', 'stack', 'cloud', 'security', 'machine learning', 'data science', 'cse', 'it', 'ece', 'eee', 'iot', 'aiml', 'vlsi', 'embedded', 'robotics', 'mech', 'mechanical', 'civil', 'chemical', 'aerospace']
     civil_keywords = ['ias', 'civil service', 'upsc', 'mro', 'revenue officer', 'tpsc', 'appsc', 'group 1', 'group 2', 'constable', 'sub-inspector', 'panchayat', 'administrative', 'ips', 'ifs', 'collector', 'telangana', 'andhra']
     finance_keywords = ['income tax', 'tax', 'ssc', 'cgl', 'banking', 'bank', 'po', 'clerk', 'finance', 'audit', 'lic', 'rbi', 'ibps', 'accountant', 'budget', 'revenue']
-    medical_keywords = ['medical', 'doctor', 'nurse', 'pharmacy', 'healthcare', 'dentist', 'physician', 'surgeon', 'clinic', 'radiology', 'psychiatry', 'dermatology', 'urology', 'nephrology', 'pulmonology', 'ophthalmology', 'ayurveda', 'homeopathy', 'public health']
+    medical_keywords = ['medical', 'doctor', 'nurse', 'nursing', 'pharmacy', 'hospital', 'healthcare', 'dentist', 'physician', 'surgeon', 'clinic', 'radiology', 'psychiatry', 'dermatology', 'urology', 'nephrology', 'pulmonology', 'ophthalmology', 'ayurveda', 'homeopathy', 'public health']
     science_keywords = ['science', 'research', 'physics', 'chemistry', 'biology', 'scientist', 'laboratory', 'biotech']
     
     is_role_tech = any(kw in role_raw for kw in tech_keywords)
@@ -42,14 +42,20 @@ def get_interview_session_questions(user):
     is_iot = any(kw in edu_lower or kw in role_raw for kw in ['iot', 'internet of things', 'mqtt', 'sensors', 'edge computing', 'wsn', 'connectivity'])
     is_chemical = any(kw in edu_lower or kw in role_raw for kw in ['chemical', 'petroleum', 'process engineering', 'polymer', 'biochemical', 'fertilizer', 'refinery'])
     is_aerospace = any(kw in edu_lower or kw in role_raw for kw in ['aerospace', 'aero', 'satellite', 'rocket', 'avionics', 'propulsion', 'flight', 'orbital'])
+    is_cyber = any(kw in edu_lower or kw in role_raw for kw in ['cyber', 'security', 'penetration', 'ethical hacking', 'infosec', 'forensics', 'cryptography'])
     
     # Priority: Role keywords override education
     is_tech = is_role_tech or is_tech_edu
     if is_civil or is_finance or is_medical or is_science:
         is_tech = is_role_tech
-    
     # 1. Fetch Technical/Role-Specific Pool
-    if is_ece:
+    if is_cyber:
+        role_pool = Question.query.filter(Question.category == "Cyber Security").all()
+    elif is_datascience:
+        role_pool = Question.query.filter(Question.category == "Data Science").all()
+    elif is_aiml:
+        role_pool = Question.query.filter(Question.category == "AIML").all()
+    elif is_ece:
         role_pool = Question.query.filter(Question.category == "ECE").all()
     elif is_eee:
         role_pool = Question.query.filter(Question.category == "EEE").all()
@@ -59,14 +65,16 @@ def get_interview_session_questions(user):
         role_pool = Question.query.filter(Question.category == "CIVIL").all()
     elif is_chemical:
         role_pool = Question.query.filter(Question.category == "CHEMICAL").all()
-    elif is_aiml:
-        role_pool = Question.query.filter(Question.category == "AIML").all()
     elif is_iot:
         role_pool = Question.query.filter(Question.category == "IOT").all()
     elif is_aerospace:
         role_pool = Question.query.filter(Question.category == "AEROSPACE").all()
+    elif is_medical:
+        role_pool = Question.query.filter_by(category="Medical").all()
+    elif is_science:
+        role_pool = Question.query.filter_by(category="Science").all()
     elif is_tech:
-        role_pool = Question.query.filter(Question.category.in_(["Coding", "Core CS"])).all()
+        role_pool = Question.query.filter(Question.category.in_(["Coding", "Core CS", "CSE"])).all()
     elif is_upsc:
         role_pool = Question.query.filter(Question.category.in_(["Civil Service", "IAS", "UPSC"])).all()
     elif is_appsc or is_tspsc:
@@ -78,18 +86,20 @@ def get_interview_session_questions(user):
         role_pool = Question.query.filter(Question.category.in_(["Civil Service", "IAS"])).all()
     elif is_finance:
         role_pool = Question.query.filter(Question.category.in_(["Finance/Govt"])).all()
-    elif is_medical:
-        role_pool = Question.query.filter_by(category="Medical").all()
-    elif is_science:
-        role_pool = Question.query.filter_by(category="Science").all()
     else:
         # Check educational category if no role match
         edu = user.education_level or ""
         if 'School' in edu: category = "School"
         elif 'Intermediate' in edu: category = "Intermediate"
-        elif edu in ['ITI', 'Diploma']: category = "Vocational"
+        elif any(kw in edu for kw in ['ITI', 'Diploma']): category = "Vocational"
         else: category = "Professional"
         role_pool = Question.query.filter_by(category=category).all()
+
+    # --- Robust Fallback for Technical Branch questions ---
+    # If a technical branch has fewer than 3 questions, supplement with general Coding questions
+    if is_tech and len(role_pool) < 3:
+        coding_pool = Question.query.filter(Question.category.in_(["Coding", "Core CS", "CSE"])).all()
+        role_pool.extend(coding_pool)
     
     # 2. Refine by role keywords if possible
     # We want to be more specific if the pool is large

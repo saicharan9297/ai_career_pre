@@ -1,0 +1,4 @@
+ID: 15, Question: What is the 'SWOT analysis' used for in organizational planning?
+ID: 16, Question: Define 'Product Positioning' in a marketing context.
+ID: 17, Question: What is 'Transformational Leadership'?
+ID: 27, Question: What is the difference between a Manager and a Leader?

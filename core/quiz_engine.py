@@ -13,7 +13,7 @@ def get_quiz_questions(user, week_number=1, count=5):
     civil_service_keywords = ['ias', 'civil service', 'upsc', 'mro', 'revenue officer', 'tpsc', 'appsc', 'group 1', 'group 2', 'constable', 'sub-inspector', 'panchayat', 'administrative', 'ips', 'ifs', 'collector']
     finance_govt_keywords = ['income tax', 'tax', 'ssc', 'cgl', 'banking', 'bank', 'po', 'clerk', 'finance', 'audit', 'lic', 'rbi', 'ibps', 'accountant', 'budget', 'revenue']
     medical_keywords = [
-        'medical', 'doctor', 'nurse', 'pharmacy', 'healthcare', 'dentist', 'physician', 'surgeon', 'clinic',
+        'medical', 'doctor', 'nurse', 'nursing', 'pharmacy', 'hospital', 'healthcare', 'dentist', 'physician', 'surgeon', 'clinic',
         'cardiolog', 'radiolog', 'dermato', 'pediatr', 'ortho', 'ayush', 'homeo', 'physio', 'dent', 
         'mbbs', 'bds', 'bams', 'bhms', 'nurs', 'pharm', 'hospital', 'clinic', 'surgeon', 'officer'
     ]

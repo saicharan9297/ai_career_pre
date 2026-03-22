@@ -1,0 +1,10 @@
+ID: 7, Question: Which Article of the Indian Constitution deals with the 'Right to Equality'?
+ID: 8, Question: Who was the first Tirthankara of Jainism?
+ID: 9, Question: Explain the phenomenon of 'Western Disturbances' and its impact on Indian agriculture.
+ID: 10, Question: What are the 'Directive Principles of State Policy' (DPSP) and are they legally enforceable?
+ID: 11, Question: Describe the administrative reforms introduced by Sher Shah Suri.
+ID: 12, Question: What was the significance of the 1916 Lucknow Pact in the Indian National Movement?
+ID: 13, Question: Discus the ethical issues involved in 'Artificial Intelligence' and its impact on human privacy.
+ID: 14, Question: What is the 'Fiscal Responsibility and Budget Management (FRBM) Act' and why is it important for India?
+ID: 28, Question: What is 'Fiscal Deficit' and why is it a concern for the economy?
+ID: 29, Question: What do you understand by 'Crisis of Conscience'?

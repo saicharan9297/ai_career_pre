@@ -1,0 +1,10 @@
+ID: 34, Question: How would you handle a patient who refuses potentially life-saving treatment due to religious beliefs?
+ID: 35, Question: Explain the management of a patient presenting with NSTEMI.
+ID: 36, Question: How do you approach a case of 'failure to thrive' in an infant?
+ID: 37, Question: Describe your process for prioritizing patient care during a high-volume emergency shift.
+ID: 38, Question: What steps do you take to prevent medication errors in a busy hospital setting?
+ID: 39, Question: Describe the rehabilitation plan for a post-op ACL reconstruction.
+ID: 40, Question: What are the key clinical signs of Milk Fever in dairy cows?
+ID: 41, Question: Explain the concept of 'Prakriti' in Ayurvedic diagnosis.
+ID: 42, Question: Describe the safety protocols for working in an MRI environment.
+ID: 43, Question: What is the importance of 'herd immunity' in vaccination programs?

@@ -14,7 +14,7 @@ def generate_roadmap(user):
     tech_keywords = ['engineer', 'developer', 'coding', 'ai', 'data', 'software', 'tech', 'programmer', 'web', 'frontend', 'backend', 'fullstack', 'devops', 'stack', 'cloud', 'security', 'machine learning', 'data science', 'cse', 'it', 'ece', 'eee', 'iot', 'aiml', 'vlsi', 'embedded', 'robotics', 'mech', 'mechanical', 'civil', 'chemical', 'aerospace']
     civil_service_keywords = ['ias', 'civil service', 'upsc', 'mro', 'revenue officer', 'tpsc', 'appsc', 'group 1', 'group 2', 'constable', 'sub-inspector', 'panchayat', 'administrative', 'ips', 'ifs', 'collector']
     finance_govt_keywords = ['income tax', 'tax', 'ssc', 'cgl', 'banking', 'bank', 'po', 'clerk', 'finance', 'audit', 'lic', 'rbi', 'ibps', 'accountant', 'budget', 'revenue', 'economist', 'tally']
-    medical_keywords = ['medical', 'doctor', 'nurse', 'pharmacy', 'healthcare', 'dentist', 'physician', 'surgeon', 'clinic', 'cardiology', 'neurology', 'orthopedic', 'physiotherapy', 'veterinary', 'radiology', 'psychiatry', 'dermatology', 'urology', 'nephrology', 'pulmonology', 'ophthalmology', 'ayurveda', 'homeopathy', 'public health']
+    medical_keywords = ['medical', 'doctor', 'nurse', 'nursing', 'pharmacy', 'hospital', 'healthcare', 'dentist', 'physician', 'surgeon', 'clinic', 'cardiology', 'neurology', 'orthopedic', 'physiotherapy', 'veterinary', 'radiology', 'psychiatry', 'dermatology', 'urology', 'nephrology', 'pulmonology', 'ophthalmology', 'ayurveda', 'homeopathy', 'public health']
     science_keywords = ['science', 'research', 'physics', 'chemistry', 'biology', 'scientist', 'laboratory', 'biotech']
 
     # Detailed Medical Role Flags

@@ -1,0 +1,16 @@
+Category: AEROSPACE, Count: 2
+Category: AIML, Count: 3
+Category: CHEMICAL, Count: 2
+Category: CIVIL, Count: 4
+Category: CSE, Count: 1
+Category: Coding, Count: 13
+Category: Data Science, Count: 2
+Category: ECE, Count: 7
+Category: EEE, Count: 4
+Category: HR, Count: 6
+Category: IAS, Count: 10
+Category: IOT, Count: 2
+Category: MECH, Count: 4
+Category: Medical, Count: 10
+Category: Professional, Count: 4
+Category: UPSC, Count: 4
