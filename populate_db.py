@@ -686,3 +686,33 @@ if __name__ == "__main__":
         seed_btech_branches()
     except ImportError:
         print("Skipping seed_btech_branches (not found)")
+
+    try:
+        from seed_branch_content import seed_branch_content
+        seed_branch_content()
+    except ImportError:
+        print("Skipping seed_branch_content (not found)")
+
+    try:
+        from seed_civil_admin import seed_civil_admin
+        seed_civil_admin()
+    except ImportError:
+        print("Skipping seed_civil_admin (not found)")
+
+    try:
+        from seed_all_branches_comprehensive import seed_all_branches
+        seed_all_branches()
+    except ImportError:
+        print("Skipping seed_all_branches (not found)")
+
+    try:
+        from seed_nursing_interviews import seed_nursing_interviews
+        seed_nursing_interviews()
+    except ImportError:
+        print("Skipping seed_nursing_interviews (not found)")
+
+    try:
+        from seed_specialized_interviews import seed_interviews
+        seed_interviews()
+    except ImportError:
+        print("Skipping seed_specialized_interviews (not found)")

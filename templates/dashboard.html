@@ -5,12 +5,27 @@
 {% block content %}
 <div class="row">
     <!-- Welcome Header -->
-    <div class="col-12 mb-5 d-flex justify-content-between align-items-center">
-        <div>
-            <h2 class="fw-bold">Welcome, <span class="gradient-text">{{ user.username }}</span>!</h2>
-            <p class="text-muted">Target Role: <span class="fw-semibold text-primary">{{ user.desired_role }}</span> | Prep Style: <span class="fw-semibold text-primary">{{ user.available_time }} hrs/day</span> | Duration: <span class="fw-semibold text-primary">{{ user.prep_weeks }} Weeks</span></p>
+    <div class="col-12 mb-5">
+        <div class="card card-glass p-4 border-0 shadow-sm" style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(56, 189, 248, 0.05) 100%);">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="fw-bold mb-1">Welcome, <span class="gradient-text">{{ user.username }}</span>!</h2>
+                    <h4 class="text-primary fw-bold mb-2">Targeting: {{ user.desired_role or 'Career Search' }}</h4>
+                    <p class="text-muted mb-0 small">
+                        <i class="bi bi-clock me-1"></i> {{ user.available_time }} hrs/daily 
+                        <span class="mx-2 text-secondary">|</span>
+                        <i class="bi bi-calendar3 me-1"></i> {{ user.prep_weeks }} Week Program
+                        <span class="mx-2 text-secondary">|</span>
+                        <i class="bi bi-mortarboard me-1"></i> {{ user.education_level }}
+                    </p>
+                </div>
+                <div class="text-end">
+                    <a href="{{ url_for('onboarding') }}" class="btn btn-primary rounded-pill px-4">
+                        <i class="bi bi-person-gear me-1"></i> Update Profile
+                    </a>
+                </div>
+            </div>
         </div>
-        <a href="{{ url_for('onboarding') }}" class="btn btn-outline-primary btn-sm">Update Profile</a>
     </div>
 
     <!-- Stats Cards -->
@@ -37,31 +52,117 @@
             <p class="text-muted small">Keep practicing to improve!</p>
         </div>
     </div>
-    <div class="col-md-4 mb-4">
-        <div class="card card-glass p-4 text-center h-100">
-            <h6 class="text-muted text-uppercase small fw-bold">Weak Areas</h6>
-            <div class="text-white mt-3">
+
+    <!-- Sidebar (Left) -->
+    <div class="col-md-4">
+        <div class="card card-glass p-4 shadow-sm text-center mb-4">
+            <h5 class="fw-bold mb-3">Ready to Practice?</h5>
+            <p class="text-muted small mb-4">Take a role-specific mock interview with adaptive difficulty.</p>
+            <a href="{{ url_for('start_interview') }}" class="btn btn-primary w-100 py-3 fw-bold">Start Mock Interview</a>
+        </div>
+
+        <div class="card card-glass p-4 shadow-sm mb-4">
+            <h5 class="fw-bold mb-3">Preparation Tips</h5>
+            <ul class="list-group list-group-flush bg-transparent small">
+                {% for tip in roadmap.tips %}
+                <li class="list-group-item bg-transparent text-white border-dark px-0 py-2">
+                    <i class="bi bi-lightbulb text-warning me-2"></i> {{ tip }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <div class="card card-glass p-4 shadow-sm mb-4 border-0" style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.08) 0%, rgba(56, 189, 248, 0.03) 100%);">
+            <h5 class="fw-bold mb-3"><i class="bi bi-people-fill text-info me-2"></i>Community Picks</h5>
+            <p class="text-muted small mb-3">Popular paths and personalized recommendations:</p>
+            <div class="list-group list-group-flush bg-transparent">
+                {% for rec in recommendations %}
+                <div class="list-group-item bg-transparent text-white border-dark px-0 py-3">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <h6 class="fw-bold mb-0 text-info">
+                            {{ rec.role }}
+                            {% if rec.is_community %}
+                            <span class="badge bg-info text-dark ms-2" style="font-size: 0.6rem;">COMMUNITY</span>
+                            {% endif %}
+                        </h6>
+                        <a href="{{ url_for('adopt_roadmap', role_name=rec.role) }}" class="btn btn-primary btn-sm rounded-pill px-3 py-0 small" style="font-size: 0.75rem;">
+                            {% if rec.is_community %}Follow Path{% else %}Switch{% endif %}
+                        </a>
+                    </div>
+                    <p class="text-muted small mb-0" style="font-size: 0.8rem;">
+                        {% if rec.is_community %}<i class="bi bi-graph-up-arrow text-success me-1"></i>{% endif %}
+                        {{ rec.description }}
+                    </p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="card card-glass p-4 shadow-sm mb-4">
+            <h5 class="fw-bold mb-3">Recent Activity</h5>
+            <div class="activity-feed small text-muted">
+                {% if user.sessions %}
+                    {% for session in user.sessions[:3] %}
+                        <div class="mb-2 border-bottom border-dark pb-2">
+                            <div class="d-flex justify-content-between">
+                                <span class="text-white">Interview ({{ session.role }})</span>
+                                <span>{{ session.date.strftime('%b %d') }}</span>
+                            </div>
+                            <span>Score: {{ session.score }}%</span>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No recent activity found.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card card-glass p-4 shadow-sm">
+            <h5 class="fw-bold mb-3">Weak Areas</h5>
+            <div class="text-white">
                 {% if user.sessions and user.sessions[-1].weak_areas %}
                     {% for area in user.sessions[-1].weak_areas.split(',') %}
                         <span class="badge bg-danger mb-1">{{ area.strip() }}</span>
                     {% endfor %}
                 {% else %}
-                    <span class="text-muted italic small">No data yet. Take an interview!</span>
+                    <p class="text-muted italic small mb-0">No data yet. Take an interview to identify weak areas.</p>
                 {% endif %}
             </div>
         </div>
     </div>
 
-    <!-- Quick Actions -->
+    <!-- Main Content (Right) -->
     <div class="col-md-8">
         <div class="card card-glass p-4 shadow-sm mb-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h4 class="fw-bold mb-0">Preparation Roadmap</h4>
-                <a href="{{ url_for('onboarding') }}" class="btn btn-outline-primary btn-sm rounded-pill px-3">
-                    <i class="bi bi-pencil-square me-1"></i> Modify Plan
-                </a>
+                <h4 class="fw-bold mb-0">
+                    Preparation Roadmap
+                    {% if roadmap.is_ai %}
+                    <span class="badge rounded-pill bg-info text-dark ms-2" style="font-size: 0.6rem; vertical-align: middle;">AI PERSONALIZED</span>
+                    {% else %}
+                    <span class="badge rounded-pill bg-secondary text-white ms-2" style="font-size: 0.6rem; vertical-align: middle;">STANDARD FALLBACK</span>
+                    {% endif %}
+                </h4>
+                <div class="d-flex gap-2">
+                    <a href="{{ url_for('regenerate_roadmap') }}" class="btn btn-outline-info btn-sm rounded-pill px-3">
+                        <i class="bi bi-arrow-clockwise me-1"></i> Regenerate
+                    </a>
+                    <a href="{{ url_for('onboarding') }}" class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                        <i class="bi bi-pencil-square me-1"></i> Modify Plan
+                    </a>
+                </div>
             </div>
 
+            {% if roadmap.instructions %}
+            <div class="alert alert-info alert-dismissible fade show d-flex align-items-center mb-4" role="alert" style="background: rgba(13, 110, 253, 0.1); border: 1px solid rgba(13, 110, 253, 0.2); color: #fff;">
+                <i class="bi bi-info-circle-fill me-3 fs-4 text-info"></i>
+                <div>
+                    <strong>Note:</strong> {{ roadmap.instructions }}
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+            
             {% if roadmap.guidance %}
             <div class="guidance-card p-3 rounded mb-4 d-flex align-items-center" style="background: linear-gradient(90deg, rgba(234, 179, 8, 0.1) 0%, rgba(234, 179, 8, 0.02) 100%); border-left: 4px solid #eab308;">
                 <div class="me-3">
@@ -127,44 +228,6 @@
                     </div>
                 </div>
                 {% endfor %}
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="card card-glass p-4 shadow-sm text-center mb-4">
-            <h5 class="fw-bold mb-3">Ready to Practice?</h5>
-            <p class="text-muted small mb-4">Take a role-specific mock interview with adaptive difficulty.</p>
-            <a href="{{ url_for('start_interview') }}" class="btn btn-primary w-100 py-3 fw-bold">Start Mock Interview</a>
-        </div>
-        
-        <div class="card card-glass p-4 shadow-sm mb-4">
-            <h5 class="fw-bold mb-3">Preparation Tips</h5>
-            <ul class="list-group list-group-flush bg-transparent small">
-                {% for tip in roadmap.tips %}
-                <li class="list-group-item bg-transparent text-white border-dark px-0 py-2">
-                    <i class="bi bi-lightbulb text-warning me-2"></i> {{ tip }}
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
-        
-        <div class="card card-glass p-4 shadow-sm">
-            <h5 class="fw-bold mb-3">Recent Activity</h5>
-            <div class="activity-feed small text-muted">
-                {% if user.sessions %}
-                    {% for session in user.sessions[:3] %}
-                        <div class="mb-2 border-bottom border-dark pb-2">
-                            <div class="d-flex justify-content-between">
-                                <span class="text-white">Interview ({{ session.role }})</span>
-                                <span>{{ session.date.strftime('%b %d') }}</span>
-                            </div>
-                            <span>Score: {{ session.score }}%</span>
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    <p>No recent activity found.</p>
-                {% endif %}
             </div>
         </div>
     </div>

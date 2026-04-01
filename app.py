@@ -5,6 +5,9 @@ from extensions import db, login_manager
 import os
 import secrets
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def create_app():
     app = Flask(__name__)
@@ -140,61 +143,207 @@ def create_app():
     @app.route('/onboarding', methods=['GET', 'POST'])
     @login_required
     def onboarding():
+        role_query = request.args.get('role', '')
         from models import UserProgress
         if request.method == 'POST':
             print(f"DEBUG ONBOARDING: form={request.form}")
             try:
-                new_role = request.form.get('desired_role')
-                new_weeks = int(request.form.get('prep_weeks') or 1)
+                new_role = request.form.get('desired_role', '').strip()
+                if not new_role:
+                    flash('Desired role cannot be empty.', category='error')
+                    return redirect(url_for('onboarding'))
                 
-                # --- SAVE CURRENT PROGRESS BEFORE SWITCHING ---
-                if current_user.desired_role:
+                if len(new_role) > 100:
+                    flash('Role name is too long (max 100 characters).', category='error')
+                    return redirect(url_for('onboarding'))
+
+                # Safe integer conversions
+                try:
+                    new_weeks = int(request.form.get('prep_weeks') or 1)
+                except ValueError:
+                    new_weeks = 1
+                    
+                new_age = request.form.get('age')
+                new_edu = request.form.get('education_level')
+                new_time = request.form.get('available_time')
+                
+                print(f"DEBUG ONBOARDING: role='{new_role}', weeks={new_weeks}, edu='{new_edu}'")
+                
+                # Update basic info
+                if new_age:
+                    try:
+                        current_user.age = int(new_age)
+                    except ValueError:
+                        pass # Non-critical field failure
+                
+                if new_edu: current_user.education_level = new_edu
+                if new_time: current_user.available_time = new_time
+
+                # Handle Role Switching/Updating
+                current_role_clean = (current_user.desired_role or "").strip()
+                if current_role_clean and current_role_clean != new_role:
+                    print(f"DEBUG ONBOARDING: Switching role from '{current_role_clean}' to '{new_role}'")
+                    # Save current progress for the OLD role
                     old_progress = UserProgress.query.filter_by(
                         user_id=current_user.id, 
-                        role=current_user.desired_role
+                        role=current_role_clean
                     ).first()
+                    
                     if not old_progress:
-                        old_progress = UserProgress(user_id=current_user.id, role=current_user.desired_role)
+                        old_progress = UserProgress(user_id=current_user.id, role=current_role_clean)
                         db.session.add(old_progress)
                     
                     old_progress.completed_modules = current_user.completed_modules
                     old_progress.readiness_score = current_user.readiness_score
                     old_progress.prep_weeks = current_user.prep_weeks
-                
-                # --- RESTORE NEW ROLE PROGRESS ---
-                new_progress = UserProgress.query.filter_by(
-                    user_id=current_user.id, 
-                    role=new_role
-                ).first()
-                
-                if new_progress:
-                    current_user.completed_modules = new_progress.completed_modules
-                    current_user.readiness_score = new_progress.readiness_score
-                    # Only restore prep_weeks if it's not provided in form, but here it's required
-                    current_user.prep_weeks = new_weeks 
+                    
+                    # Fetch or initialize progress for the NEW role
+                    new_progress = UserProgress.query.filter_by(
+                        user_id=current_user.id, 
+                        role=new_role
+                    ).first()
+                    
+                    if new_progress:
+                        print(f"DEBUG ONBOARDING: Restoring progress for '{new_role}'")
+                        current_user.completed_modules = new_progress.completed_modules
+                        current_user.readiness_score = new_progress.readiness_score
+                        current_user.prep_weeks = new_weeks # Still respect the form's duration choice
+                        
+                        # Clear cache if weeks changed
+                        if new_progress.prep_weeks != new_weeks:
+                            new_progress.roadmap_json = None
+                    else:
+                        print(f"DEBUG ONBOARDING: Initializing new role '{new_role}'")
+                        current_user.completed_modules = ""
+                        current_user.readiness_score = 0
+                        current_user.prep_weeks = new_weeks
                 else:
-                    # New role, no previous progress
-                    current_user.completed_modules = ""
-                    current_user.readiness_score = 0
+                    # Updating same role or first-time setup
+                    print(f"DEBUG ONBOARDING: Initializing/Updating same role '{new_role}'")
+                    # Clear cache if weeks changed
+                    if current_user.prep_weeks != new_weeks:
+                        existing_p = UserProgress.query.filter_by(user_id=current_user.id, role=new_role).first()
+                        if existing_p: existing_p.roadmap_json = None
+                        
                     current_user.prep_weeks = new_weeks
-
-                current_user.age = request.form.get('age')
-                current_user.education_level = request.form.get('education_level')
-                current_user.available_time = request.form.get('available_time')
+                
                 current_user.desired_role = new_role
                 db.session.commit()
-                flash(f'Your roadmap for {new_role} has been updated!', category='success')
+                
+                # Explicitly sync to ensure UserProgress exists for the new role immediately
+                sync_user_progress(current_user)
+                
+                flash(f'Profile updated for {new_role}!', category='success')
                 return redirect(url_for('dashboard'))
             except Exception as e:
                 db.session.rollback()
-                flash(f'Error updating roadmap: {str(e)}', category='error')
-        return render_template('onboarding.html')
+                print(f"ERROR ONBOARDING: {str(e)}")
+                flash(f'Error updating profile: {str(e)}', category='error')
+        return render_template('onboarding.html', role_query=role_query)
+    @app.route('/switch_roadmap/<path:role_name>')
+    @login_required
+    def switch_roadmap(role_name):
+        try:
+            from models import UserProgress
+            new_role = (role_name or "").strip()
+            if not new_role:
+                flash("Role name is empty.", category='error')
+                return redirect(url_for('dashboard'))
+            
+            current_role_clean = (current_user.desired_role or "").strip()
+            if current_role_clean and current_role_clean != new_role:
+                old_p = UserProgress.query.filter_by(user_id=current_user.id, role=current_role_clean).first()
+                if not old_p:
+                    old_p = UserProgress(user_id=current_user.id, role=current_role_clean)
+                    db.session.add(old_p)
+                old_p.completed_modules = current_user.completed_modules
+                old_p.readiness_score = current_user.readiness_score
+                old_p.prep_weeks = current_user.prep_weeks
+                
+                new_p = UserProgress.query.filter_by(user_id=current_user.id, role=new_role).first()
+                if new_p:
+                    current_user.completed_modules = new_p.completed_modules
+                    current_user.readiness_score = new_p.readiness_score
+                    current_user.prep_weeks = new_p.prep_weeks
+                else:
+                    current_user.completed_modules = ""
+                    current_user.readiness_score = 0
+            
+            current_user.desired_role = new_role
+            db.session.commit()
+            flash(f'Switched to {new_role} roadmap!', category='success')
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Error switching roadmap: {str(e)}', category='error')
+        return redirect(url_for('dashboard'))
+
+    @app.route('/adopt_roadmap/<path:role_name>')
+    @login_required
+    def adopt_roadmap(role_name):
+        try:
+            from models import User, UserProgress
+            new_role = (role_name or "").strip()
+            
+            if not new_role:
+                flash("Invalid career path.", category='error')
+                return redirect(url_for('dashboard'))
+
+            current_role_clean = (current_user.desired_role or "").strip()
+            if current_role_clean and current_role_clean != new_role:
+                # Save old progress
+                old_p = UserProgress.query.filter_by(user_id=current_user.id, role=current_role_clean).first()
+                if not old_p:
+                    old_p = UserProgress(user_id=current_user.id, role=current_role_clean)
+                    db.session.add(old_p)
+                old_p.completed_modules = current_user.completed_modules
+                old_p.readiness_score = current_user.readiness_score
+                old_p.prep_weeks = current_user.prep_weeks
+                
+                # Fetch new
+                new_p = UserProgress.query.filter_by(user_id=current_user.id, role=new_role).first()
+                if new_p:
+                    current_user.completed_modules = new_p.completed_modules
+                    current_user.readiness_score = new_p.readiness_score
+                else:
+                    current_user.completed_modules = ""
+                    current_user.readiness_score = 0
+            
+            current_user.desired_role = new_role
+            db.session.commit()
+            sync_user_progress(current_user)
+            flash(f'Now following the {new_role} path!', category='success')
+            return redirect(url_for('dashboard'))
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Error adopting path: {str(e)}", category='error')
+            return redirect(url_for('dashboard'))
+
+    @app.route('/regenerate_roadmap')
+    @login_required
+    def regenerate_roadmap():
+        try:
+            from models import UserProgress
+            progress = UserProgress.query.filter_by(
+                user_id=current_user.id, 
+                role=current_user.desired_role
+            ).first()
+            if progress:
+                progress.roadmap_json = None
+                db.session.commit()
+                flash('Roadmap will be regenerated on next load!', category='info')
+            return redirect(url_for('dashboard'))
+        except Exception as e:
+            flash(f"Error: {str(e)}", category='error')
+            return redirect(url_for('dashboard'))
+
     @app.route('/dashboard')
     @login_required
     def dashboard():
-        from core.roadmap import generate_roadmap
+        from core.roadmap import generate_roadmap, get_recommendations
         from models import QuizAttempt
+        
         roadmap_data = generate_roadmap(current_user)
+        recommendations = get_recommendations(current_user)
         
         # Get list of weeks where the user has passed the quiz (>= 70%)
         passed_attempts = QuizAttempt.query.filter_by(user_id=current_user.id).all()
@@ -204,7 +353,8 @@ def create_app():
         ]
 
         # Calculate current prep week (first incomplete week)
-        completed_indices = [int(i) for i in current_user.completed_modules.split(',') if i]
+        completed_str = current_user.completed_modules or ""
+        completed_indices = [int(i) for i in completed_str.split(',') if i]
         current_prep_week = 1
         for i in range(current_user.prep_weeks or 1):
             if i not in completed_indices:
@@ -218,7 +368,8 @@ def create_app():
                                user=current_user, 
                                roadmap=roadmap_data, 
                                passed_weeks=passed_weeks,
-                               current_week=current_prep_week)
+                               current_week=current_prep_week,
+                               recommendations=recommendations)
 
     @app.route('/interview')
     @login_required
@@ -445,4 +596,4 @@ def quiz_result(attempt_id):
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=False)
+    app.run(host='0.0.0.0', port=port, debug=True)

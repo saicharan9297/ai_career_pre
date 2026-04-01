@@ -69,4 +69,5 @@ class UserProgress(db.Model):
     prep_weeks = db.Column(db.Integer, default=1)
     completed_modules = db.Column(db.String(500), default="")
     readiness_score = db.Column(db.Integer, default=0)
+    roadmap_json = db.Column(db.Text) # Cached AI-generated roadmap
     last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

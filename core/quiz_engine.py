@@ -1,5 +1,10 @@
 from models import QuizQuestion
 import random
+try:
+    from core.ai_service import generate_quiz_ai
+    import json
+except ImportError:
+    generate_quiz_ai = None
 
 def get_quiz_questions(user, week_number=1, count=5):
     """
@@ -24,7 +29,8 @@ def get_quiz_questions(user, week_number=1, count=5):
     is_pharmacy = any(kw in role_raw for kw in ['pharmacist', 'pharmacy', 'b.pharm', 'm.pharm', 'druggist'])
     is_dental = any(kw in role_raw for kw in ['dentist', 'dental', 'bds', 'mds'])
     
-    is_medical_role = is_mbbs or is_nursing or is_pharmacy or is_dental or any(kw in role_raw for kw in medical_keywords)
+    is_physio = any(kw in role_raw for kw in ['physiotherapy', 'physiotherapist', 'physical therapist', 'therapist', 'bpt', 'mpt', 'rehabilitation'])
+    is_medical_role = is_mbbs or is_nursing or is_pharmacy or is_dental or is_physio or any(kw in role_raw for kw in medical_keywords)
     
     is_role_tech = any(kw in role_raw for kw in tech_keywords)
     is_civil = any(kw in role_raw for kw in civil_service_keywords)
@@ -216,4 +222,33 @@ def get_quiz_questions(user, week_number=1, count=5):
         pro_fallback = QuizQuestion.query.filter_by(category="Professional").filter(~QuizQuestion.id.in_(excluded_ids)).order_by(func.random()).limit(remaining).all()
         questions.extend(pro_fallback)
         
+    # --- 2. AI ENHANCEMENT: If we still don't have enough questions, use AI to generate them ---
+    if len(questions) < count and generate_quiz_ai:
+        try:
+            remaining = count - len(questions)
+            # Use the category and a random preferred subcat as context
+            subcat = random.choice(preferred_subcats) if preferred_subcats else "General knowledge"
+            ai_raw = generate_quiz_ai(category, subcat, count=remaining)
+            
+            if ai_raw.startswith("```json"):
+                ai_raw = ai_raw.replace("```json", "").replace("```", "").strip()
+            
+            ai_data = json.loads(ai_raw)
+            for item in ai_data:
+                # Create transient QuizQuestion objects (not saved to DB unless explicitly committed)
+                temp_q = QuizQuestion(
+                    question_text=item['question_text'],
+                    option_a=item['option_a'],
+                    option_b=item['option_b'],
+                    option_c=item['option_c'],
+                    option_d=item['option_d'],
+                    correct_option=item['correct_option'],
+                    category=category,
+                    sub_category=subcat,
+                    week_number=mapped_week
+                )
+                questions.append(temp_q)
+        except Exception:
+            pass
+
     return questions

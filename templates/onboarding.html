@@ -40,7 +40,7 @@
 
                 <div class="mb-4">
                     <label class="form-label text-muted small">Desired Job Role</label>
-                    <input type="text" name="desired_role" class="form-control" placeholder="e.g. Software Engineer" value="{{ current_user.desired_role or '' }}" required>
+                    <input type="text" name="desired_role" class="form-control" placeholder="e.g. Software Engineer" value="{{ role_query or current_user.desired_role or '' }}" required>
                 </div>
 
                 <div class="row mb-4">

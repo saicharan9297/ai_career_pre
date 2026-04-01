@@ -1,0 +1,56 @@
+﻿=== INTERVIEW QUESTIONS (Question Model) ===
+  AEROSPACE: 2
+  AIML: 6
+  CHEMICAL: 2
+  CIVIL: 4
+  CSE: 1
+  Coding: 13
+  Cyber Security: 5
+  Data Science: 6
+  ECE: 9
+  EEE: 4
+  HR: 6
+  IAS: 16
+  IOT: 2
+  MECH: 6
+  Medical: 20
+  Professional: 4
+  UPSC: 4
+
+=== QUIZ QUESTIONS (QuizQuestion Model) ===
+  AEROSPACE: 2
+  AIML: 6
+  APPSC: 2
+  CHEMICAL: 4
+  CIVIL: 5
+  CSE: 3
+  Civil Service: 11
+  Coding: 28
+  Data Science: 7
+  ECE: 25
+  EEE: 15
+  Finance/Govt: 12
+  IAS: 20
+  IOT: 3
+  Intermediate: 3
+  MECH: 10
+  Medical: 51
+  Professional: 15
+  SSC: 4
+  School: 4
+  Science: 3
+  TSPSC: 2
+  UPSC: 7
+  Vocational: 3
+
+=== USER DATA PREP WEEKS CHECK ===
+User persist_tester (ID: 1): Profile Prep Weeks = 4, Role = Full Stack Developer
+  - Progress Record for Full Stack Developer: Prep Weeks = 4
+User saicharan (ID: 2): Profile Prep Weeks = 10, Role = ECE
+  - Progress Record for ECE: Prep Weeks = 10
+User Test User (ID: 3): Profile Prep Weeks = 14, Role = Full Stack Developer
+  - No Progress Record found for Full Stack Developer
+User sai (ID: 4): Profile Prep Weeks = 10, Role = photographer
+  - No Progress Record found for photographer
+User raju (ID: 5): Profile Prep Weeks = 10, Role = bank manager
+  - No Progress Record found for bank manager

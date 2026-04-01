@@ -1,5 +1,10 @@
 from models import Question, User
 import random
+try:
+    from core.ai_service import evaluate_answer_ai
+    import json
+except ImportError:
+    evaluate_answer_ai = None
 
 def get_interview_session_questions(user):
     """
@@ -14,7 +19,7 @@ def get_interview_session_questions(user):
     tech_keywords = ['engineer', 'developer', 'coding', 'ai', 'data', 'software', 'tech', 'programmer', 'web', 'frontend', 'backend', 'fullstack', 'devops', 'stack', 'cloud', 'security', 'machine learning', 'data science', 'cse', 'it', 'ece', 'eee', 'iot', 'aiml', 'vlsi', 'embedded', 'robotics', 'mech', 'mechanical', 'civil', 'chemical', 'aerospace']
     civil_keywords = ['ias', 'civil service', 'upsc', 'mro', 'revenue officer', 'tpsc', 'appsc', 'group 1', 'group 2', 'constable', 'sub-inspector', 'panchayat', 'administrative', 'ips', 'ifs', 'collector', 'telangana', 'andhra']
     finance_keywords = ['income tax', 'tax', 'ssc', 'cgl', 'banking', 'bank', 'po', 'clerk', 'finance', 'audit', 'lic', 'rbi', 'ibps', 'accountant', 'budget', 'revenue']
-    medical_keywords = ['medical', 'doctor', 'nurse', 'nursing', 'pharmacy', 'hospital', 'healthcare', 'dentist', 'physician', 'surgeon', 'clinic', 'radiology', 'psychiatry', 'dermatology', 'urology', 'nephrology', 'pulmonology', 'ophthalmology', 'ayurveda', 'homeopathy', 'public health']
+    medical_keywords = ['medical', 'doctor', 'nurse', 'nursing', 'pharmacy', 'hospital', 'healthcare', 'dentist', 'physician', 'surgeon', 'clinic', 'radiology', 'psychiatry', 'dermatology', 'urology', 'nephrology', 'pulmonology', 'ophthalmology', 'ayurveda', 'homeopathy', 'public health', 'therapist']
     science_keywords = ['science', 'research', 'physics', 'chemistry', 'biology', 'scientist', 'laboratory', 'biotech']
     
     is_role_tech = any(kw in role_raw for kw in tech_keywords)
@@ -79,11 +84,11 @@ def get_interview_session_questions(user):
         role_pool = Question.query.filter(Question.category.in_(["Civil Service", "IAS", "UPSC"])).all()
     elif is_appsc or is_tspsc:
         cat = "APPSC" if is_appsc else "TSPSC"
-        role_pool = Question.query.filter(Question.category.in_(["Civil Service", cat])).all()
+        role_pool = Question.query.filter(Question.category.in_(["Civil Service", "IAS", "UPSC", cat])).all()
     elif is_ssc:
         role_pool = Question.query.filter(Question.category.in_(["Finance/Govt", "SSC"])).all()
     elif is_civil:
-        role_pool = Question.query.filter(Question.category.in_(["Civil Service", "IAS"])).all()
+        role_pool = Question.query.filter(Question.category.in_(["Civil Service", "IAS", "UPSC"])).all()
     elif is_finance:
         role_pool = Question.query.filter(Question.category.in_(["Finance/Govt"])).all()
     else:
@@ -133,22 +138,35 @@ def get_interview_session_questions(user):
 
 def evaluate_answer(question, user_answer):
     """
-    Basic evaluation logic. In a real app, this would use LLM.
+    Evaluates answer. Prioritizes AI (LLM) if available, otherwise falls back to rule-based keyword matching.
     """
     if not user_answer:
         return 0, "No answer provided."
-    
-    # Simple keyword matching
+
+    # 1. Attempt AI Evaluation
+    if evaluate_answer_ai:
+        try:
+            ai_response_raw = evaluate_answer_ai(question.question_text, question.correct_answer, user_answer)
+            # Basic cleanup of JSON markdown if LLM includes it
+            if ai_response_raw.startswith("```json"):
+                ai_response_raw = ai_response_raw.replace("```json", "").replace("```", "").strip()
+            
+            ai_data = json.loads(ai_response_raw)
+            if "score" in ai_data and "feedback" in ai_data:
+                return ai_data["score"], ai_data["feedback"]
+        except Exception:
+            pass # Fallback to rule-based on any AI failure
+
+    # 2. Rule-Based Fallback (Keyword matching)
     correct_keywords = question.correct_answer.lower().split()
     user_words = user_answer.lower()
     matches = [word for word in correct_keywords if word in user_words]
     
     score = int((len(matches) / len(correct_keywords)) * 100) if correct_keywords else 50
-    # Adjust score based on length and relevance
     if len(user_words.split()) > 10:
         score = min(score + 10, 100)
         
-    feedback = f"You mentioned {len(matches)} key points correctly."
+    feedback = f"Rule-based evaluation: You mentioned {len(matches)} key points correctly."
     if score >= 70:
         feedback += " Great job! Your explanation was thorough."
     elif score >= 40:

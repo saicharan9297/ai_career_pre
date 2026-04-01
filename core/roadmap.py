@@ -1,3 +1,74 @@
+try:
+    from core.ai_service import generate_roadmap_ai
+    from models import QuizQuestion
+    import json
+except ImportError:
+    generate_roadmap_ai = None
+
+def get_recommendations(user):
+    """
+    Returns a list of recommended roles based on user profile and community trends.
+    """
+    from models import User, db
+    from sqlalchemy import func
+    
+    edu = (user.education_level or "").lower()
+    current_role = (user.desired_role or "").strip()
+    
+    # 1. Fetch Community Trends (Roles others are preparing for)
+    # Get top 5 most popular roles excluding current user's role
+    trending_query = db.session.query(
+        User.desired_role, 
+        func.count(User.id).label('user_count')
+    ).filter(
+        User.desired_role != None,
+        User.desired_role != "",
+        User.desired_role != current_role
+    ).group_by(User.desired_role).order_by(func.count(User.id).desc()).limit(5).all()
+    
+    community_recs = []
+    for role_name, count in trending_query:
+        community_recs.append({
+            "role": role_name,
+            "description": f"Trending: {count} people are following this roadmap.",
+            "is_community": True,
+            "user_count": count
+        })
+
+    # 2. Base recommendations by education (Original fallback/static)
+    static_recs = []
+    if "b.tech" in edu or "m.tech" in edu:
+        static_recs = [
+            {"role": "Full Stack Developer", "description": "Mastering both frontend and backend technologies."},
+            {"role": "Data Scientist", "description": "Analyzing complex data to drive business decisions."},
+            {"role": "DevOps Engineer", "description": "Bridging the gap between development and operations."}
+        ]
+    elif "intermediate" in edu or "school" in edu:
+        static_recs = [
+            {"role": "Engineering Foundation", "description": "Strengthening math and physics for technical careers."},
+            {"role": "Coding Basics (Python)", "description": "Starting your journey into software development."},
+            {"role": "NDA / Defense Services", "description": "Preparing for a career in the Indian Armed Forces."}
+        ]
+    else:
+        static_recs = [
+            {"role": "Civil Services (IAS/IPS)", "description": "The peak of administrative careers in India."},
+            {"role": "Banking (IBPS/PO)", "description": "Stable and prestigious career in the financial sector."},
+            {"role": "Digital Marketing", "description": "Fast-paced career in the modern digital economy."}
+        ]
+    
+    # Combine and prioritize community if available
+    all_recs = community_recs + [r for r in static_recs if r['role'].lower().strip() != current_role.lower().strip()]
+    
+    # Return unique roles
+    seen_roles = set([current_role.lower().strip()])
+    final_recs = []
+    for r in all_recs:
+        role_key = r['role'].lower().strip()
+        if role_key not in seen_roles:
+            final_recs.append(r)
+            seen_roles.add(role_key)
+            
+    return final_recs[:4]
 def generate_roadmap(user):
     """
     Generates a personalized roadmap based on user profile and preparation duration.
@@ -14,7 +85,9 @@ def generate_roadmap(user):
     tech_keywords = ['engineer', 'developer', 'coding', 'ai', 'data', 'software', 'tech', 'programmer', 'web', 'frontend', 'backend', 'fullstack', 'devops', 'stack', 'cloud', 'security', 'machine learning', 'data science', 'cse', 'it', 'ece', 'eee', 'iot', 'aiml', 'vlsi', 'embedded', 'robotics', 'mech', 'mechanical', 'civil', 'chemical', 'aerospace']
     civil_service_keywords = ['ias', 'civil service', 'upsc', 'mro', 'revenue officer', 'tpsc', 'appsc', 'group 1', 'group 2', 'constable', 'sub-inspector', 'panchayat', 'administrative', 'ips', 'ifs', 'collector']
     finance_govt_keywords = ['income tax', 'tax', 'ssc', 'cgl', 'banking', 'bank', 'po', 'clerk', 'finance', 'audit', 'lic', 'rbi', 'ibps', 'accountant', 'budget', 'revenue', 'economist', 'tally']
-    medical_keywords = ['medical', 'doctor', 'nurse', 'nursing', 'pharmacy', 'hospital', 'healthcare', 'dentist', 'physician', 'surgeon', 'clinic', 'cardiology', 'neurology', 'orthopedic', 'physiotherapy', 'veterinary', 'radiology', 'psychiatry', 'dermatology', 'urology', 'nephrology', 'pulmonology', 'ophthalmology', 'ayurveda', 'homeopathy', 'public health']
+    medical_keywords = ['medical', 'doctor', 'nurse', 'nursing', 'pharmacy', 'hospital', 'healthcare', 'dentist', 'physician', 'surgeon', 'clinic', 'cardiology', 'neurology', 'orthopedic', 'physiotherapy', 'veterinary', 'radiology', 'psychiatry', 'dermatology', 'urology', 'nephrology', 'pulmonology', 'ophthalmology', 'ayurveda', 'homeopathy', 'public health', 'therapist']
+    creative_keywords = ['designer', 'graphic', 'ui', 'ux', 'artist', 'video', 'content', 'writer', 'editor', 'creative', 'animation', 'multimedia']
+    business_keywords = ['manager', 'marketing', 'sales', 'hr', 'human resources', 'business', 'analyst', 'finance', 'consultant', 'operation', 'supply chain', 'mba']
     science_keywords = ['science', 'research', 'physics', 'chemistry', 'biology', 'scientist', 'laboratory', 'biotech']
 
     # Detailed Medical Role Flags
@@ -22,7 +95,7 @@ def generate_roadmap(user):
     is_nursing = any(kw in role_lower for kw in ['nurse', 'nursing', 'anm', 'gnm', 'midwifery'])
     is_pharmacy = any(kw in role_lower for kw in ['pharmacist', 'pharmacy', 'b.pharm', 'm.pharm', 'druggist'])
     is_dental = any(kw in role_lower for kw in ['dentist', 'dental', 'bds', 'mds', 'orthodontist', 'periodontist'])
-    is_physio = any(kw in role_lower for kw in ['physiotherapy', 'physiotherapist', 'bpt', 'mpt', 'rehabilitation'])
+    is_physio = any(kw in role_lower for kw in ['physiotherapy', 'physiotherapist', 'physical therapist', 'therapist', 'bpt', 'mpt', 'rehabilitation'])
     is_vet = any(kw in role_lower for kw in ['veterinary', 'vet', 'animal doctor', 'bvg', 'mvg'])
     is_ayush = any(kw in role_lower for kw in ['ayurveda', 'homeopathy', 'bams', 'bhms', 'unani', 'yoga'])
     is_allied_health = any(kw in role_lower for kw in ['radiographer', 'lab technician', 'optometry', 'dialysis', 'paramedic'])
@@ -45,11 +118,12 @@ def generate_roadmap(user):
     is_finance_govt = is_ssc or any(kw in role_lower for kw in finance_govt_keywords)
     
     # Education Level Specific Flags
-    is_school = 'School' in edu
-    is_intermediate = 'Intermediate' in edu
-    is_iti_diploma = 'Diploma' in edu or 'ITI' in edu
-    is_btech = 'B.Tech' in edu
-    is_mtech = 'M.Tech' in edu
+    edu_safe = edu or ""
+    is_school = 'School' in edu_safe
+    is_intermediate = 'Intermediate' in edu_safe
+    is_iti_diploma = 'Diploma' in edu_safe or 'ITI' in edu_safe
+    is_btech = 'B.Tech' in edu_safe
+    is_mtech = 'M.Tech' in edu_safe
     is_higher_tech = is_btech or is_mtech
 
     # Specific B.Tech/M.Tech Branch Detection (Expanded for robust matching)
@@ -91,7 +165,99 @@ def generate_roadmap(user):
 
     roadmap = []
     
-    # Define potential themes based on ROLE first, then EDUCATION LEVEL
+    is_creative = any(k in role_lower for k in creative_keywords)
+    is_business = any(k in role_lower for k in business_keywords)
+    
+    # --- 0. Try Loading Cached Roadmap ---
+    from models import UserProgress, db
+    progress = UserProgress.query.filter_by(user_id=user.id, role=role_raw).first()
+    
+    if progress and progress.roadmap_json:
+        try:
+            cached_data = json.loads(progress.roadmap_json)
+            # Ensure it matches current prep_weeks
+            if cached_data.get('prep_weeks') == prep_weeks:
+                print(f"DEBUG: Using cached roadmap for {role_raw}")
+                # Ensure strategy text is updated for current hours/weeks
+                if hours >= 4:
+                    strategy = f"Intensive ({hours}h/day for {prep_weeks} weeks) - Mastery-Oriented"
+                else:
+                    strategy = f"Steady Progress ({hours}h/day for {prep_weeks} weeks) - Balanced"
+                cached_data['strategy'] = f"AI Personalized ({strategy})" if cached_data.get('is_ai') else strategy
+                return cached_data
+        except Exception as e:
+            print(f"DEBUG: Error loading cached roadmap: {str(e)}")
+
+    # --- 1. Attempt AI Roadmap Generation (RAG) ---
+    if generate_roadmap_ai:
+        try:
+            # RAG: Retrieve potential subjects from Database to guide the AI
+            role_keyword = role_lower.split()[0] if role_lower else ""
+            context_qs = QuizQuestion.query.filter(
+                QuizQuestion.category.contains(role_keyword)
+            ).limit(10).all()
+            
+            search_context = "\n".join([f"- {q.sub_category}: {q.question_text[:100]}" for q in context_qs]) if context_qs else "General career foundations."
+            
+            user_profile = {
+                'desired_role': role_raw,
+                'education_level': edu,
+                'prep_weeks': prep_weeks
+            }
+            
+            print(f"DEBUG: Calling AI for roadmap: {role_raw}")
+            ai_roadmap_raw = generate_roadmap_ai(user_profile, search_context)
+            
+            if ai_roadmap_raw and "Error" not in ai_roadmap_raw:
+                # Basic cleanup
+                clean_json = ai_roadmap_raw.strip()
+                if clean_json.startswith("```json"):
+                    clean_json = clean_json.replace("```json", "").replace("```", "").strip()
+                elif clean_json.startswith("```"):
+                    clean_json = clean_json.replace("```", "").strip()
+                
+                ai_roadmap = json.loads(clean_json)
+                
+                # Robust parsing for list or dict-wrapped-list
+                if isinstance(ai_roadmap, dict):
+                    # Try common keys
+                    for key in ['weeks', 'roadmap', 'plan', 'modules']:
+                        if key in ai_roadmap and isinstance(ai_roadmap[key], list):
+                            ai_roadmap = ai_roadmap[key]
+                            break
+                
+                if isinstance(ai_roadmap, list) and len(ai_roadmap) > 0:
+                    print(f"DEBUG: Successfully generated AI roadmap for {role_raw}")
+                    # Return consistent dictionary format
+                    result = {
+                        "strategy": f"AI Personalized ({hours}h/day for {prep_weeks} weeks)",
+                        "modules": ai_roadmap,
+                        "target_role": role_raw,
+                        "tips": ["Use the personalized roadmap for targeted study", "Keep consistent with daily practice"],
+                        "prep_weeks": prep_weeks,
+                        "guidance": "AI Generated Path: This roadmap was dynamically generated based on your profile.",
+                        "is_ai": True
+                    }
+                    
+                    # Cache the successful AI roadmap
+                    if progress:
+                        try:
+                            progress.roadmap_json = json.dumps(result)
+                            db.session.commit()
+                            print(f"DEBUG: Cached AI roadmap for {role_raw}")
+                        except Exception as cache_err:
+                            print(f"DEBUG: Failed to cache roadmap: {str(cache_err)}")
+                    
+                    return result
+                else:
+                    print(f"DEBUG: AI Roadmap list empty or invalid: {ai_roadmap}")
+            else:
+                print(f"DEBUG: AI Roadmap raw response failed: {ai_roadmap_raw[:100] if ai_roadmap_raw else 'Empty'}")
+        except Exception as e:
+            print(f"DEBUG: AI Roadmap Generation Error: {str(e)}")
+
+    # --- 2. Rule-Based Fallback (Current Logic) ---
+    is_generic = False
     if is_tech:
         if is_btech and "1st Year" in edu:
             # Common subjects but with branch-specific intro
@@ -247,22 +413,23 @@ def generate_roadmap(user):
                         ]
                     }
                 ]
-            else: # Default/Professional Readiness (Fallback for CSE/IT)
+            else: # Default/Professional Readiness (Fallback for Generic Tech)
+                is_generic = True
                 all_themes = [
                     {
-                        "title": "Core Computer Science Foundations",
+                        "title": "Core Technical Foundations",
                         "subjects": [
-                            {"name": "Data Structures & Algorithms", "content": "Arrays, Lists, Stacks, Queues, and basic algorithmic complexity."},
-                            {"name": "Discrete Mathematics", "content": "Set theory, Graph theory, and Combinatorics for CS logic."},
-                            {"name": "Object Oriented Programming (Java/C++)", "content": "Classes, Inheritance, and Polymorphism in real-world design."}
+                            {"name": "Problem Solving & Logic", "content": "Analytical thinking and structured problem-solving techniques."},
+                            {"name": "Fundamentals of Technology", "content": "Understanding modern tech stacks and industry standards."},
+                            {"name": "Professional Communication", "content": "Professional ethics and technical communication skills."}
                         ]
                     },
                     {
-                        "title": "Computer Organization & Database Basics",
+                        "title": "Industry Orientation & Real-world Prep",
                         "subjects": [
-                            {"name": "Computer Organization & Architecture", "content": "CPU design, Memory hierarchy, and Instruction set architectures."},
-                            {"name": "Database Management Systems (Relational)", "content": "SQL, Normalization, and Entity-Relationship modeling."},
-                            {"name": "Python for Data Science Basics", "content": "Introduction to NumPy, Pandas, and basic data visualization."}
+                            {"name": "Project Lifecycle Basics", "content": "Understanding how software and systems are built and maintained."},
+                            {"name": "Database & Info Management", "content": "Essential data handling and storage concepts for all tech roles."},
+                            {"name": "Digital Productivity Tools", "content": "Mastering tools for collaboration and documentation."}
                         ]
                     }
                 ]
@@ -511,13 +678,14 @@ def generate_roadmap(user):
                     }
                 ]
             else: # Fallback to Advanced Tech/Professional Readiness
+                is_generic = True
                 all_themes = [
                     {
-                        "title": "Advanced Engineering & Professional Readiness",
+                        "title": "Advanced Technical Readiness",
                         "subjects": [
-                            {"name": "Operating Systems & Networking", "content": "Process scheduling, TCP/IP, and Distributed system foundations."},
-                            {"name": "Design & Analysis of Algorithms", "content": "Dynamic programming, Greedy algorithms, and NP-completeness."},
-                            {"name": "Software Engineering Principles", "content": "SDLC, Design patterns, and Agile methodologies."}
+                            {"name": "Modern Professional Scenarios", "content": "Case studies and real-world problem solving for senior roles."},
+                            {"name": "System Architecture Principles", "content": "High-level overview of how complex systems are designed."},
+                            {"name": "Advanced Workflow Management", "content": "Agile, SDLC, and modern project management techniques."}
                         ]
                     },
                     {
@@ -952,6 +1120,44 @@ def generate_roadmap(user):
                 ]
             }
         ]
+    elif is_creative:
+            all_themes = [
+                {
+                    "title": "Design Fundamentals & Tools",
+                    "subjects": [
+                        {"name": "Color Theory & Typography", "content": "Mastering color palettes, legibility, and font pairings."},
+                        {"name": "Adobe Creative Suite Basics", "content": "Introduction to Photoshop, Illustrator, and InDesign."},
+                        {"name": "Composition & Layout", "content": "Grid systems, hierarchy, and balance in visual design."}
+                    ]
+                },
+                {
+                    "title": "Digital Assets & Portfolio",
+                    "subjects": [
+                        {"name": "Vector Illustration", "content": "Creating scalable graphics and logo design principles."},
+                        {"name": "Image Editing & Retouching", "content": "Advanced Photoshop techniques for photo manipulation."},
+                        {"name": "Portfolio Building", "content": "Curating work and presenting it on platforms like Behance/Dribbble."}
+                    ]
+                }
+            ]
+    elif is_business:
+            all_themes = [
+                {
+                    "title": "Business Communication & Marketing",
+                    "subjects": [
+                        {"name": "Professional Writing", "content": "Email etiquette, report writing, and business proposals."},
+                        {"name": "Digital Marketing Foundations", "content": "SEO, SEM, and social media marketing strategies."},
+                        {"name": "Sales & Negotiation", "content": "Persuasion techniques and customer relationship management."}
+                    ]
+                },
+                {
+                    "title": "Management & Analytics",
+                    "subjects": [
+                        {"name": "Project Management Basics", "content": "Agile, Scrum, and task management tools like Trello/Jira."},
+                        {"name": "Data Analysis for Business", "content": "Excel macros, pivot tables, and basic data visualization."},
+                        {"name": "Leadership & Ethics", "content": "Team management and professional workplace behavior."}
+                    ]
+                }
+            ]
     elif is_civil_service:
         all_themes = [
             {
@@ -1389,6 +1595,30 @@ def generate_roadmap(user):
                 ]
             })
 
+    # --- 8. Final Assembly & Instructions ---
+    if not roadmap and all_themes:
+        roadmap = all_themes
+    
+    # If still no roadmap, or if it's a generic fallback and user asked for something specific
+    if not roadmap:
+        is_generic = True
+        roadmap = [
+            {
+                "title": "General Career Foundations",
+                "subjects": [
+                    {"name": "Professional Communication", "content": "Mastering workplace English and interpersonal skills."},
+                    {"name": "Digital Literacy", "content": "Essential tools like Excel, Word, and online collaboration."},
+                    {"name": "Career Planning", "content": "Setting milestones and understanding industry expectations."}
+                ]
+            }
+        ]
+    
+    instructions = None
+    role_is_placeholder = role_lower in ["", "career search", "job", "fresher", "none"]
+    
+    if is_generic and not role_is_placeholder:
+        instructions = f"We couldn't find a specialized roadmap for '{role_raw}'. To get a better result, try entering a more specific role (e.g., 'Java Developer', 'Civil Engineer', 'IAS') in your profile."
+
     # Strategy text
     if hours >= 4:
         strategy = f"Intensive ({hours}h/day for {prep_weeks} weeks) - Mastery-Oriented"
@@ -1406,9 +1636,11 @@ def generate_roadmap(user):
 
     return {
         "strategy": strategy,
-        "modules": roadmap,
+        "modules": roadmap[:prep_weeks], # Limit to requested duration
         "target_role": role_raw,
         "tips": tips,
         "prep_weeks": prep_weeks,
-        "guidance": guidance
+        "guidance": guidance or f"Career Path for {role_raw}",
+        "instructions": instructions,
+        "is_ai": False
     }
